@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
@@ -7,7 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Windows.Data;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell.Interop;
-using Mono.Cecil;
+using Mono.Cecil.Cil;
 using Quart.Msiler.Annotations;
 
 namespace Quart.Msiler
@@ -17,8 +16,24 @@ namespace Quart.Msiler
         private MsilMethodEntity _selectedMethod;
         private ObservableCollection<MsilMethodEntity> _methods;
         private ICollectionView _methodsView;
+        private ICollectionView _instructionsView;
         private string _filterString;
         private MsilInstruction _selectedInstruction;
+        private bool _hideNopInstructions;
+
+        public bool HideNopInstructions
+        {
+            get { return _hideNopInstructions; }
+            set
+            {
+                if (value == _hideNopInstructions) {
+                    return;
+                }
+                _hideNopInstructions = value;
+                this.UpdateInstructionsFilter();
+                OnPropertyChanged();
+            }
+        }
 
         public MsilInstruction SelectedInstruction
         {
@@ -79,6 +94,7 @@ namespace Quart.Msiler
                 }
                 _selectedMethod = value;
                 OnPropertyChanged();
+                this.UpdateInstructionsFilter();
             }
         }
 
@@ -88,11 +104,23 @@ namespace Quart.Msiler
             Common.Instance.Build.AdviseUpdateSolutionEvents(this, out cookie);
             Common.Instance.SolutionCookie = cookie;
             this.Methods = new ObservableCollection<MsilMethodEntity>();
-            this.UpdateFilter();
+            this.UpdateMethodsFilter();
             this.FilterString = "";
         }
 
-        private void UpdateFilter()
+        private void UpdateInstructionsFilter()
+        {
+            this._instructionsView = CollectionViewSource.GetDefaultView(this.SelectedMethod.Instructions);
+            this._instructionsView.Filter = o => {
+                var obj = (MsilInstruction)o;
+                if (this.HideNopInstructions) {
+                    return obj.OpCode.Code != Code.Nop;
+                }
+                return true;
+            };
+        }
+
+        private void UpdateMethodsFilter()
         {
             this._methodsView = CollectionViewSource.GetDefaultView(this.Methods);
             this._methodsView.Filter = o => {
@@ -121,7 +149,7 @@ namespace Quart.Msiler
                 var msilReader = new MsilReader(assemblyFile);
 
                 this.Methods = new ObservableCollection<MsilMethodEntity>(msilReader.EnumerateMethods());
-                this.UpdateFilter();
+                this.UpdateMethodsFilter();
 
                 Debug.WriteLine("Done");
             }

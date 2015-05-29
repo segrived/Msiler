@@ -5,6 +5,10 @@
 
     <local:IsGreaterThanZero x:Key="IsGreaterThanZeroConv" />
 
+    <Style TargetType="ListBoxItem">
+        <Setter Property="BorderThickness" Value="0" />
+    </Style>
+
     <Style TargetType="UserControl">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static vs:EnvironmentColors.ToolWindowTextBrushKey}}" />
         <Setter Property="Background" Value="{DynamicResource {x:Static vs:EnvironmentColors.ToolWindowBackgroundBrushKey}}" />
