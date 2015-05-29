@@ -2,35 +2,13 @@
 <ArrayOfArrayOfArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <ArrayOfArrayOfString>
     <ArrayOfString>
-      <string>d:\projects\msiler\msiler\msilreader.cs</string>
+      <string>D:\Projects\Msiler\Msiler\MsilReader.cs</string>
     </ArrayOfString>
     <ArrayOfString>
-      <string>d:\projects\msiler\msiler\mycontrolvm.cs</string>
+      <string>D:\Projects\Msiler\Msiler\MyToolWindow.cs</string>
     </ArrayOfString>
     <ArrayOfString>
-      <string>D:\Projects\Msiler\Msiler\MyControl.xaml</string>
-      <string>d:\projects\msiler\msiler\mycontrol.xaml.cs</string>
-    </ArrayOfString>
-    <ArrayOfString>
-      <string>d:\projects\msiler\msiler\msilerpackage.cs</string>
-    </ArrayOfString>
-    <ArrayOfString>
-      <string>d:\projects\msiler\msiler\xamlresources.xaml</string>
-    </ArrayOfString>
-    <ArrayOfString>
-      <string>d:\projects\msiler\msiler\isequalorgreaterthanconverter.cs</string>
-    </ArrayOfString>
-    <ArrayOfString>
-      <string>d:\projects\msiler\msiler\common.cs</string>
-    </ArrayOfString>
-    <ArrayOfString>
-      <string>d:\projects\msiler\msiler\globalsuppressions.cs</string>
-    </ArrayOfString>
-    <ArrayOfString>
-      <string>d:\projects\msiler\msiler\guids.cs</string>
-    </ArrayOfString>
-    <ArrayOfString>
-      <string>d:\projects\msiler\msiler\helpers.cs</string>
+      <string>D:\Projects\Msiler\Msiler\MyControlVM.cs</string>
     </ArrayOfString>
   </ArrayOfArrayOfString>
 </ArrayOfArrayOfArrayOfString>

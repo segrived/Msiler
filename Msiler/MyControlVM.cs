@@ -74,12 +74,17 @@ namespace Quart.Msiler
             Common.Instance.Build.AdviseUpdateSolutionEvents(this, out cookie);
             Common.Instance.SolutionCookie = cookie;
             this.Methods = new ObservableCollection<MsilMethodEntity>();
+            this.UpdateFilter();
+            this.FilterString = "";
+        }
+
+        private void UpdateFilter()
+        {
             this._methodsView = CollectionViewSource.GetDefaultView(this.Methods);
             this._methodsView.Filter = o => {
                 var obj = (MsilMethodEntity)o;
-                return obj.MethodData.FullName.Contains(this.FilterString);
+                return obj.MethodData.FullName.ToLower().Contains(this.FilterString.ToLower());
             };
-            this.FilterString = "";
         }
 
 
@@ -102,11 +107,7 @@ namespace Quart.Msiler
                 var msilReader = new MsilReader(assemblyFile);
 
                 this.Methods = new ObservableCollection<MsilMethodEntity>(msilReader.EnumerateMethods());
-                this._methodsView = CollectionViewSource.GetDefaultView(this.Methods);
-                this._methodsView.Filter = o => {
-                    var obj = (MsilMethodEntity)o;
-                    return obj.MethodData.FullName.Contains(this.FilterString);
-                };
+                this.UpdateFilter();
 
                 Debug.WriteLine("Done");
             }
