@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 
@@ -19,6 +18,16 @@ namespace Quart.Msiler
         public OpCode OpCode
         {
             get { return Instruction.OpCode; }
+        }
+
+        public string Description
+        {
+            get {
+                return
+                    MsilInstructionsDescription.InstructionDescriptions.ContainsKey(this.OpCode.Name)
+                        ? MsilInstructionsDescription.InstructionDescriptions[this.OpCode.Name]
+                        : String.Empty;
+            }
         }
 
         public object Operand

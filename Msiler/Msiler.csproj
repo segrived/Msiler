@@ -147,6 +147,7 @@
     <Compile Include="Common.cs" />
     <Compile Include="Helpers.cs" />
     <Compile Include="IsEqualOrGreaterThanConverter.cs" />
+    <Compile Include="MsilInstructionsDescription.cs" />
     <Compile Include="MsilReader.cs" />
     <Compile Include="MyControl.xaml.cs">
       <DependentUpon>MyControl.xaml</DependentUpon>

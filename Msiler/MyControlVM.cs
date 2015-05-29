@@ -18,6 +18,20 @@ namespace Quart.Msiler
         private ObservableCollection<MsilMethodEntity> _methods;
         private ICollectionView _methodsView;
         private string _filterString;
+        private MsilInstruction _selectedInstruction;
+
+        public MsilInstruction SelectedInstruction
+        {
+            get { return _selectedInstruction; }
+            set
+            {
+                if (Equals(value, _selectedInstruction)) {
+                    return;
+                }
+                _selectedInstruction = value;
+                OnPropertyChanged();
+            }
+        }
 
         public string FilterString
         {

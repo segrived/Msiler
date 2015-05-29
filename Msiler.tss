@@ -2,13 +2,16 @@
 <ArrayOfArrayOfArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <ArrayOfArrayOfString>
     <ArrayOfString>
-      <string>D:\Projects\Msiler\Msiler\MsilReader.cs</string>
-    </ArrayOfString>
-    <ArrayOfString>
-      <string>D:\Projects\Msiler\Msiler\MyToolWindow.cs</string>
+      <string>d:\projects\msiler\msiler\msilreader.cs</string>
     </ArrayOfString>
     <ArrayOfString>
       <string>D:\Projects\Msiler\Msiler\MyControlVM.cs</string>
+    </ArrayOfString>
+    <ArrayOfString>
+      <string>d:\projects\msiler\msiler\msilinstructionsdescription.cs</string>
+    </ArrayOfString>
+    <ArrayOfString>
+      <string>d:\projects\msiler\msiler\mycontrol.xaml.cs</string>
     </ArrayOfString>
   </ArrayOfArrayOfString>
 </ArrayOfArrayOfArrayOfString>

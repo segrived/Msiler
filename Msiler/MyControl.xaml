@@ -60,28 +60,41 @@
                        FontWeight="Bold"
                        Padding="5,5,5,5"
                        Text="{Binding Path=SelectedMethod.MethodData.Name}" />
-            <ListBox Grid.Row="4"
-                     FontFamily="Consolas"
-                     FontSize="12"
-                     ItemsSource="{Binding Path=SelectedMethod.Instructions}"
-                     Padding="5">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock>
-                                <TextBlock.Inlines>
-                                    <Run FontWeight="Bold"
-                                         Foreground="{DynamicResource {x:Static vs:EnvironmentColors.SystemGrayTextBrushKey}}"
-                                         Text="{Binding Offset,
-                                                        Mode=OneWay}" />
-                                    <Run FontWeight="Bold" Text="{Binding OpCode, Mode=OneWay}" />
-                                    <Run Text="{Binding Operand, Mode=OneWay}" />
-                                </TextBlock.Inlines>
-                            </TextBlock>
-                        </StackPanel>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
+            <Grid Grid.Row="4">
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <ListBox Grid.Row="0"
+                         BorderThickness="0,1,0,0"
+                         FontFamily="Consolas"
+                         FontSize="12"
+                         ItemsSource="{Binding Path=SelectedMethod.Instructions}"
+                         Padding="5"
+                         SelectedItem="{Binding SelectedInstruction}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock>
+                                    <TextBlock.Inlines>
+                                        <Run FontWeight="Bold"
+                                             Foreground="{DynamicResource {x:Static vs:EnvironmentColors.SystemGrayTextBrushKey}}"
+                                             Text="{Binding Offset,
+                                                            Mode=OneWay}" />
+                                        <Run FontWeight="Bold" Text="{Binding OpCode, Mode=OneWay}" />
+                                        <Run Text="{Binding Operand, Mode=OneWay}" />
+                                    </TextBlock.Inlines>
+                                </TextBlock>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                <TextBlock Grid.Row="1"
+                           FontStyle="Italic"
+                           Padding="5"
+                           Text="{Binding Path=SelectedInstruction.Description,
+                                          Mode=OneWay}" />
+            </Grid>
         </Grid>
     </Grid>
 </UserControl>
