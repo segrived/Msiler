@@ -43,7 +43,7 @@ namespace Quart.Msiler
                 { "blt.un.s", "Branch to target if less than (unsigned or unordered), short form." },
                 { "bne.un", "Branch to target if unequal or unordered." },
                 { "bne.un.s", "Branch to target if unequal or unordered, short form." },
-                { "box", "Convert a boxable value to its boxed form   Object model instruction" },
+                { "box", "Convert a boxable value to its boxed form" },
                 { "br", "Branch to target." },
                 { "br.s", "Branch to target, short form." },
                 { "break", "Inform a debugger that a breakpoint has been reached." },
@@ -70,7 +70,7 @@ namespace Quart.Msiler
                     "Call method indicated on the stack with arguments described by callsitedescr."
                 }, {
                     "callvirt",
-                    "Call a method associated with an object.    Object model instruction"
+                    "Call a method associated with an object. "
                 },
                 { "castclass", "Cast obj to class.  Object model instruction" },
                 { "ceq", "Push 1 (of type int32) if value1 equals value2, else push 0." },
@@ -166,7 +166,7 @@ namespace Quart.Msiler
                 { "endfilter", "End an exception handling filter clause." },
                 { "endfinally", "End finally clause of an exception block." },
                 { "initblk", "Set all bytes in a block of memory to a given byte value." },
-                { "initobj", "Initialize the value at address dest.   Object model instruction" }, {
+                { "initobj", "Initialize the value at address dest." }, {
                     "isinst",
                     "Test if obj is an instance of class, returning null or an instance of that class or interface.  Object model instruction"
                 },
@@ -198,40 +198,40 @@ namespace Quart.Msiler
                 { "ldc.r4", "Push num of type float32 onto the stack as F." },
                 { "ldc.r8", "Push num of type float64 onto the stack as F." }, {
                     "ldelem",
-                    "Load the element at index onto the top of the stack.    Object model instruction"
+                    "Load the element at index onto the top of the stack. "
                 }, {
                     "ldelem.i",
-                    "Load the element with type native int at index onto the top of the stack as a native int.   Object model instruction"
+                    "Load the element with type native int at index onto the top of the stack as a native int."
                 }, {
                     "ldelem.i1",
                     "Load the element with type int8 at index onto the top of the stack as an int32. Object model instruction"
                 }, {
                     "ldelem.i2",
-                    "Load the element with type int16 at index onto the top of the stack as an int32.    Object model instruction"
+                    "Load the element with type int16 at index onto the top of the stack as an int32. "
                 }, {
                     "ldelem.i4",
-                    "Load the element with type int32 at index onto the top of the stack as an int32.    Object model instruction"
+                    "Load the element with type int32 at index onto the top of the stack as an int32. "
                 }, {
                     "ldelem.i8",
-                    "Load the element with type int64 at index onto the top of the stack as an int64.    Object model instruction"
+                    "Load the element with type int64 at index onto the top of the stack as an int64. "
                 }, {
                     "ldelem.r4",
-                    "Load the element with type float32 at index onto the top of the stack as an F   Object model instruction"
+                    "Load the element with type float32 at index onto the top of the stack as an F"
                 }, {
                     "ldelem.r8",
                     "Load the element with type float64 at index onto the top of the stack as an F.  Object model instruction"
                 }, {
                     "ldelem.ref",
-                    "Load the element at index onto the top of the stack as an O. The type of the O is the same as the element type of the array pushed on the CIL stack.    Object model instruction"
+                    "Load the element at index onto the top of the stack as an O. The type of the O is the same as the element type of the array pushed on the CIL stack. "
                 }, {
                     "ldelem.u1",
-                    "Load the element with type unsigned int8 at index onto the top of the stack as an int32.    Object model instruction"
+                    "Load the element with type unsigned int8 at index onto the top of the stack as an int32. "
                 }, {
                     "ldelem.u2",
-                    "Load the element with type unsigned int16 at index onto the top of the stack as an int32.   Object model instruction"
+                    "Load the element with type unsigned int16 at index onto the top of the stack as an int32."
                 }, {
                     "ldelem.u4",
-                    "Load the element with type unsigned int32 at index onto the top of the stack as an int32.   Object model instruction"
+                    "Load the element with type unsigned int32 at index onto the top of the stack as an int32."
                 }, {
                     "ldelem.u8",
                     "Load the element with type unsigned int64 at index onto the top of the stack as an int64 (alias for ldelem.i8). Object model instruction"
@@ -243,7 +243,7 @@ namespace Quart.Msiler
                     "Push the value of field of object (or value type) obj, onto the stack.  Object model instruction"
                 }, {
                     "ldflda",
-                    "Push the address of field of object obj on the stack.   Object model instruction"
+                    "Push the address of field of object obj on the stack."
                 },
                 { "ldftn", "Push a pointer to a method referenced by method, on the stack." },
                 { "ldind.i", "Indirect load value of type native int as native int on the stack" },
@@ -261,7 +261,7 @@ namespace Quart.Msiler
                     "Indirect load value of type unsigned int64 as int64 on the stack (alias for ldind.i8)."
                 }, {
                     "ldlen",
-                    "Push the length (of type native unsigned int) of array on the stack.    Object model instruction"
+                    "Push the length (of type native unsigned int) of array on the stack. "
                 },
                 { "ldloc", "Load local variable of index indx onto stack." },
                 { "ldloc.0", "Load local variable 0 onto stack." },
@@ -275,18 +275,18 @@ namespace Quart.Msiler
                     "ldobj",
                     "Copy the value stored at address src to the stack.  Object model instruction"
                 },
-                { "ldsfld", "Push the value of field on the stack.   Object model instruction" }, {
+                { "ldsfld", "Push the value of field on the stack." }, {
                     "ldsflda",
                     "Push the address of the static field, field, on the stack.  Object model instruction"
                 }, {
                     "ldstr",
-                    "Push a string object for the literal string.    Object model instruction"
+                    "Push a string object for the literal string. "
                 }, {
                     "ldtoken",
-                    "Convert metadata token to its runtime representation.   Object model instruction"
+                    "Convert metadata token to its runtime representation."
                 }, {
                     "ldvirtftn",
-                    "Push address of virtual method on the stack.    Object model instruction"
+                    "Push address of virtual method on the stack. "
                 },
                 { "leave", "Exit a protected region of code." },
                 { "leave.s", "Exit a protected region of code, short form." },
@@ -306,7 +306,7 @@ namespace Quart.Msiler
                     "Create a new array with elements of type etype. Object model instruction"
                 }, {
                     "newobj",
-                    "Allocate an uninitialized object or value type and call ctor.   Object model instruction"
+                    "Allocate an uninitialized object or value type and call ctor."
                 }, {
                     "no.typecheck",
                     "The specified fault check(s) normally performed as part of the execution of the subsequent instruction can/shall be skipped."
@@ -325,10 +325,10 @@ namespace Quart.Msiler
                     "Specify that the subsequent array address operation performs no type check at runtime, and that it returns a controlled-mutability managed pointer"
                 }, {
                     "refanytype",
-                    "Push the type token stored in a typed reference.    Object model instruction"
+                    "Push the type token stored in a typed reference. "
                 }, {
                     "refanyval",
-                    "Push the address stored in a typed reference.   Object model instruction"
+                    "Push the address stored in a typed reference."
                 },
                 { "rem", "Remainder when dividing one value by another." },
                 { "rem.un", "Remainder when dividing one unsigned value by another." },
@@ -338,7 +338,7 @@ namespace Quart.Msiler
                 { "shr", "Shift an integer right (shift in sign), return an integer." },
                 { "shr.un", "Shift an integer right (shift in zero), return an integer." }, {
                     "sizeof",
-                    "Push the size, in bytes, of a type as an unsigned int32.    Object model instruction"
+                    "Push the size, in bytes, of a type as an unsigned int32. "
                 },
                 { "starg", "Store value to the argument numbered num." },
                 { "starg.s", "Store value to the argument numbered num, short form." }, {
@@ -346,19 +346,19 @@ namespace Quart.Msiler
                     "Replace array element at index with the value on the stack  Object model instruction"
                 }, {
                     "stelem.i",
-                    "Replace array element at index with the i value on the stack.   Object model instruction"
+                    "Replace array element at index with the i value on the stack."
                 }, {
                     "stelem.i1",
-                    "Replace array element at index with the int8 value on the stack.    Object model instruction"
+                    "Replace array element at index with the int8 value on the stack. "
                 }, {
                     "stelem.i2",
-                    "Replace array element at index with the int16 value on the stack.   Object model instruction"
+                    "Replace array element at index with the int16 value on the stack."
                 }, {
                     "stelem.i4",
-                    "Replace array element at index with the int32 value on the stack.   Object model instruction"
+                    "Replace array element at index with the int32 value on the stack."
                 }, {
                     "stelem.i8",
-                    "Replace array element at index with the int64 value on the stack.   Object model instruction"
+                    "Replace array element at index with the int64 value on the stack."
                 }, {
                     "stelem.r4",
                     "Replace array element at index with the float32 value on the stack. Object model instruction"
@@ -370,7 +370,7 @@ namespace Quart.Msiler
                     "Replace array element at index with the ref value on the stack. Object model instruction"
                 }, {
                     "stfld",
-                    "Replace the value of field of the object obj with value.    Object model instruction"
+                    "Replace the value of field of the object obj with value. "
                 },
                 { "stind.i", "Store value of type native int into memory at address" },
                 { "stind.i1", "Store value of type int8 into memory at address" },
@@ -387,9 +387,9 @@ namespace Quart.Msiler
                 { "stloc.3", "Pop a value from stack into local variable 3." },
                 { "stloc.s", "Pop a value from stack into local variable indx, short form." }, {
                     "stobj",
-                    "Store a value of type typeTok at an address.    Object model instruction"
+                    "Store a value of type typeTok at an address. "
                 },
-                { "stsfld", "Replace the value of field with val.    Object model instruction" },
+                { "stsfld", "Replace the value of field with val. " },
                 { "sub", "Subtract value2 from value1, returning a new value." }, {
                     "sub.ovf",
                     "Subtract native int from a native int. Signed result shall fit in same size"
@@ -402,7 +402,7 @@ namespace Quart.Msiler
                 { "throw", "Throw an exception. Object model instruction" },
                 { "unaligned. (alignment)", "Subsequent pointer instruction might be unaligned." }, {
                     "unbox",
-                    "Extract a value-type from obj, its boxed representation.    Object model instruction"
+                    "Extract a value-type from obj, its boxed representation. "
                 }, {
                     "unbox.any",
                     "Extract a value-type from obj, its boxed representation Object model instruction"

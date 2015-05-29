@@ -16,6 +16,7 @@ namespace Quart.Msiler
     public sealed class MsilerPackage : Package
     {
         private IVsSolutionBuildManager _buildManager;
+        private IVsSolution _solutionManager;
 
         private void ShowToolWindow(object sender, EventArgs e)
         {
@@ -26,7 +27,6 @@ namespace Quart.Msiler
             var windowFrame = (IVsWindowFrame)window.Frame;
             ErrorHandler.ThrowOnFailure(windowFrame.Show());
         }
-
 
         protected override void Initialize()
         {
@@ -45,15 +45,21 @@ namespace Quart.Msiler
                 return;
             }
 
+            _solutionManager = GetService(typeof(SVsSolution)) as IVsSolution;
+            if (_solutionManager == null) {
+                return;
+            }
+
             Common.Instance.Package = this;
             Common.Instance.Build = _buildManager;
+            Common.Instance.Solution = _solutionManager;
         }
 
         protected override void Dispose(bool disposing)
         {
             base.Dispose(disposing);
-            if (_buildManager != null && Common.Instance.SolutionCookie != 0) {
-                _buildManager.UnadviseUpdateSolutionEvents(Common.Instance.SolutionCookie);
+            if (_buildManager != null && Common.Instance.SolutionUpdateCookie != 0) {
+                _buildManager.UnadviseUpdateSolutionEvents(Common.Instance.SolutionUpdateCookie);
             }
         }
     }

@@ -1,8 +1,10 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Windows;
 using System.Windows.Data;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell.Interop;
@@ -11,7 +13,7 @@ using Quart.Msiler.Annotations;
 
 namespace Quart.Msiler
 {
-    public class MyControlVM : INotifyPropertyChanged, IVsUpdateSolutionEvents
+    public class MyControlVM : INotifyPropertyChanged, IVsUpdateSolutionEvents, IVsSolutionEvents
     {
         private MsilMethodEntity _selectedMethod;
         private ObservableCollection<MsilMethodEntity> _methods;
@@ -100,9 +102,12 @@ namespace Quart.Msiler
 
         public MyControlVM()
         {
-            uint cookie;
-            Common.Instance.Build.AdviseUpdateSolutionEvents(this, out cookie);
-            Common.Instance.SolutionCookie = cookie;
+            uint solutionUpdateCookie;
+            uint solutionCookie;
+            Common.Instance.Build.AdviseUpdateSolutionEvents(this, out solutionUpdateCookie);
+            Common.Instance.Solution.AdviseSolutionEvents(this, out solutionCookie);
+            Common.Instance.SolutionUpdateCookie = solutionUpdateCookie;
+            Common.Instance.SolutionCookie = solutionCookie;
             this.Methods = new ObservableCollection<MsilMethodEntity>();
             this.UpdateMethodsFilter();
             this.FilterString = "";
@@ -143,7 +148,7 @@ namespace Quart.Msiler
 
         public int UpdateSolution_Done(int fSucceeded, int fModified, int fCancelCommand)
         {
-            if (fSucceeded == 1) {
+            if (MyToolWindow.IsVisible && fSucceeded == 1) {
                 Debug.Write("Compiled, generating IL code...");
                 string assemblyFile = Helpers.GetOutputAssemblyFileName();
                 var msilReader = new MsilReader(assemblyFile);
@@ -153,6 +158,12 @@ namespace Quart.Msiler
 
                 Debug.WriteLine("Done");
             }
+            return VSConstants.S_OK;
+        }
+
+        public int OnAfterCloseSolution(object pUnkReserved)
+        {
+            this.Methods.Clear(); // empty collection
             return VSConstants.S_OK;
         }
 
@@ -172,6 +183,51 @@ namespace Quart.Msiler
         }
 
         public int OnActiveProjectCfgChange(IVsHierarchy pIVsHierarchy)
+        {
+            return VSConstants.S_OK;
+        }
+        
+        public int OnAfterOpenProject(IVsHierarchy pHierarchy, int fAdded)
+        {
+            return VSConstants.S_OK;
+        }
+
+        public int OnQueryCloseProject(IVsHierarchy pHierarchy, int fRemoving, ref int pfCancel)
+        {
+            return VSConstants.S_OK;
+        }
+
+        public int OnBeforeCloseProject(IVsHierarchy pHierarchy, int fRemoved)
+        {
+            return VSConstants.S_OK;
+        }
+
+        public int OnAfterLoadProject(IVsHierarchy pStubHierarchy, IVsHierarchy pRealHierarchy)
+        {
+            return VSConstants.S_OK;
+        }
+
+        public int OnQueryUnloadProject(IVsHierarchy pRealHierarchy, ref int pfCancel)
+        {
+            return VSConstants.S_OK;
+        }
+
+        public int OnBeforeUnloadProject(IVsHierarchy pRealHierarchy, IVsHierarchy pStubHierarchy)
+        {
+            return VSConstants.S_OK;
+        }
+
+        public int OnAfterOpenSolution(object pUnkReserved, int fNewSolution)
+        {
+            return VSConstants.S_OK;
+        }
+
+        public int OnQueryCloseSolution(object pUnkReserved, ref int pfCancel)
+        {
+            return VSConstants.S_OK;
+        }
+
+        public int OnBeforeCloseSolution(object pUnkReserved)
         {
             return VSConstants.S_OK;
         }

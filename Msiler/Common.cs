@@ -21,11 +21,13 @@ namespace Quart.Msiler
         }
 
         public IVsSolutionBuildManager Build { get; set; }
+        public IVsSolution Solution { get; set; }
         public IVsWindowFrame Frame { get; set; }
 
         public MsilerPackage Package { get; set; }
 
         public ObservableCollection<string> Messages = new ObservableCollection<string>();
+        public uint SolutionUpdateCookie { get; set; }
         public uint SolutionCookie { get; set; }
     }
 }
