@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
@@ -9,6 +10,7 @@ namespace Quart.Msiler
     public class MsilInstruction
     {
         private Instruction Instruction { get; set; }
+
 
         public string Offset
         {
@@ -77,7 +79,7 @@ namespace Quart.Msiler
                 from type in types 
                 from method in type.Methods 
                 let body = method.Body 
-                where body != null 
+                where method.HasBody
                 let instructions = body.Instructions.Select(i => new MsilInstruction(i)) 
                 select new MsilMethodEntity(method, instructions.ToList());
         }

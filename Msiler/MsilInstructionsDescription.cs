@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Quart.Msiler
 {
-    internal class MsilInstructionsDescription
+    // taken from wikipedia
+    internal static class MsilInstructionsDescription
     {
-        public static Dictionary<string, string> InstructionDescriptions =
+        public readonly static Dictionary<string, string> InstructionDescriptions =
             new Dictionary<string, string> {
                 { "add", "Add two values, returning a new value." },
                 { "add.ovf", "Add signed integer values with overflow check." },

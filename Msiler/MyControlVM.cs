@@ -23,6 +23,8 @@ namespace Quart.Msiler
         private MsilInstruction _selectedInstruction;
         private bool _hideNopInstructions;
 
+        private byte[] _lastBuildMd5Hash;
+
         public bool HideNopInstructions
         {
             get { return _hideNopInstructions; }
@@ -148,16 +150,27 @@ namespace Quart.Msiler
 
         public int UpdateSolution_Done(int fSucceeded, int fModified, int fCancelCommand)
         {
-            if (MyToolWindow.IsVisible && fSucceeded == 1) {
-                Debug.Write("Compiled, generating IL code...");
-                string assemblyFile = Helpers.GetOutputAssemblyFileName();
+            if (! MyToolWindow.IsVisible || fSucceeded != 1) {
+                return VSConstants.S_OK;
+            }
+            Debug.Write("Compiled, generating IL code...");
+            string assemblyFile = Helpers.GetOutputAssemblyFileName();
+            try {
+                var hash = Helpers.ComputeMd5(assemblyFile);
+                // if assembly was not changed
+                if (_lastBuildMd5Hash != null && _lastBuildMd5Hash.SequenceEqual(hash)) {
+                    return VSConstants.S_OK;
+                }
                 var msilReader = new MsilReader(assemblyFile);
 
-                this.Methods = new ObservableCollection<MsilMethodEntity>(msilReader.EnumerateMethods());
+                this.Methods =
+                    new ObservableCollection<MsilMethodEntity>(msilReader.EnumerateMethods());
+                _lastBuildMd5Hash = hash;
                 this.UpdateMethodsFilter();
-
-                Debug.WriteLine("Done");
+            } catch {
+                this.Methods = new ObservableCollection<MsilMethodEntity>();
             }
+            Debug.WriteLine("Done");
             return VSConstants.S_OK;
         }
 

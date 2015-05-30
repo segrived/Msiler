@@ -90,7 +90,7 @@
                          SelectedItem="{Binding SelectedInstruction}">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
+                            <StackPanel Orientation="Vertical">
                                 <TextBlock>
                                     <TextBlock.Inlines>
                                         <Run FontWeight="Bold"

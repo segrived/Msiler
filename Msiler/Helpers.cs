@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Security.Cryptography;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
 
@@ -37,6 +38,15 @@ namespace Quart.Msiler
             string outFn = prj.ConfigurationManager.ActiveConfiguration.Properties.Item("OutputPath").Value.ToString();
             string fullPath = GetFullPath(outFn, Path.GetDirectoryName(prj.FileName));
             return Path.Combine(fullPath, prj.Properties.Item("OutputFileName").Value.ToString());
+        }
+
+        public static byte[] ComputeMd5(string fn)
+        {
+            using (var md5 = MD5.Create()) {
+                using (var stream = File.OpenRead(fn)) {
+                    return md5.ComputeHash(stream);
+                }
+            }
         }
     }
 }

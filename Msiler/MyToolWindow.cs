@@ -7,9 +7,9 @@ using Microsoft.VisualStudio.Shell.Interop;
 namespace Quart.Msiler
 {
     [Guid("0c127690-de92-4d02-a743-634bb922145c")]
-    public class MyToolWindow : ToolWindowPane,IVsWindowFrameNotify
+    public class MyToolWindow : ToolWindowPane, IVsWindowFrameNotify
     {
-        public static bool IsVisible { get; set; }
+        public static bool IsVisible { get; private set; }
 
         public MyToolWindow() : base(null)
         {
