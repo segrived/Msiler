@@ -31,14 +31,21 @@ namespace Quart.Msiler
             }
         }
 
-        public object Operand
+        public string Operand
         {
             get
             {
                 if (Instruction.Operand is Instruction) {
                     return new MsilInstruction((Instruction)Instruction.Operand).Offset;
                 }
-                return Instruction.Operand;
+                if (Instruction.Operand is Instruction[]) {
+                    var operands = (Instruction[])Instruction.Operand;
+                    return String.Join(" / ", operands.Select(o => new MsilInstruction(o).Offset));
+                }
+                if (Instruction.Operand == null) {
+                    return String.Empty;
+                }
+                return Instruction.Operand.ToString();
             }
         }
 
