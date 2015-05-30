@@ -7,6 +7,7 @@ namespace Quart.Msiler
     public class IsGreaterThanZero : IValueConverter
     {
         #region IValueConverter Members
+
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value == null) {
@@ -19,10 +20,12 @@ namespace Quart.Msiler
             }
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        public object ConvertBack(
+            object value, Type targetType, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
         }
+
         #endregion
     }
 }

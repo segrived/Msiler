@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
@@ -10,7 +9,6 @@ namespace Quart.Msiler
     public class MsilInstruction
     {
         private Instruction Instruction { get; set; }
-
 
         public string Offset
         {
@@ -24,7 +22,8 @@ namespace Quart.Msiler
 
         public string Description
         {
-            get {
+            get
+            {
                 return
                     MsilInstructionsDescription.InstructionDescriptions.ContainsKey(this.OpCode.Name)
                         ? MsilInstructionsDescription.InstructionDescriptions[this.OpCode.Name]
@@ -51,20 +50,20 @@ namespace Quart.Msiler
 
     public class MsilMethodEntity
     {
+        public MethodDefinition MethodData { get; set; }
+        public List<MsilInstruction> Instructions { get; set; }
+
         public MsilMethodEntity(MethodDefinition methodData, List<MsilInstruction> instructions)
         {
             MethodData = methodData;
             Instructions = instructions;
         }
-
-        public MethodDefinition MethodData { get; set; }
-        public List<MsilInstruction> Instructions { get; set; }
     }
 
     public class MsilReader
     {
-        private string AssemblyName { get; set; }
         private readonly ModuleDefinition _module;
+        private string AssemblyName { get; set; }
 
         public MsilReader(string assemblyName)
         {
@@ -75,12 +74,12 @@ namespace Quart.Msiler
         public IEnumerable<MsilMethodEntity> EnumerateMethods()
         {
             var types = this._module.GetTypes();
-            return 
-                from type in types 
-                from method in type.Methods 
-                let body = method.Body 
+            return
+                from type in types
+                from method in type.Methods
+                let body = method.Body
                 where method.HasBody
-                let instructions = body.Instructions.Select(i => new MsilInstruction(i)) 
+                let instructions = body.Instructions.Select(i => new MsilInstruction(i))
                 select new MsilMethodEntity(method, instructions.ToList());
         }
     }

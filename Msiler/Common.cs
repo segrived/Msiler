@@ -6,8 +6,7 @@ namespace Quart.Msiler
     public class Common
     {
         private static Common instance;
-
-        private Common() { }
+        public ObservableCollection<string> Messages = new ObservableCollection<string>();
 
         public static Common Instance
         {
@@ -23,11 +22,9 @@ namespace Quart.Msiler
         public IVsSolutionBuildManager Build { get; set; }
         public IVsSolution Solution { get; set; }
         public IVsWindowFrame Frame { get; set; }
-
         public MsilerPackage Package { get; set; }
-
-        public ObservableCollection<string> Messages = new ObservableCollection<string>();
         public uint SolutionUpdateCookie { get; set; }
         public uint SolutionCookie { get; set; }
+        private Common() { }
     }
 }

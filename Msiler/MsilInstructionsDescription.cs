@@ -5,7 +5,7 @@ namespace Quart.Msiler
     // taken from wikipedia
     internal static class MsilInstructionsDescription
     {
-        public readonly static Dictionary<string, string> InstructionDescriptions =
+        public static readonly Dictionary<string, string> InstructionDescriptions =
             new Dictionary<string, string> {
                 { "add", "Add two values, returning a new value." },
                 { "add.ovf", "Add signed integer values with overflow check." },

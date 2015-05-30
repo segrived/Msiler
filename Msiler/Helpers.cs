@@ -6,13 +6,14 @@ using Microsoft.VisualStudio.Shell;
 
 namespace Quart.Msiler
 {
-    static class Helpers
+    internal static class Helpers
     {
         public static string GetFullPath(string path, string basePath)
         {
             bool isAbsolute = Path.IsPathRooted(path);
-            if (isAbsolute)
+            if (isAbsolute) {
                 return path;
+            }
             string saved = Environment.CurrentDirectory;
             Environment.CurrentDirectory = basePath;
             try {
@@ -26,8 +27,9 @@ namespace Quart.Msiler
         {
             var provider = ServiceProvider.GlobalProvider;
             var vs = (DTE)provider.GetService(typeof(DTE));
-            if (vs == null)
+            if (vs == null) {
                 throw new InvalidOperationException("DTE not found.");
+            }
             return vs;
         }
 
@@ -35,7 +37,9 @@ namespace Quart.Msiler
         {
             var dte = GetCurrentDocument();
             var prj = dte.ActiveDocument.ProjectItem.ContainingProject;
-            string outFn = prj.ConfigurationManager.ActiveConfiguration.Properties.Item("OutputPath").Value.ToString();
+            string outFn =
+                prj.ConfigurationManager.ActiveConfiguration.Properties.Item("OutputPath")
+                   .Value.ToString();
             string fullPath = GetFullPath(outFn, Path.GetDirectoryName(prj.FileName));
             return Path.Combine(fullPath, prj.Properties.Item("OutputFileName").Value.ToString());
         }

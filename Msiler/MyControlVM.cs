@@ -4,7 +4,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Windows;
 using System.Windows.Data;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell.Interop;
@@ -15,15 +14,14 @@ namespace Quart.Msiler
 {
     public class MyControlVM : INotifyPropertyChanged, IVsUpdateSolutionEvents, IVsSolutionEvents
     {
-        private MsilMethodEntity _selectedMethod;
+        private string _filterString;
+        private bool _hideNopInstructions;
+        private ICollectionView _instructionsView;
+        private byte[] _lastBuildMd5Hash;
         private ObservableCollection<MsilMethodEntity> _methods;
         private ICollectionView _methodsView;
-        private ICollectionView _instructionsView;
-        private string _filterString;
         private MsilInstruction _selectedInstruction;
-        private bool _hideNopInstructions;
-
-        private byte[] _lastBuildMd5Hash;
+        private MsilMethodEntity _selectedMethod;
 
         public bool HideNopInstructions
         {
@@ -34,7 +32,7 @@ namespace Quart.Msiler
                     return;
                 }
                 _hideNopInstructions = value;
-                this.UpdateInstructionsFilter();
+                this._instructionsView.Refresh();
                 OnPropertyChanged();
             }
         }
@@ -81,7 +79,8 @@ namespace Quart.Msiler
                         return;
                     }
                     string selectedName = this.SelectedMethod.MethodData.FullName;
-                    this.SelectedMethod = value.FirstOrDefault(x => x.MethodData.FullName == selectedName);
+                    this.SelectedMethod =
+                        value.FirstOrDefault(x => x.MethodData.FullName == selectedName);
                 } catch {
                     // ignored
                 }
@@ -115,37 +114,12 @@ namespace Quart.Msiler
             this.FilterString = "";
         }
 
-        private void UpdateInstructionsFilter()
-        {
-            this._instructionsView = CollectionViewSource.GetDefaultView(this.SelectedMethod.Instructions);
-            this._instructionsView.Filter = o => {
-                var obj = (MsilInstruction)o;
-                if (this.HideNopInstructions) {
-                    return obj.OpCode.Code != Code.Nop;
-                }
-                return true;
-            };
-        }
-
-        private void UpdateMethodsFilter()
-        {
-            this._methodsView = CollectionViewSource.GetDefaultView(this.Methods);
-            this._methodsView.Filter = o => {
-                var obj = (MsilMethodEntity)o;
-                return obj.MethodData.FullName.ToLower().Contains(this.FilterString.ToLower());
-            };
-        }
-
-
         public event PropertyChangedEventHandler PropertyChanged;
 
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        public int OnAfterCloseSolution(object pUnkReserved)
         {
-            var handler = PropertyChanged;
-            if (handler != null) {
-                handler(this, new PropertyChangedEventArgs(propertyName));
-            }
+            this.Methods.Clear(); // empty collection
+            return VSConstants.S_OK;
         }
 
         public int UpdateSolution_Done(int fSucceeded, int fModified, int fCancelCommand)
@@ -163,8 +137,8 @@ namespace Quart.Msiler
                 }
                 var msilReader = new MsilReader(assemblyFile);
 
-                this.Methods =
-                    new ObservableCollection<MsilMethodEntity>(msilReader.EnumerateMethods());
+                var methodsEnumerable = msilReader.EnumerateMethods();
+                this.Methods = new ObservableCollection<MsilMethodEntity>(methodsEnumerable);
                 _lastBuildMd5Hash = hash;
                 this.UpdateMethodsFilter();
             } catch {
@@ -174,17 +148,47 @@ namespace Quart.Msiler
             return VSConstants.S_OK;
         }
 
-        public int OnAfterCloseSolution(object pUnkReserved)
+        private void UpdateInstructionsFilter()
         {
-            this.Methods.Clear(); // empty collection
-            return VSConstants.S_OK;
+            this._instructionsView =
+                CollectionViewSource.GetDefaultView(this.SelectedMethod.Instructions);
+            this._instructionsView.Filter = o => {
+                if (! this.HideNopInstructions) {
+                    return true;
+                }
+                var obj = (MsilInstruction)o;
+                return obj.OpCode.Code != Code.Nop;
+            };
+        }
+
+        private void UpdateMethodsFilter()
+        {
+            this._methodsView = CollectionViewSource.GetDefaultView(this.Methods);
+            this._methodsView.Filter = o => {
+                if (String.IsNullOrEmpty(this.FilterString)) {
+                    return true;
+                }
+                var obj = (MsilMethodEntity)o;
+                return obj.MethodData.FullName.ToLower().Contains(this.FilterString.ToLower());
+            };
+        }
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            var handler = PropertyChanged;
+            if (handler != null) {
+                handler(this, new PropertyChangedEventArgs(propertyName));
+            }
         }
 
         #region Unused handlers
+
         public int UpdateSolution_Begin(ref int pfCancelUpdate)
         {
             return VSConstants.S_OK;
         }
+
         public int UpdateSolution_StartUpdate(ref int pfCancelUpdate)
         {
             return VSConstants.S_OK;
@@ -199,7 +203,7 @@ namespace Quart.Msiler
         {
             return VSConstants.S_OK;
         }
-        
+
         public int OnAfterOpenProject(IVsHierarchy pHierarchy, int fAdded)
         {
             return VSConstants.S_OK;
@@ -244,6 +248,7 @@ namespace Quart.Msiler
         {
             return VSConstants.S_OK;
         }
+
         #endregion
     }
 }

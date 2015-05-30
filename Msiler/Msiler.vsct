@@ -1,5 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<CommandTable xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+<CommandTable xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable"
+              xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
   <!--  This is the file that defines the actual layout and type of the commands.
         It is divided in different sections (e.g. command definition, command
@@ -15,12 +17,10 @@
         defining some of the constants that we will use inside the file. -->
 
   <!--This is the file that defines the IDs for all the commands exposed by VisualStudio. -->
-  <Extern href="stdidcmd.h"/>
+  <Extern href="stdidcmd.h" />
 
   <!--This header contains the command ids for the menus provided by the shell. -->
-  <Extern href="vsshlids.h"/>
-
-
+  <Extern href="vsshlids.h" />
 
 
   <!--The Commands section is where we the commands, menus and menu groups are defined.
@@ -34,7 +34,7 @@
     group; your package should define its own command set in order to avoid collisions  
     with command ids defined by other packages. -->
 
-    
+
     <!-- In this section you can define new menu groups. A menu group is a container for 
          other menus or buttons (commands); from a visual point of view you can see the 
          group as the part of a menu contained between two lines. The parent of a group 
@@ -58,7 +58,7 @@
 
 
       <Button guid="guidMsilerCmdSet" id="cmdidMyTool" priority="0x0100" type="Button">
-        <Parent guid="guidSHLMainMenu" id="IDG_VS_WNDO_OTRWNDWS1"/>
+        <Parent guid="guidSHLMainMenu" id="IDG_VS_WNDO_OTRWNDWS1" />
         <Icon guid="guidImages" id="bmpPic2" />
         <Strings>
           <ButtonText>Msiler</ButtonText>
@@ -67,7 +67,7 @@
 
 
     </Buttons>
-   
+
     <!--The bitmaps section is used to define the bitmaps that are used for the commands.-->
     <Bitmaps>
       <!--  The bitmap id is defined in a way that is a little bit different from the others: 
@@ -75,30 +75,27 @@
             bitmap strip containing the bitmaps and then there are the numeric ids of the elements used 
             inside a button definition. An important aspect of this declaration is that the element id 
             must be the actual index (1-based) of the bitmap inside the bitmap strip. -->
-      <Bitmap guid="guidImages" href="Resources\Images.png" usedList="bmpPic1, bmpPic2, bmpPicSearch, bmpPicX, bmpPicArrows"/>
-      
+      <Bitmap guid="guidImages" href="Resources\Images.png"
+              usedList="bmpPic1, bmpPic2, bmpPicSearch, bmpPicX, bmpPicArrows" />
+
     </Bitmaps>
- 
+
   </Commands>
-
-
-
 
 
   <Symbols>
     <!-- This is the package guid. -->
     <GuidSymbol name="guidMsilerPkg" value="{2e50f4f0-18d1-419e-a204-f1156c910f2b}" />
-    
+
     <!-- This is the guid used to group the menu commands together -->
     <GuidSymbol name="guidMsilerCmdSet" value="{04d989fc-bbaa-4e42-aef8-c93d8727da2b}">
 
       <IDSymbol name="MyMenuGroup" value="0x1020" />
       <IDSymbol name="cmdidMyTool" value="0x0101" />
     </GuidSymbol>
-    
-    
-    
-    <GuidSymbol name="guidImages" value="{e717eaca-97d1-41ea-af53-9343cb04b25e}" >
+
+
+    <GuidSymbol name="guidImages" value="{e717eaca-97d1-41ea-af53-9343cb04b25e}">
       <IDSymbol name="bmpPic1" value="1" />
       <IDSymbol name="bmpPic2" value="2" />
       <IDSymbol name="bmpPicSearch" value="3" />
@@ -107,7 +104,6 @@
       <IDSymbol name="bmpPicStrikethrough" value="6" />
     </GuidSymbol>
   </Symbols>
-
 
 
 </CommandTable>

@@ -1,5 +1,4 @@
 ﻿using System.Runtime.InteropServices;
-using System.Windows;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
@@ -7,7 +6,7 @@ using Microsoft.VisualStudio.Shell.Interop;
 namespace Quart.Msiler
 {
     [Guid("0c127690-de92-4d02-a743-634bb922145c")]
-    public class MyToolWindow : ToolWindowPane, IVsWindowFrameNotify
+    public sealed class MyToolWindow : ToolWindowPane, IVsWindowFrameNotify
     {
         public static bool IsVisible { get; private set; }
 
@@ -16,7 +15,7 @@ namespace Quart.Msiler
             this.Caption = Resources.ToolWindowTitle;
             this.BitmapResourceID = 301;
             this.BitmapIndex = 1;
-            base.Content = new MyControl();
+            Content = new MyControl();
             IsVisible = false;
         }
 

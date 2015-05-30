@@ -7,7 +7,6 @@ using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Quart.Msiler
 {
-
     [PackageRegistration(UseManagedResourcesOnly = true)]
     [InstalledProductRegistration("#110", "#112", "1.0", IconResourceID = 400)]
     [ProvideMenuResource("Menus.ctmenu", 1)]
@@ -36,7 +35,8 @@ namespace Quart.Msiler
             if (null == mcs) {
                 return;
             }
-            var toolwndCommandId = new CommandID(GuidList.guidMsilerCmdSet, (int)PkgCmdIDList.cmdidMyTool);
+            var toolwndCommandId = new CommandID(GuidList.guidMsilerCmdSet,
+                (int)PkgCmdIDList.cmdidMyTool);
             var menuToolWin = new MenuCommand(ShowToolWindow, toolwndCommandId);
             mcs.AddCommand(menuToolWin);
 
