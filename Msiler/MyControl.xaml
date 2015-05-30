@@ -42,7 +42,7 @@
             <ListBox Name="MethodList"
                      Grid.Row="1"
                      BorderThickness="0,0,0,1"
-                     DisplayMemberPath="MethodData.FullName"
+                     DisplayMemberPath="Name"
                      ItemsSource="{Binding Methods}"
                      SelectedValue="{Binding SelectedMethod}" />
             <GridSplitter Grid.Row="2"
@@ -80,6 +80,7 @@
                           Content="Hide NOP instructions"
                           Foreground="{DynamicResource {x:Static vs:EnvironmentColors.ToolWindowTextBrushKey}}"
                           IsChecked="{Binding HideNopInstructions}" />
+
                 <ListBox Name="InstructionList"
                          Grid.Row="1"
                          BorderThickness="0,1,0,0"

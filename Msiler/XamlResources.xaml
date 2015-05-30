@@ -7,46 +7,38 @@
 
     <Style TargetType="ListBoxItem">
         <Setter Property="BorderThickness" Value="0" />
-        <Setter Property="Padding" Value="2" />
+        <Setter Property="Padding" Value="3" />
     </Style>
 
     <Style TargetType="UserControl">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static vs:EnvironmentColors.ToolWindowTextBrushKey}}" />
-        <Setter Property="Background"
-                Value="{DynamicResource {x:Static vs:EnvironmentColors.ToolWindowBackgroundBrushKey}}" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static vs:EnvironmentColors.ToolWindowBackgroundBrushKey}}" />
     </Style>
     <Style TargetType="Label">
-        <Setter Property="Background"
-                Value="{DynamicResource {x:Static vs:EnvironmentColors.ToolWindowBackgroundBrushKey}}" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static vs:EnvironmentColors.ToolWindowBackgroundBrushKey}}" />
         <Setter Property="Foreground" Value="{DynamicResource {x:Static vs:EnvironmentColors.ToolWindowTextBrushKey}}" />
     </Style>
     <Style TargetType="TextBox">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static vs:EnvironmentColors.ToolWindowTextBrushKey}}" />
-        <Setter Property="Background"
-                Value="{DynamicResource {x:Static vs:EnvironmentColors.ToolWindowBackgroundBrushKey}}" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static vs:EnvironmentColors.ToolWindowBackgroundBrushKey}}" />
     </Style>
     <Style TargetType="TextBlock">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static vs:EnvironmentColors.ToolWindowTextBrushKey}}" />
-        <Setter Property="Background"
-                Value="{DynamicResource {x:Static vs:EnvironmentColors.ToolWindowBackgroundBrushKey}}" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static vs:EnvironmentColors.ToolWindowBackgroundBrushKey}}" />
     </Style>
 
     <Style TargetType="ListBox">
-        <Setter Property="Background"
-                Value="{DynamicResource {x:Static vs:EnvironmentColors.ToolWindowBackgroundBrushKey}}" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static vs:EnvironmentColors.ToolWindowBackgroundBrushKey}}" />
         <Setter Property="Foreground" Value="{DynamicResource {x:Static vs:EnvironmentColors.ToolWindowTextBrushKey}}" />
-        <Setter Property="BorderBrush"
-                Value="{DynamicResource {x:Static vs:EnvironmentColors.ToolWindowBorderBrushKey}}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static vs:EnvironmentColors.ToolWindowBorderBrushKey}}" />
     </Style>
 
     <Style xmlns:sys="clr-namespace:System;assembly=mscorlib"
            x:Key="FilterHintTextBox"
            TargetType="TextBox">
         <Setter Property="Padding" Value="3" />
-        <Setter Property="Background"
-                Value="{DynamicResource {x:Static vs:EnvironmentColors.ToolWindowBackgroundBrushKey}}" />
-        <Setter Property="BorderBrush"
-                Value="{DynamicResource {x:Static vs:EnvironmentColors.ToolWindowBorderBrushKey}}" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static vs:EnvironmentColors.ToolWindowBackgroundBrushKey}}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static vs:EnvironmentColors.ToolWindowBorderBrushKey}}" />
         <Setter Property="Foreground" Value="{DynamicResource {x:Static vs:EnvironmentColors.ToolWindowTextBrushKey}}" />
         <Style.Resources>
             <VisualBrush x:Key="CueBannerBrush"
@@ -62,8 +54,7 @@
         </Style.Resources>
         <Style.Triggers>
             <Trigger Property="IsFocused" Value="False">
-                <Setter Property="Background"
-                        Value="{DynamicResource {x:Static vs:EnvironmentColors.ToolWindowBackgroundBrushKey}}" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static vs:EnvironmentColors.ToolWindowBackgroundBrushKey}}" />
             </Trigger>
             <Trigger Property="Text" Value="{x:Static sys:String.Empty}">
                 <Setter Property="Background" Value="{StaticResource CueBannerBrush}" />
@@ -72,8 +63,7 @@
                 <Setter Property="Background" Value="{StaticResource CueBannerBrush}" />
             </Trigger>
             <Trigger Property="IsKeyboardFocused" Value="True">
-                <Setter Property="Background"
-                        Value="{DynamicResource {x:Static vs:EnvironmentColors.ToolWindowBackgroundBrushKey}}" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static vs:EnvironmentColors.ToolWindowBackgroundBrushKey}}" />
             </Trigger>
         </Style.Triggers>
     </Style>

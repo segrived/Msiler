@@ -5,13 +5,23 @@
       <string>d:\projects\msiler\msiler\msilreader.cs</string>
     </ArrayOfString>
     <ArrayOfString>
-      <string>d:\projects\msiler\msiler\msilinstructionsdescription.cs</string>
+      <string>D:\Projects\Msiler\Msiler\MyToolWindow.cs</string>
     </ArrayOfString>
     <ArrayOfString>
       <string>D:\Projects\Msiler\Msiler\MsilerPackage.cs</string>
     </ArrayOfString>
     <ArrayOfString>
-      <string>D:\Projects\Msiler\Msiler\Common.cs</string>
+      <string>D:\Projects\Msiler\Msiler\MyControl.xaml</string>
+      <string>D:\Projects\Msiler\Msiler\MyControl.xaml.cs</string>
+    </ArrayOfString>
+    <ArrayOfString>
+      <string>D:\Projects\Msiler\Msiler\MyControl.xaml.cs</string>
+    </ArrayOfString>
+    <ArrayOfString>
+      <string>D:\Projects\Msiler\Msiler\MyToolWindow.cs</string>
+    </ArrayOfString>
+    <ArrayOfString>
+      <string>D:\Projects\Msiler\Msiler\PkgCmdID.cs</string>
     </ArrayOfString>
   </ArrayOfArrayOfString>
 </ArrayOfArrayOfArrayOfString>

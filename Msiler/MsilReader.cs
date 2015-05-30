@@ -53,6 +53,14 @@ namespace Quart.Msiler
         public MethodDefinition MethodData { get; set; }
         public List<MsilInstruction> Instructions { get; set; }
 
+        public string Name
+        {
+            get
+            {
+                return String.Format("{0}.{1}", MethodData.DeclaringType.FullName, MethodData.Name);
+            }
+        }
+
         public MsilMethodEntity(MethodDefinition methodData, List<MsilInstruction> instructions)
         {
             MethodData = methodData;

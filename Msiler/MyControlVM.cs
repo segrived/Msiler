@@ -112,6 +112,7 @@ namespace Quart.Msiler
             this.Methods = new ObservableCollection<MsilMethodEntity>();
             this.UpdateMethodsFilter();
             this.FilterString = "";
+            Debug.WriteLine(MsilInstructionsDescription.InstructionDescriptions.Max(x => x.Key.Length));
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
