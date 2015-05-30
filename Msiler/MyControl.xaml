@@ -102,7 +102,7 @@
                                              Text="{Binding OpCode,
                                                             Mode=OneWay}"
                                              ToolTip="{Binding Description}" />
-                                        <Run Text="{Binding Operand, Mode=OneWay}" />
+                                        <Run Text="{Binding Operand, Mode=OneWay}" Foreground="ForestGreen" />
                                     </TextBlock.Inlines>
                                 </TextBlock>
                             </StackPanel>
