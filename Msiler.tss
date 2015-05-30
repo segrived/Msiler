@@ -2,26 +2,26 @@
 <ArrayOfArrayOfArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <ArrayOfArrayOfString>
     <ArrayOfString>
-      <string>d:\projects\msiler\msiler\msilreader.cs</string>
+      <string>D:\Projects\Msiler\Msiler\MsilReader.cs</string>
     </ArrayOfString>
     <ArrayOfString>
-      <string>D:\Projects\Msiler\Msiler\MyToolWindow.cs</string>
+      <string>d:\projects\msiler\msiler\mytoolwindow.cs</string>
     </ArrayOfString>
     <ArrayOfString>
-      <string>D:\Projects\Msiler\Msiler\MsilerPackage.cs</string>
+      <string>d:\projects\msiler\msiler\msilerpackage.cs</string>
     </ArrayOfString>
     <ArrayOfString>
-      <string>D:\Projects\Msiler\Msiler\MyControl.xaml</string>
-      <string>D:\Projects\Msiler\Msiler\MyControl.xaml.cs</string>
+      <string>d:\projects\msiler\msiler\mycontrol.xaml</string>
+      <string>d:\projects\msiler\msiler\mycontrol.xaml.cs</string>
     </ArrayOfString>
     <ArrayOfString>
-      <string>D:\Projects\Msiler\Msiler\MyControl.xaml.cs</string>
+      <string>D:\Projects\Msiler\Msiler\XamlResources.xaml</string>
     </ArrayOfString>
     <ArrayOfString>
-      <string>D:\Projects\Msiler\Msiler\MyToolWindow.cs</string>
+      <string>D:\Projects\Msiler\Msiler\MyControlVM.cs</string>
     </ArrayOfString>
     <ArrayOfString>
-      <string>D:\Projects\Msiler\Msiler\PkgCmdID.cs</string>
+      <string>D:\Projects\Msiler\Msiler\MsilReader.cs</string>
     </ArrayOfString>
   </ArrayOfArrayOfString>
 </ArrayOfArrayOfArrayOfString>

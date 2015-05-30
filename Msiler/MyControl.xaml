@@ -42,9 +42,14 @@
             <ListBox Name="MethodList"
                      Grid.Row="1"
                      BorderThickness="0,0,0,1"
-                     DisplayMemberPath="Name"
                      ItemsSource="{Binding Methods}"
-                     SelectedValue="{Binding SelectedMethod}" />
+                     SelectedValue="{Binding SelectedMethod}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}" ToolTip="{Binding MethodData.FullName}" />
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
             <GridSplitter Grid.Row="2"
                           Height="3"
                           Margin="0"
@@ -102,7 +107,7 @@
                                              Text="{Binding OpCode,
                                                             Mode=OneWay}"
                                              ToolTip="{Binding Description}" />
-                                        <Run Text="{Binding Operand, Mode=OneWay}" Foreground="ForestGreen" />
+                                        <Run Foreground="ForestGreen" Text="{Binding Operand, Mode=OneWay}" />
                                     </TextBlock.Inlines>
                                 </TextBlock>
                             </StackPanel>
