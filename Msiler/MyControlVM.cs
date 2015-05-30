@@ -170,7 +170,7 @@ namespace Quart.Msiler
                     return true;
                 }
                 var obj = (MsilMethodEntity)o;
-                return obj.MethodData.FullName.ToLower().Contains(this.FilterString.ToLower());
+                return obj.Name.ToLower().Contains(this.FilterString.ToLower());
             };
         }
 
