@@ -17,8 +17,7 @@ namespace Quart.Msiler
         private IVsSolutionBuildManager _buildManager;
         private IVsSolution _solutionManager;
 
-        private void ShowToolWindow(object sender, EventArgs e)
-        {
+        private void ShowToolWindow(object sender, EventArgs e) {
             var window = this.FindToolWindow(typeof(MyToolWindow), 0, true);
             if ((null == window) || (null == window.Frame)) {
                 throw new NotSupportedException(Resources.CanNotCreateWindow);
@@ -27,8 +26,7 @@ namespace Quart.Msiler
             ErrorHandler.ThrowOnFailure(windowFrame.Show());
         }
 
-        protected override void Initialize()
-        {
+        protected override void Initialize() {
             base.Initialize();
 
             var mcs = GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
@@ -55,8 +53,7 @@ namespace Quart.Msiler
             Common.Instance.Solution = _solutionManager;
         }
 
-        protected override void Dispose(bool disposing)
-        {
+        protected override void Dispose(bool disposing) {
             base.Dispose(disposing);
             if (_buildManager != null && Common.Instance.SolutionUpdateCookie != 0) {
                 _buildManager.UnadviseUpdateSolutionEvents(Common.Instance.SolutionUpdateCookie);

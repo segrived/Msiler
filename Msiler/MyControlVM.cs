@@ -9,6 +9,7 @@ using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell.Interop;
 using Mono.Cecil.Cil;
 using Quart.Msiler.Annotations;
+using Microsoft.CSharp;
 
 namespace Quart.Msiler
 {
@@ -23,8 +24,7 @@ namespace Quart.Msiler
         private MsilInstruction _selectedInstruction;
         private MsilMethodEntity _selectedMethod;
 
-        public bool HideNopInstructions
-        {
+        public bool HideNopInstructions {
             get { return _hideNopInstructions; }
             set
             {
@@ -37,8 +37,7 @@ namespace Quart.Msiler
             }
         }
 
-        public MsilInstruction SelectedInstruction
-        {
+        public MsilInstruction SelectedInstruction {
             get { return _selectedInstruction; }
             set
             {
@@ -50,8 +49,7 @@ namespace Quart.Msiler
             }
         }
 
-        public string FilterString
-        {
+        public string FilterString {
             get { return _filterString; }
             set
             {
@@ -64,8 +62,7 @@ namespace Quart.Msiler
             }
         }
 
-        public ObservableCollection<MsilMethodEntity> Methods
-        {
+        public ObservableCollection<MsilMethodEntity> Methods {
             get { return _methods; }
             set
             {
@@ -87,8 +84,7 @@ namespace Quart.Msiler
             }
         }
 
-        public MsilMethodEntity SelectedMethod
-        {
+        public MsilMethodEntity SelectedMethod {
             get { return _selectedMethod; }
             set
             {
@@ -101,8 +97,7 @@ namespace Quart.Msiler
             }
         }
 
-        public MyControlVM()
-        {
+        public MyControlVM() {
             uint solutionUpdateCookie;
             uint solutionCookie;
             Common.Instance.Build.AdviseUpdateSolutionEvents(this, out solutionUpdateCookie);
@@ -117,15 +112,13 @@ namespace Quart.Msiler
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public int OnAfterCloseSolution(object pUnkReserved)
-        {
+        public int OnAfterCloseSolution(object pUnkReserved) {
             this.Methods.Clear(); // empty collection
             return VSConstants.S_OK;
         }
 
-        public int UpdateSolution_Done(int fSucceeded, int fModified, int fCancelCommand)
-        {
-            if (! MyToolWindow.IsVisible || fSucceeded != 1) {
+        public int UpdateSolution_Done(int fSucceeded, int fModified, int fCancelCommand) {
+            if (!MyToolWindow.IsVisible || fSucceeded != 1) {
                 return VSConstants.S_OK;
             }
             Debug.Write("Compiled, generating IL code...");
@@ -149,12 +142,11 @@ namespace Quart.Msiler
             return VSConstants.S_OK;
         }
 
-        private void UpdateInstructionsFilter()
-        {
+        private void UpdateInstructionsFilter() {
             this._instructionsView =
                 CollectionViewSource.GetDefaultView(this.SelectedMethod.Instructions);
             this._instructionsView.Filter = o => {
-                if (! this.HideNopInstructions) {
+                if (!this.HideNopInstructions) {
                     return true;
                 }
                 var obj = (MsilInstruction)o;
@@ -162,8 +154,7 @@ namespace Quart.Msiler
             };
         }
 
-        private void UpdateMethodsFilter()
-        {
+        private void UpdateMethodsFilter() {
             this._methodsView = CollectionViewSource.GetDefaultView(this.Methods);
             this._methodsView.Filter = o => {
                 if (String.IsNullOrEmpty(this.FilterString)) {
@@ -175,8 +166,7 @@ namespace Quart.Msiler
         }
 
         [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) {
             var handler = PropertyChanged;
             if (handler != null) {
                 handler(this, new PropertyChangedEventArgs(propertyName));
@@ -185,68 +175,55 @@ namespace Quart.Msiler
 
         #region Unused handlers
 
-        public int UpdateSolution_Begin(ref int pfCancelUpdate)
-        {
+        public int UpdateSolution_Begin(ref int pfCancelUpdate) {
             return VSConstants.S_OK;
         }
 
-        public int UpdateSolution_StartUpdate(ref int pfCancelUpdate)
-        {
+        public int UpdateSolution_StartUpdate(ref int pfCancelUpdate) {
             return VSConstants.S_OK;
         }
 
-        public int UpdateSolution_Cancel()
-        {
+        public int UpdateSolution_Cancel() {
             return VSConstants.S_OK;
         }
 
-        public int OnActiveProjectCfgChange(IVsHierarchy pIVsHierarchy)
-        {
+        public int OnActiveProjectCfgChange(IVsHierarchy pIVsHierarchy) {
             return VSConstants.S_OK;
         }
 
-        public int OnAfterOpenProject(IVsHierarchy pHierarchy, int fAdded)
-        {
+        public int OnAfterOpenProject(IVsHierarchy pHierarchy, int fAdded) {
             return VSConstants.S_OK;
         }
 
-        public int OnQueryCloseProject(IVsHierarchy pHierarchy, int fRemoving, ref int pfCancel)
-        {
+        public int OnQueryCloseProject(IVsHierarchy pHierarchy, int fRemoving, ref int pfCancel) {
             return VSConstants.S_OK;
         }
 
-        public int OnBeforeCloseProject(IVsHierarchy pHierarchy, int fRemoved)
-        {
+        public int OnBeforeCloseProject(IVsHierarchy pHierarchy, int fRemoved) {
             return VSConstants.S_OK;
         }
 
-        public int OnAfterLoadProject(IVsHierarchy pStubHierarchy, IVsHierarchy pRealHierarchy)
-        {
+        public int OnAfterLoadProject(IVsHierarchy pStubHierarchy, IVsHierarchy pRealHierarchy) {
             return VSConstants.S_OK;
         }
 
-        public int OnQueryUnloadProject(IVsHierarchy pRealHierarchy, ref int pfCancel)
-        {
+        public int OnQueryUnloadProject(IVsHierarchy pRealHierarchy, ref int pfCancel) {
             return VSConstants.S_OK;
         }
 
-        public int OnBeforeUnloadProject(IVsHierarchy pRealHierarchy, IVsHierarchy pStubHierarchy)
-        {
+        public int OnBeforeUnloadProject(IVsHierarchy pRealHierarchy, IVsHierarchy pStubHierarchy) {
             return VSConstants.S_OK;
         }
 
-        public int OnAfterOpenSolution(object pUnkReserved, int fNewSolution)
-        {
+        public int OnAfterOpenSolution(object pUnkReserved, int fNewSolution) {
             return VSConstants.S_OK;
         }
 
-        public int OnQueryCloseSolution(object pUnkReserved, ref int pfCancel)
-        {
+        public int OnQueryCloseSolution(object pUnkReserved, ref int pfCancel) {
             return VSConstants.S_OK;
         }
 
-        public int OnBeforeCloseSolution(object pUnkReserved)
-        {
+        public int OnBeforeCloseSolution(object pUnkReserved) {
             return VSConstants.S_OK;
         }
 

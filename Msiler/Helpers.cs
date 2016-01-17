@@ -8,8 +8,7 @@ namespace Quart.Msiler
 {
     internal static class Helpers
     {
-        public static string GetFullPath(string path, string basePath)
-        {
+        public static string GetFullPath(string path, string basePath) {
             bool isAbsolute = Path.IsPathRooted(path);
             if (isAbsolute) {
                 return path;
@@ -23,8 +22,7 @@ namespace Quart.Msiler
             }
         }
 
-        public static DTE GetCurrentDocument()
-        {
+        public static DTE GetCurrentDocument() {
             var provider = ServiceProvider.GlobalProvider;
             var vs = (DTE)provider.GetService(typeof(DTE));
             if (vs == null) {
@@ -33,8 +31,7 @@ namespace Quart.Msiler
             return vs;
         }
 
-        public static string GetOutputAssemblyFileName()
-        {
+        public static string GetOutputAssemblyFileName() {
             var dte = GetCurrentDocument();
             var prj = dte.ActiveDocument.ProjectItem.ContainingProject;
             string outFn =
@@ -44,8 +41,7 @@ namespace Quart.Msiler
             return Path.Combine(fullPath, prj.Properties.Item("OutputFileName").Value.ToString());
         }
 
-        public static byte[] ComputeMd5(string fn)
-        {
+        public static byte[] ComputeMd5(string fn) {
             using (var md5 = MD5.Create()) {
                 using (var stream = File.OpenRead(fn)) {
                     return md5.ComputeHash(stream);

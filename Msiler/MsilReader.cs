@@ -10,18 +10,15 @@ namespace Quart.Msiler
     {
         private Instruction Instruction { get; set; }
 
-        public string Offset
-        {
+        public string Offset {
             get { return String.Format("IL_{0:X4}", Instruction.Offset); }
         }
 
-        public OpCode OpCode
-        {
+        public OpCode OpCode {
             get { return Instruction.OpCode; }
         }
 
-        public string Description
-        {
+        public string Description {
             get
             {
                 return
@@ -31,8 +28,7 @@ namespace Quart.Msiler
             }
         }
 
-        public string Operand
-        {
+        public string Operand {
             get
             {
                 if (Instruction.Operand is Instruction) {
@@ -49,8 +45,7 @@ namespace Quart.Msiler
             }
         }
 
-        public MsilInstruction(Instruction instruction)
-        {
+        public MsilInstruction(Instruction instruction) {
             this.Instruction = instruction;
         }
     }
@@ -60,16 +55,14 @@ namespace Quart.Msiler
         public MethodDefinition MethodData { get; set; }
         public List<MsilInstruction> Instructions { get; set; }
 
-        public string Name
-        {
+        public string Name {
             get
             {
                 return String.Format("{0}.{1}", MethodData.DeclaringType.FullName, MethodData.Name);
             }
         }
 
-        public MsilMethodEntity(MethodDefinition methodData, List<MsilInstruction> instructions)
-        {
+        public MsilMethodEntity(MethodDefinition methodData, List<MsilInstruction> instructions) {
             MethodData = methodData;
             Instructions = instructions;
         }
@@ -80,14 +73,12 @@ namespace Quart.Msiler
         private readonly ModuleDefinition _module;
         private string AssemblyName { get; set; }
 
-        public MsilReader(string assemblyName)
-        {
+        public MsilReader(string assemblyName) {
             this.AssemblyName = assemblyName;
             this._module = ModuleDefinition.ReadModule(assemblyName);
         }
 
-        public IEnumerable<MsilMethodEntity> EnumerateMethods()
-        {
+        public IEnumerable<MsilMethodEntity> EnumerateMethods() {
             var types = this._module.GetTypes();
             return
                 from type in types

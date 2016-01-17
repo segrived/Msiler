@@ -10,8 +10,7 @@ namespace Quart.Msiler
     {
         public static bool IsVisible { get; private set; }
 
-        public MyToolWindow() : base(null)
-        {
+        public MyToolWindow() : base(null) {
             this.Caption = Resources.ToolWindowTitle;
             this.BitmapResourceID = 301;
             this.BitmapIndex = 1;
@@ -19,8 +18,7 @@ namespace Quart.Msiler
             IsVisible = false;
         }
 
-        public int OnShow(int fShow)
-        {
+        public int OnShow(int fShow) {
             if (fShow == (int)__FRAMESHOW.FRAMESHOW_WinShown) {
                 IsVisible = true;
             } else if (fShow == (int)__FRAMESHOW.FRAMESHOW_WinHidden) {
@@ -29,18 +27,15 @@ namespace Quart.Msiler
             return VSConstants.S_OK;
         }
 
-        public int OnMove()
-        {
+        public int OnMove() {
             return VSConstants.S_OK;
         }
 
-        public int OnSize()
-        {
+        public int OnSize() {
             return VSConstants.S_OK;
         }
 
-        public int OnDockableChange(int fDockable)
-        {
+        public int OnDockableChange(int fDockable) {
             return VSConstants.S_OK;
         }
     }

@@ -8,8 +8,7 @@ namespace Quart.Msiler
         private static Common instance;
         public ObservableCollection<string> Messages = new ObservableCollection<string>();
 
-        public static Common Instance
-        {
+        public static Common Instance {
             get
             {
                 if (instance == null) {

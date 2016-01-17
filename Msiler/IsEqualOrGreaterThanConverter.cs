@@ -8,8 +8,7 @@ namespace Quart.Msiler
     {
         #region IValueConverter Members
 
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
             if (value == null) {
                 return false;
             }
@@ -21,8 +20,7 @@ namespace Quart.Msiler
         }
 
         public object ConvertBack(
-            object value, Type targetType, object parameter, CultureInfo culture)
-        {
+            object value, Type targetType, object parameter, CultureInfo culture) {
             throw new NotImplementedException();
         }
 
