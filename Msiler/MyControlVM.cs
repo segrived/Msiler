@@ -11,28 +11,42 @@ using Mono.Cecil.Cil;
 using Quart.Msiler.Annotations;
 using ICSharpCode.AvalonEdit.Highlighting;
 using ICSharpCode.AvalonEdit.Highlighting.Xshd;
+using System.Reflection;
 
 namespace Quart.Msiler
 {
     public class MyControlVM : INotifyPropertyChanged, IVsUpdateSolutionEvents, IVsSolutionEvents
     {
-        private string _filterString;
-        private bool _hideNopInstructions;
-        private ICollectionView _instructionsView;
-        private byte[] _lastBuildMd5Hash;
-        private ObservableCollection<MsilMethodEntity> _methods;
-        private ICollectionView _methodsView;
-        private MsilInstruction _selectedInstruction;
-        private MsilMethodEntity _selectedMethod;
+        ICollectionView _instructionsView;
+        ICollectionView _methodsView;
+        byte[] _lastBuildMd5Hash;
+
+        public MyControlVM() {
+            this.UpdateMethodsFilter();
+
+            InitCommon();
+
+            var ilRes = "Quart.Msiler.Resources.IL.xshd";
+            using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(ilRes)) {
+                using (var reader = new System.Xml.XmlTextReader(stream)) {
+                    this.Highlighter = HighlightingLoader.Load(reader, HighlightingManager.Instance);
+                }
+            }
+        }
+
+        public void InitCommon() {
+            uint solutionUpdateCookie;
+            uint solutionCookie;
+            Common.Instance.Build.AdviseUpdateSolutionEvents(this, out solutionUpdateCookie);
+            Common.Instance.Solution.AdviseSolutionEvents(this, out solutionCookie);
+            Common.Instance.SolutionUpdateCookie = solutionUpdateCookie;
+            Common.Instance.SolutionCookie = solutionCookie;
+        }
 
 
         private IHighlightingDefinition _highligher;
-
         public IHighlightingDefinition Highlighter {
-            get
-            {
-                return this._highligher;
-            }
+            get { return this._highligher; }
             set
             {
                 this._highligher = value;
@@ -40,6 +54,7 @@ namespace Quart.Msiler
             }
         }
 
+        private bool _hideNopInstructions;
         public bool HideNopInstructions {
             get { return _hideNopInstructions; }
             set
@@ -53,6 +68,7 @@ namespace Quart.Msiler
             }
         }
 
+        private MsilInstruction _selectedInstruction;
         public MsilInstruction SelectedInstruction {
             get { return _selectedInstruction; }
             set
@@ -65,6 +81,7 @@ namespace Quart.Msiler
             }
         }
 
+        private string _filterString = "";
         public string FilterString {
             get { return _filterString; }
             set
@@ -72,13 +89,14 @@ namespace Quart.Msiler
                 if (value == _filterString) {
                     return;
                 }
-
                 _filterString = value;
                 this._methodsView.Refresh();
                 OnPropertyChanged();
             }
         }
 
+        private ObservableCollection<MsilMethodEntity> _methods
+            = new ObservableCollection<MsilMethodEntity>();
         public ObservableCollection<MsilMethodEntity> Methods {
             get { return _methods; }
             set
@@ -93,14 +111,14 @@ namespace Quart.Msiler
                         return;
                     }
                     string selectedName = this.SelectedMethod.MethodData.FullName;
-                    this.SelectedMethod =
-                        value.FirstOrDefault(x => x.MethodData.FullName == selectedName);
+                    this.SelectedMethod = value.FirstOrDefault(x => x.MethodData.FullName == selectedName);
                 } catch {
                     // ignored
                 }
             }
         }
 
+        private MsilMethodEntity _selectedMethod;
         public MsilMethodEntity SelectedMethod {
             get { return _selectedMethod; }
             set
@@ -111,26 +129,6 @@ namespace Quart.Msiler
                 _selectedMethod = value;
                 OnPropertyChanged();
                 this.UpdateInstructionsFilter();
-            }
-        }
-
-        public MyControlVM() {
-            uint solutionUpdateCookie;
-            uint solutionCookie;
-            Common.Instance.Build.AdviseUpdateSolutionEvents(this, out solutionUpdateCookie);
-            Common.Instance.Solution.AdviseSolutionEvents(this, out solutionCookie);
-            Common.Instance.SolutionUpdateCookie = solutionUpdateCookie;
-            Common.Instance.SolutionCookie = solutionCookie;
-            this.Methods = new ObservableCollection<MsilMethodEntity>();
-            this.UpdateMethodsFilter();
-            this.FilterString = "";
-            Debug.WriteLine(MsilInstructionsDescription.InstructionDescriptions.Max(x => x.Key.Length));
-
-
-            using (var stream = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream("Quart.Msiler.Resources.IL.xshd")) {
-                using (var reader = new System.Xml.XmlTextReader(stream)) {
-                    this.Highlighter = HighlightingLoader.Load(reader, HighlightingManager.Instance);
-                }
             }
         }
 
