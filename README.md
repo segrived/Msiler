@@ -2,6 +2,10 @@
 
 MSIL code viewer extension for Visual Studio 2013/2015. VS themes (dark, ligth, blue) are supported.
 
+[![Build status](https://ci.appveyor.com/api/projects/status/aj46np0rwam5sf4e?svg=true)](https://ci.appveyor.com/project/segrived/msiler)
+
+## Screenshot
+
 ![Screenshot](http://i.imgur.com/Fp7Xa37.gif)
 
 ## Installation
@@ -14,17 +18,7 @@ Open tool window using menu item "View -> Other Windows -> Msiler" and build/reb
 Feel free to send pull requests.
 
 ## Changelog
-### Msiler 1.1
-* Visual Studio 2015 support (was tested in RC version)
-* Hide *nop* instructions feature
-* Clear processed data on solution unload
-* Process asembly only if Msiler tool window is visible
-* Do not reanalyse data if output assembly was not changed
-* Simple function names instead of full signatures
-* Other fixes and optimizations
-
-### Msiler 1.0
-First version
+[Version history](https://github.com/segrived/Msiler/wiki/Version-History)
 
 ## License
 The MIT License (MIT)
