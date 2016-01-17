@@ -25,6 +25,7 @@ namespace Quart.Msiler
         public static DTE GetCurrentDocument() {
             var provider = ServiceProvider.GlobalProvider;
             var vs = (DTE)provider.GetService(typeof(DTE));
+
             if (vs == null) {
                 throw new InvalidOperationException("DTE not found.");
             }

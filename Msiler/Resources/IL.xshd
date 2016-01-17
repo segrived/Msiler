@@ -1,25 +1,33 @@
 ﻿<SyntaxDefinition name="IL" xmlns="http://icsharpcode.net/sharpdevelop/syntaxdefinition/2008">
-  <Color name="Comment" foreground="Green" />
-  <Color name="String" foreground="Blue" />
-  <Color name="Offset" foreground="Orange" />
+  <Color name="Comment" foreground="Gray" />
+  <Color name="String" foreground="Green" />
+  <Color name="Offset" foreground="Brown" />
   <Color name="Instruction" fontWeight="bold" foreground="Blue" />
+  <Color name="Number" fontWeight="bold" foreground="Orange" />
 
   <RuleSet ignoreCase="true">
     <Span color="Comment" begin="//" />
 
     <Span color="String">
-    <Begin>"</Begin>
-    <End>"</End>
-    <RuleSet>
+      <Begin>"</Begin>
+      <End>"</End>
+      <RuleSet>
         <Span begin = "\\" end="." />
-    </RuleSet>
+      </RuleSet>
     </Span>
 
     <Span color="Offset">
-    <Begin>IL_</Begin>
-    <End>\s+</End>
+      <Begin>IL_</Begin>
+      <End>\s+</End>
     </Span>
-   
+
+    <Rule color="Number">
+      (?&lt;=\s)\-?\d+\s
+    </Rule>
+
+    <Rule color="Number">
+      (?&lt;=\s)\-?\d+$
+    </Rule>
       
     <Keywords color="Instruction">
       <Word>add </Word>

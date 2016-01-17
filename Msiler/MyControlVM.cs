@@ -9,7 +9,6 @@ using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell.Interop;
 using Mono.Cecil.Cil;
 using Quart.Msiler.Annotations;
-using Microsoft.CSharp;
 using ICSharpCode.AvalonEdit.Highlighting;
 using ICSharpCode.AvalonEdit.Highlighting.Xshd;
 
@@ -73,6 +72,7 @@ namespace Quart.Msiler
                 if (value == _filterString) {
                     return;
                 }
+
                 _filterString = value;
                 this._methodsView.Refresh();
                 OnPropertyChanged();
