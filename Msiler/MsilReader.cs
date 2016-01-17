@@ -48,6 +48,10 @@ namespace Quart.Msiler
         public MsilInstruction(Instruction instruction) {
             this.Instruction = instruction;
         }
+
+        public override string ToString() {
+            return $"{Offset} {OpCode} {Operand}";
+        }
     }
 
     public class MsilMethodEntity
@@ -61,6 +65,8 @@ namespace Quart.Msiler
                 return String.Format("{0}.{1}", MethodData.DeclaringType.FullName, MethodData.Name);
             }
         }
+
+        public string InstructionsStr { get { return String.Join(Environment.NewLine, this.Instructions); } }
 
         public MsilMethodEntity(MethodDefinition methodData, List<MsilInstruction> instructions) {
             MethodData = methodData;

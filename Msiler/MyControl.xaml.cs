@@ -7,8 +7,7 @@ namespace Quart.Msiler
     {
         private readonly MyControlVM _viewModel;
 
-        public MyControl()
-        {
+        public MyControl() {
             InitializeComponent();
             this._viewModel = new MyControlVM();
             this.DataContext = this._viewModel;

@@ -85,35 +85,16 @@
                           Content="Hide NOP instructions"
                           Foreground="{DynamicResource {x:Static vs:EnvironmentColors.ToolWindowTextBrushKey}}"
                           IsChecked="{Binding HideNopInstructions}" />
-
-                <ListBox Name="InstructionList"
-                         Grid.Row="1"
-                         BorderThickness="0,1,0,0"
-                         FontFamily="Consolas"
-                         FontSize="12"
-                         ItemsSource="{Binding Path=SelectedMethod.Instructions}"
-                         Padding="5"
-                         SelectedItem="{Binding SelectedInstruction}">
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Vertical">
-                                <TextBlock>
-                                    <TextBlock.Inlines>
-                                        <Run FontWeight="Bold"
-                                             Foreground="{DynamicResource {x:Static vs:EnvironmentColors.SystemGrayTextBrushKey}}"
-                                             Text="{Binding Offset,
-                                                            Mode=OneWay}" />
-                                        <Run FontWeight="Bold"
-                                             Text="{Binding OpCode,
-                                                            Mode=OneWay}"
-                                             ToolTip="{Binding Description}" />
-                                        <Run Foreground="ForestGreen" Text="{Binding Operand, Mode=OneWay}" />
-                                    </TextBlock.Inlines>
-                                </TextBlock>
-                            </StackPanel>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
+                
+                <local:MvvmTextEditor
+                x:Name="InstructionList"
+                Grid.Row="1"
+                FontFamily="Consolas"
+                ShowLineNumbers="True"
+                Text="{Binding Path=SelectedMethod.InstructionsStr, Mode=OneWay}"
+                    SyntaxHighlighting="{Binding Path=Highlighter}"
+                FontSize="10pt"
+                    />
                 <TextBlock Grid.Row="2"
                            FontStyle="Italic"
                            Padding="5"

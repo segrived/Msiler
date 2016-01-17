@@ -10,6 +10,8 @@ using Microsoft.VisualStudio.Shell.Interop;
 using Mono.Cecil.Cil;
 using Quart.Msiler.Annotations;
 using Microsoft.CSharp;
+using ICSharpCode.AvalonEdit.Highlighting;
+using ICSharpCode.AvalonEdit.Highlighting.Xshd;
 
 namespace Quart.Msiler
 {
@@ -23,6 +25,21 @@ namespace Quart.Msiler
         private ICollectionView _methodsView;
         private MsilInstruction _selectedInstruction;
         private MsilMethodEntity _selectedMethod;
+
+
+        private IHighlightingDefinition _highligher;
+
+        public IHighlightingDefinition Highlighter {
+            get
+            {
+                return this._highligher;
+            }
+            set
+            {
+                this._highligher = value;
+                OnPropertyChanged();
+            }
+        }
 
         public bool HideNopInstructions {
             get { return _hideNopInstructions; }
@@ -108,6 +125,13 @@ namespace Quart.Msiler
             this.UpdateMethodsFilter();
             this.FilterString = "";
             Debug.WriteLine(MsilInstructionsDescription.InstructionDescriptions.Max(x => x.Key.Length));
+
+
+            using (var stream = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream("Quart.Msiler.Resources.IL.xshd")) {
+                using (var reader = new System.Xml.XmlTextReader(stream)) {
+                    this.Highlighter = HighlightingLoader.Load(reader, HighlightingManager.Instance);
+                }
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
