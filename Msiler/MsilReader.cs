@@ -31,6 +31,10 @@ namespace Quart.Msiler
         public string Operand {
             get
             {
+                if (Instruction.OpCode.Name == "ldstr") {
+                    return @"""" + Instruction.Operand.ToString() + @"""";
+                }
+
                 if (Instruction.Operand is Instruction) {
                     return new MsilInstruction((Instruction)Instruction.Operand).Offset;
                 }
