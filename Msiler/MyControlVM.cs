@@ -7,31 +7,18 @@ using System.Runtime.CompilerServices;
 using System.Windows.Data;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell.Interop;
-using Mono.Cecil.Cil;
 using Quart.Msiler.Annotations;
-using ICSharpCode.AvalonEdit.Highlighting;
-using ICSharpCode.AvalonEdit.Highlighting.Xshd;
-using System.Reflection;
 
 namespace Quart.Msiler
 {
     public class MyControlVM : INotifyPropertyChanged, IVsUpdateSolutionEvents, IVsSolutionEvents
     {
-        ICollectionView _instructionsView;
         ICollectionView _methodsView;
         byte[] _lastBuildMd5Hash;
 
         public MyControlVM() {
             this.UpdateMethodsFilter();
-
             InitCommon();
-
-            var ilRes = "Quart.Msiler.Resources.IL.xshd";
-            using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(ilRes)) {
-                using (var reader = new System.Xml.XmlTextReader(stream)) {
-                    this.Highlighter = HighlightingLoader.Load(reader, HighlightingManager.Instance);
-                }
-            }
         }
 
         public void InitCommon() {
@@ -43,17 +30,6 @@ namespace Quart.Msiler
             Common.Instance.SolutionCookie = solutionCookie;
         }
 
-
-        private IHighlightingDefinition _highligher;
-        public IHighlightingDefinition Highlighter {
-            get { return this._highligher; }
-            set
-            {
-                this._highligher = value;
-                OnPropertyChanged();
-            }
-        }
-
         private bool _hideNopInstructions;
         public bool HideNopInstructions {
             get { return _hideNopInstructions; }
@@ -63,20 +39,19 @@ namespace Quart.Msiler
                     return;
                 }
                 _hideNopInstructions = value;
-                this._instructionsView.Refresh();
                 OnPropertyChanged();
             }
         }
 
-        private MsilInstruction _selectedInstruction;
-        public MsilInstruction SelectedInstruction {
-            get { return _selectedInstruction; }
+        private string _instructionsString;
+        public string InstructionsString {
+            get { return _instructionsString; }
             set
             {
-                if (Equals(value, _selectedInstruction)) {
+                if (Equals(value, _instructionsString)) {
                     return;
                 }
-                _selectedInstruction = value;
+                _instructionsString = value;
                 OnPropertyChanged();
             }
         }
@@ -127,8 +102,8 @@ namespace Quart.Msiler
                     return;
                 }
                 _selectedMethod = value;
+                this.InstructionsString = value.InstructionsStr;
                 OnPropertyChanged();
-                this.UpdateInstructionsFilter();
             }
         }
 
@@ -162,18 +137,6 @@ namespace Quart.Msiler
             }
             Debug.WriteLine("Done");
             return VSConstants.S_OK;
-        }
-
-        private void UpdateInstructionsFilter() {
-            this._instructionsView =
-                CollectionViewSource.GetDefaultView(this.SelectedMethod.Instructions);
-            this._instructionsView.Filter = o => {
-                if (!this.HideNopInstructions) {
-                    return true;
-                }
-                var obj = (MsilInstruction)o;
-                return obj.OpCode.Code != Code.Nop;
-            };
         }
 
         private void UpdateMethodsFilter() {
