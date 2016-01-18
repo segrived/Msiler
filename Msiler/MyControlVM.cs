@@ -32,15 +32,17 @@ namespace Quart.Msiler
             Common.Instance.SolutionCookie = solutionCookie;
         }
 
-        private bool _hideNopInstructions;
-        public bool HideNopInstructions {
-            get { return _hideNopInstructions; }
+        private bool _ignoreNops;
+        public bool IgnoreNops {
+            get { return _ignoreNops; }
             set
             {
-                if (value == _hideNopInstructions) {
+                if (value == _ignoreNops) {
                     return;
                 }
-                _hideNopInstructions = value;
+                _ignoreNops = value;
+                this._generator.IgnoreNops = value;
+                UpdateListing();
                 OnPropertyChanged();
             }
         }
@@ -54,19 +56,26 @@ namespace Quart.Msiler
                     return;
                 }
                 _numbersAsHex = value;
+                this._generator.NumbersAsHex = value;
+                UpdateListing();
                 OnPropertyChanged();
             }
         }
 
-        private string _instructionsString;
-        public string InstructionsString {
-            get { return _instructionsString; }
+        public void UpdateListing() {
+            this.BytecodeListing =
+                _generator.Generate(this.SelectedMethod.Instructions);
+        }
+
+        private string _bytecodeListing;
+        public string BytecodeListing {
+            get { return _bytecodeListing; }
             set
             {
-                if (Equals(value, _instructionsString)) {
+                if (Equals(value, _bytecodeListing)) {
                     return;
                 }
-                _instructionsString = value;
+                _bytecodeListing = value;
                 OnPropertyChanged();
             }
         }
@@ -117,7 +126,7 @@ namespace Quart.Msiler
                     return;
                 }
                 _selectedMethod = value;
-                this.InstructionsString = _generator.Generate(value.Instructions);
+                this.BytecodeListing = _generator.Generate(value.Instructions);
                 OnPropertyChanged();
             }
         }

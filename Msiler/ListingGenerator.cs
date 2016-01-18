@@ -34,8 +34,8 @@ namespace Quart.Msiler
             }
 
             if (this.NumbersAsHex) {
-                double number;
-                bool isNumeric = Double.TryParse(i.Operand.ToString(), out number);
+                Int64 number;
+                bool isNumeric = Int64.TryParse(i.Operand.ToString(), out number);
                 if (isNumeric)
                     return number.ToString("X");
             }

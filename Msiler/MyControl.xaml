@@ -82,9 +82,9 @@
                 <Grid Grid.Row="0">
                     <StackPanel Orientation="Vertical">
                         <CheckBox
-                          Content="Hide NOP instructions"
+                          Content="Ignore NOPs"
                           Foreground="{DynamicResource {x:Static vs:EnvironmentColors.ToolWindowTextBrushKey}}"
-                          IsChecked="{Binding HideNopInstructions}"
+                          IsChecked="{Binding IgnoreNops}"
                             Margin="5"/>
 
                         <CheckBox
@@ -101,7 +101,7 @@
                     Grid.Row="1"
                     FontFamily="Consolas"
                     ShowLineNumbers="True"
-                    Text="{Binding Path=InstructionsString, Mode=OneWay}"
+                    Text="{Binding Path=BytecodeListing, Mode=OneWay}"
                     SyntaxHighlighting="{Binding Source={StaticResource HighlightingDefinition}}"
                     FontSize="10pt"
                     MouseHover="InstructionList_MouseHover" 

@@ -22,11 +22,11 @@
     </Span>
 
     <Rule color="Number">
-      (?&lt;=\s)\-?\d+\s
+      (?&lt;=\s)\-?[\dA-Fa-f]+\s
     </Rule>
 
     <Rule color="Number">
-      (?&lt;=\s)\-?\d+$
+      (?&lt;=\s)\-?[\dA-Fa-f]+$
     </Rule>
       
     <Keywords color="Instruction">
