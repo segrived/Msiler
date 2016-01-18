@@ -12,6 +12,7 @@ namespace Quart.Msiler
         public bool IgnoreNops { get; set; }
         public bool NumbersAsHex { get; set; }
         public bool SimplifyFunctionNames { get; set; }
+        public bool UpcaseInstructionNames { get; set; }
 
         private string GetOffset(Instruction i) =>
             String.Format("IL_{0:X4}", i.Offset);
@@ -50,7 +51,8 @@ namespace Quart.Msiler
         }
 
         public string GetOpCode(Instruction i) {
-            return i.OpCode.Name;
+            var name = i.OpCode.Name;
+            return (this.UpcaseInstructionNames) ? name.ToUpper() : name;
         }
 
         private string InstructionToString(Instruction i) {

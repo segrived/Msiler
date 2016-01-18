@@ -77,6 +77,21 @@ namespace Quart.Msiler
             }
         }
 
+        private bool _upcaseInstructionNames;
+        public bool UpcaseInstructionNames {
+            get { return _upcaseInstructionNames; }
+            set
+            {
+                if (value == _upcaseInstructionNames) {
+                    return;
+                }
+                _upcaseInstructionNames = value;
+                this._generator.UpcaseInstructionNames = value;
+                UpdateListing();
+                OnPropertyChanged();
+            }
+        }
+
         public void UpdateListing() {
             this.BytecodeListing =
                 _generator.Generate(this.SelectedMethod.Instructions);
