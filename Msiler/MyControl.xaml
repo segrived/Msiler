@@ -26,10 +26,13 @@
             </Grid.RowDefinitions>
             <Grid.Style>
                 <Style TargetType="{x:Type Grid}">
-                    <Setter Property="Visibility" Value="Visible" />
+                    <Setter Property="Visibility"
+                            Value="Visible" />
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding Path=Methods.Count}" Value="0">
-                            <Setter Property="Visibility" Value="Hidden" />
+                        <DataTrigger Binding="{Binding Path=Methods.Count}"
+                                     Value="0">
+                            <Setter Property="Visibility"
+                                    Value="Hidden" />
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
@@ -46,7 +49,8 @@
                      SelectedValue="{Binding SelectedMethod}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding Name}" ToolTip="{Binding MethodData.FullName}" />
+                        <TextBlock Text="{Binding Name}"
+                                   ToolTip="{Binding MethodData.FullName}" />
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
@@ -67,10 +71,13 @@
             <Grid Grid.Row="4">
                 <Grid.Style>
                     <Style TargetType="{x:Type Grid}">
-                        <Setter Property="Visibility" Value="Visible" />
+                        <Setter Property="Visibility"
+                                Value="Visible" />
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding Path=SelectedMethod}" Value="{x:Null}">
-                                <Setter Property="Visibility" Value="Hidden" />
+                            <DataTrigger Binding="{Binding Path=SelectedMethod}"
+                                         Value="{x:Null}">
+                                <Setter Property="Visibility"
+                                        Value="Hidden" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
@@ -81,44 +88,43 @@
                 </Grid.RowDefinitions>
                 <Grid Grid.Row="0">
                     <StackPanel Orientation="Vertical">
-                        <CheckBox
-                          Content="Ignore NOPs"
-                          Foreground="{DynamicResource {x:Static vs:EnvironmentColors.ToolWindowTextBrushKey}}"
-                          IsChecked="{Binding IgnoreNops}"
-                            Margin="5"/>
+                        <CheckBox Content="Ignore NOPs"
+                                  Foreground="{DynamicResource {x:Static vs:EnvironmentColors.ToolWindowTextBrushKey}}"
+                                  IsChecked="{Binding IgnoreNops}"
+                                  Margin="5" />
 
-                        <CheckBox
-                          Content="Display numbers as HEX values"
-                          Foreground="{DynamicResource {x:Static vs:EnvironmentColors.ToolWindowTextBrushKey}}"
-                          IsChecked="{Binding NumbersAsHex}"
-                            Margin="5"/>
+                        <CheckBox Content="Display numbers as HEX values"
+                                  Foreground="{DynamicResource {x:Static vs:EnvironmentColors.ToolWindowTextBrushKey}}"
+                                  IsChecked="{Binding NumbersAsHex}"
+                                  Margin="5" />
 
-                        <CheckBox
-                          Content="Simplify function names"
-                          Foreground="{DynamicResource {x:Static vs:EnvironmentColors.ToolWindowTextBrushKey}}"
-                          IsChecked="{Binding SimplifyFunctionNames}"
-                            Margin="5"/>
+                        <CheckBox Content="Simplify function names"
+                                  Foreground="{DynamicResource {x:Static vs:EnvironmentColors.ToolWindowTextBrushKey}}"
+                                  IsChecked="{Binding SimplifyFunctionNames}"
+                                  Margin="5" />
 
-                        <CheckBox
-                          Content="Upcase instruction names"
-                          Foreground="{DynamicResource {x:Static vs:EnvironmentColors.ToolWindowTextBrushKey}}"
-                          IsChecked="{Binding UpcaseInstructionNames}"
-                            Margin="5"/>
+                        <CheckBox Content="Upcase instruction names"
+                                  Foreground="{DynamicResource {x:Static vs:EnvironmentColors.ToolWindowTextBrushKey}}"
+                                  IsChecked="{Binding UpcaseInstructionNames}"
+                                  Margin="5" />
+
+                        <CheckBox Content="Align listing"
+                                  Foreground="{DynamicResource {x:Static vs:EnvironmentColors.ToolWindowTextBrushKey}}"
+                                  IsChecked="{Binding AlignListing}"
+                                  Margin="5" />
                     </StackPanel>
                 </Grid>
 
 
-                <local:MvvmTextEditor
-                    x:Name="InstructionList"
-                    Grid.Row="1"
-                    FontFamily="Consolas"
-                    ShowLineNumbers="True"
-                    Text="{Binding Path=BytecodeListing, Mode=OneWay}"
-                    SyntaxHighlighting="{Binding Source={StaticResource HighlightingDefinition}}"
-                    FontSize="10pt"
-                    MouseHover="InstructionList_MouseHover" 
-                    MouseHoverStopped="InstructionList_MouseHoverStopped"
-                    />
+                <local:MvvmTextEditor x:Name="InstructionList"
+                                      Grid.Row="1"
+                                      FontFamily="Consolas"
+                                      ShowLineNumbers="True"
+                                      Text="{Binding Path=BytecodeListing, Mode=OneWay}"
+                                      SyntaxHighlighting="{Binding Source={StaticResource HighlightingDefinition}}"
+                                      FontSize="10pt"
+                                      MouseHover="InstructionList_MouseHover"
+                                      MouseHoverStopped="InstructionList_MouseHoverStopped" />
             </Grid>
         </Grid>
     </Grid>

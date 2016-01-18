@@ -92,6 +92,21 @@ namespace Quart.Msiler
             }
         }
 
+        private bool _alignListing;
+        public bool AlignListing {
+            get { return _alignListing; }
+            set
+            {
+                if (value == _alignListing) {
+                    return;
+                }
+                _alignListing = value;
+                this._generator.AlignListing = value;
+                UpdateListing();
+                OnPropertyChanged();
+            }
+        }
+
         public void UpdateListing() {
             this.BytecodeListing =
                 _generator.Generate(this.SelectedMethod.Instructions);
