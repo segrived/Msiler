@@ -78,7 +78,6 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition />
-                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <CheckBox Grid.Row="0"
                           Margin="5"
@@ -97,11 +96,6 @@
                     MouseHover="InstructionList_MouseHover" 
                     MouseHoverStopped="InstructionList_MouseHoverStopped"
                     />
-                <TextBlock Grid.Row="2"
-                           FontStyle="Italic"
-                           Padding="5"
-                           Text="{Binding   Path=SelectedInstruction.Description,
-                           Mode=OneWay}" />
             </Grid>
         </Grid>
     </Grid>
