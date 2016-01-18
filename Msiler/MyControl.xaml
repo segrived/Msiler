@@ -79,11 +79,22 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition />
                 </Grid.RowDefinitions>
-                <CheckBox Grid.Row="0"
-                          Margin="5"
+                <Grid Grid.Row="0">
+                    <StackPanel Orientation="Vertical">
+                        <CheckBox
                           Content="Hide NOP instructions"
                           Foreground="{DynamicResource {x:Static vs:EnvironmentColors.ToolWindowTextBrushKey}}"
-                          IsChecked="{Binding HideNopInstructions}" />
+                          IsChecked="{Binding HideNopInstructions}"
+                            Margin="5"/>
+
+                        <CheckBox
+                          Content="Display numbers as HEX values"
+                          Foreground="{DynamicResource {x:Static vs:EnvironmentColors.ToolWindowTextBrushKey}}"
+                          IsChecked="{Binding NumbersAsHex}"
+                            Margin="5"/>
+                    </StackPanel>
+                </Grid>
+
 
                 <local:MvvmTextEditor
                     x:Name="InstructionList"

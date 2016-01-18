@@ -16,6 +16,8 @@ namespace Quart.Msiler
         ICollectionView _methodsView;
         byte[] _lastBuildMd5Hash;
 
+        public ListingGenerator _generator = new ListingGenerator();
+
         public MyControlVM() {
             this.UpdateMethodsFilter();
             InitCommon();
@@ -39,6 +41,19 @@ namespace Quart.Msiler
                     return;
                 }
                 _hideNopInstructions = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _numbersAsHex;
+        public bool NumbersAsHex {
+            get { return _numbersAsHex; }
+            set
+            {
+                if (value == _numbersAsHex) {
+                    return;
+                }
+                _numbersAsHex = value;
                 OnPropertyChanged();
             }
         }
@@ -70,16 +85,16 @@ namespace Quart.Msiler
             }
         }
 
-        private ObservableCollection<MsilMethodEntity> _methods
-            = new ObservableCollection<MsilMethodEntity>();
-        public ObservableCollection<MsilMethodEntity> Methods {
+        private ObservableCollection<MethodEntity> _methods
+            = new ObservableCollection<MethodEntity>();
+        public ObservableCollection<MethodEntity> Methods {
             get { return _methods; }
             set
             {
                 if (value == null || Equals(value, _methods)) {
                     return;
                 }
-                _methods = new ObservableCollection<MsilMethodEntity>(value);
+                _methods = new ObservableCollection<MethodEntity>(value);
                 OnPropertyChanged();
                 try {
                     if (this.SelectedMethod == null) {
@@ -93,8 +108,8 @@ namespace Quart.Msiler
             }
         }
 
-        private MsilMethodEntity _selectedMethod;
-        public MsilMethodEntity SelectedMethod {
+        private MethodEntity _selectedMethod;
+        public MethodEntity SelectedMethod {
             get { return _selectedMethod; }
             set
             {
@@ -102,7 +117,7 @@ namespace Quart.Msiler
                     return;
                 }
                 _selectedMethod = value;
-                this.InstructionsString = value.InstructionsStr;
+                this.InstructionsString = _generator.Generate(value.Instructions);
                 OnPropertyChanged();
             }
         }
@@ -129,11 +144,11 @@ namespace Quart.Msiler
                 var msilReader = new MsilReader(assemblyFile);
 
                 var methodsEnumerable = msilReader.EnumerateMethods();
-                this.Methods = new ObservableCollection<MsilMethodEntity>(methodsEnumerable);
+                this.Methods = new ObservableCollection<MethodEntity>(methodsEnumerable);
                 _lastBuildMd5Hash = hash;
                 this.UpdateMethodsFilter();
             } catch {
-                this.Methods = new ObservableCollection<MsilMethodEntity>();
+                this.Methods = new ObservableCollection<MethodEntity>();
             }
             Debug.WriteLine("Done");
             return VSConstants.S_OK;
@@ -145,7 +160,7 @@ namespace Quart.Msiler
                 if (String.IsNullOrEmpty(this.FilterString)) {
                     return true;
                 }
-                var obj = (MsilMethodEntity)o;
+                var obj = (MethodEntity)o;
                 return obj.Name.ToLower().Contains(this.FilterString.ToLower());
             };
         }
