@@ -12,8 +12,8 @@
 
     <UserControl.Resources>
         <ResourceDictionary Source="XamlResources.xaml" />
-    </UserControl.Resources>
 
+    </UserControl.Resources>
 
     <Grid>
         <Grid>
@@ -38,7 +38,7 @@
                      BorderThickness="0,0,0,1"
                      Style="{StaticResource FilterHintTextBox}"
                      Text="{Binding Path=FilterString,
-                                    UpdateSourceTrigger=PropertyChanged}" />
+                     UpdateSourceTrigger=PropertyChanged}" />
             <ListBox Name="MethodList"
                      Grid.Row="1"
                      BorderThickness="0,0,0,1"
@@ -63,7 +63,7 @@
                        FontWeight="Bold"
                        Padding="5,5,5,5"
                        Text="{Binding Path=SelectedMethod.MethodData.Name,
-                                      StringFormat=Method name: {0}}" />
+                       StringFormat=Method name: {0}}" />
             <Grid Grid.Row="4">
                 <Grid.Style>
                     <Style TargetType="{x:Type Grid}">
@@ -78,47 +78,41 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition />
-                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
-                <CheckBox Grid.Row="0"
-                          Margin="5"
-                          Content="Hide NOP instructions"
+                <Grid Grid.Row="0">
+                    <StackPanel Orientation="Vertical">
+                        <CheckBox
+                          Content="Ignore NOPs"
                           Foreground="{DynamicResource {x:Static vs:EnvironmentColors.ToolWindowTextBrushKey}}"
-                          IsChecked="{Binding HideNopInstructions}" />
+                          IsChecked="{Binding IgnoreNops}"
+                            Margin="5"/>
 
-                <ListBox Name="InstructionList"
-                         Grid.Row="1"
-                         BorderThickness="0,1,0,0"
-                         FontFamily="Consolas"
-                         FontSize="12"
-                         ItemsSource="{Binding Path=SelectedMethod.Instructions}"
-                         Padding="5"
-                         SelectedItem="{Binding SelectedInstruction}">
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Vertical">
-                                <TextBlock>
-                                    <TextBlock.Inlines>
-                                        <Run FontWeight="Bold"
-                                             Foreground="{DynamicResource {x:Static vs:EnvironmentColors.SystemGrayTextBrushKey}}"
-                                             Text="{Binding Offset,
-                                                            Mode=OneWay}" />
-                                        <Run FontWeight="Bold"
-                                             Text="{Binding OpCode,
-                                                            Mode=OneWay}"
-                                             ToolTip="{Binding Description}" />
-                                        <Run Foreground="ForestGreen" Text="{Binding Operand, Mode=OneWay}" />
-                                    </TextBlock.Inlines>
-                                </TextBlock>
-                            </StackPanel>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
-                <TextBlock Grid.Row="2"
-                           FontStyle="Italic"
-                           Padding="5"
-                           Text="{Binding Path=SelectedInstruction.Description,
-                                          Mode=OneWay}" />
+                        <CheckBox
+                          Content="Display numbers as HEX values"
+                          Foreground="{DynamicResource {x:Static vs:EnvironmentColors.ToolWindowTextBrushKey}}"
+                          IsChecked="{Binding NumbersAsHex}"
+                            Margin="5"/>
+
+                        <CheckBox
+                          Content="Simplify function names"
+                          Foreground="{DynamicResource {x:Static vs:EnvironmentColors.ToolWindowTextBrushKey}}"
+                          IsChecked="{Binding SimplifyFunctionNames}"
+                            Margin="5"/>
+                    </StackPanel>
+                </Grid>
+
+
+                <local:MvvmTextEditor
+                    x:Name="InstructionList"
+                    Grid.Row="1"
+                    FontFamily="Consolas"
+                    ShowLineNumbers="True"
+                    Text="{Binding Path=BytecodeListing, Mode=OneWay}"
+                    SyntaxHighlighting="{Binding Source={StaticResource HighlightingDefinition}}"
+                    FontSize="10pt"
+                    MouseHover="InstructionList_MouseHover" 
+                    MouseHoverStopped="InstructionList_MouseHoverStopped"
+                    />
             </Grid>
         </Grid>
     </Grid>

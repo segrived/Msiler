@@ -7,48 +7,95 @@ using System.Runtime.CompilerServices;
 using System.Windows.Data;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell.Interop;
-using Mono.Cecil.Cil;
 using Quart.Msiler.Annotations;
-using Microsoft.CSharp;
 
 namespace Quart.Msiler
 {
     public class MyControlVM : INotifyPropertyChanged, IVsUpdateSolutionEvents, IVsSolutionEvents
     {
-        private string _filterString;
-        private bool _hideNopInstructions;
-        private ICollectionView _instructionsView;
-        private byte[] _lastBuildMd5Hash;
-        private ObservableCollection<MsilMethodEntity> _methods;
-        private ICollectionView _methodsView;
-        private MsilInstruction _selectedInstruction;
-        private MsilMethodEntity _selectedMethod;
+        ICollectionView _methodsView;
+        byte[] _lastBuildMd5Hash;
 
-        public bool HideNopInstructions {
-            get { return _hideNopInstructions; }
+        public ListingGenerator _generator = new ListingGenerator();
+
+        public MyControlVM() {
+            this.UpdateMethodsFilter();
+            InitCommon();
+        }
+
+        public void InitCommon() {
+            uint solutionUpdateCookie;
+            uint solutionCookie;
+            Common.Instance.Build.AdviseUpdateSolutionEvents(this, out solutionUpdateCookie);
+            Common.Instance.Solution.AdviseSolutionEvents(this, out solutionCookie);
+            Common.Instance.SolutionUpdateCookie = solutionUpdateCookie;
+            Common.Instance.SolutionCookie = solutionCookie;
+        }
+
+        private bool _ignoreNops;
+        public bool IgnoreNops {
+            get { return _ignoreNops; }
             set
             {
-                if (value == _hideNopInstructions) {
+                if (value == _ignoreNops) {
                     return;
                 }
-                _hideNopInstructions = value;
-                this._instructionsView.Refresh();
+                _ignoreNops = value;
+                this._generator.IgnoreNops = value;
+                UpdateListing();
                 OnPropertyChanged();
             }
         }
 
-        public MsilInstruction SelectedInstruction {
-            get { return _selectedInstruction; }
+        private bool _numbersAsHex;
+        public bool NumbersAsHex {
+            get { return _numbersAsHex; }
             set
             {
-                if (Equals(value, _selectedInstruction)) {
+                if (value == _numbersAsHex) {
                     return;
                 }
-                _selectedInstruction = value;
+                _numbersAsHex = value;
+                this._generator.NumbersAsHex = value;
+                UpdateListing();
                 OnPropertyChanged();
             }
         }
 
+        private bool _simplifyFunctionNames;
+        public bool SimplifyFunctionNames {
+            get { return _simplifyFunctionNames; }
+            set
+            {
+                if (value == _simplifyFunctionNames) {
+                    return;
+                }
+                _simplifyFunctionNames = value;
+                this._generator.SimplifyFunctionNames = value;
+                UpdateListing();
+                OnPropertyChanged();
+            }
+        }
+
+        public void UpdateListing() {
+            this.BytecodeListing =
+                _generator.Generate(this.SelectedMethod.Instructions);
+        }
+
+        private string _bytecodeListing;
+        public string BytecodeListing {
+            get { return _bytecodeListing; }
+            set
+            {
+                if (Equals(value, _bytecodeListing)) {
+                    return;
+                }
+                _bytecodeListing = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private string _filterString = "";
         public string FilterString {
             get { return _filterString; }
             set
@@ -62,29 +109,31 @@ namespace Quart.Msiler
             }
         }
 
-        public ObservableCollection<MsilMethodEntity> Methods {
+        private ObservableCollection<MethodEntity> _methods
+            = new ObservableCollection<MethodEntity>();
+        public ObservableCollection<MethodEntity> Methods {
             get { return _methods; }
             set
             {
                 if (value == null || Equals(value, _methods)) {
                     return;
                 }
-                _methods = new ObservableCollection<MsilMethodEntity>(value);
+                _methods = new ObservableCollection<MethodEntity>(value);
                 OnPropertyChanged();
                 try {
                     if (this.SelectedMethod == null) {
                         return;
                     }
                     string selectedName = this.SelectedMethod.MethodData.FullName;
-                    this.SelectedMethod =
-                        value.FirstOrDefault(x => x.MethodData.FullName == selectedName);
+                    this.SelectedMethod = value.FirstOrDefault(x => x.MethodData.FullName == selectedName);
                 } catch {
                     // ignored
                 }
             }
         }
 
-        public MsilMethodEntity SelectedMethod {
+        private MethodEntity _selectedMethod;
+        public MethodEntity SelectedMethod {
             get { return _selectedMethod; }
             set
             {
@@ -92,22 +141,9 @@ namespace Quart.Msiler
                     return;
                 }
                 _selectedMethod = value;
+                this.BytecodeListing = _generator.Generate(value.Instructions);
                 OnPropertyChanged();
-                this.UpdateInstructionsFilter();
             }
-        }
-
-        public MyControlVM() {
-            uint solutionUpdateCookie;
-            uint solutionCookie;
-            Common.Instance.Build.AdviseUpdateSolutionEvents(this, out solutionUpdateCookie);
-            Common.Instance.Solution.AdviseSolutionEvents(this, out solutionCookie);
-            Common.Instance.SolutionUpdateCookie = solutionUpdateCookie;
-            Common.Instance.SolutionCookie = solutionCookie;
-            this.Methods = new ObservableCollection<MsilMethodEntity>();
-            this.UpdateMethodsFilter();
-            this.FilterString = "";
-            Debug.WriteLine(MsilInstructionsDescription.InstructionDescriptions.Max(x => x.Key.Length));
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -132,26 +168,14 @@ namespace Quart.Msiler
                 var msilReader = new MsilReader(assemblyFile);
 
                 var methodsEnumerable = msilReader.EnumerateMethods();
-                this.Methods = new ObservableCollection<MsilMethodEntity>(methodsEnumerable);
+                this.Methods = new ObservableCollection<MethodEntity>(methodsEnumerable);
                 _lastBuildMd5Hash = hash;
                 this.UpdateMethodsFilter();
             } catch {
-                this.Methods = new ObservableCollection<MsilMethodEntity>();
+                this.Methods = new ObservableCollection<MethodEntity>();
             }
             Debug.WriteLine("Done");
             return VSConstants.S_OK;
-        }
-
-        private void UpdateInstructionsFilter() {
-            this._instructionsView =
-                CollectionViewSource.GetDefaultView(this.SelectedMethod.Instructions);
-            this._instructionsView.Filter = o => {
-                if (!this.HideNopInstructions) {
-                    return true;
-                }
-                var obj = (MsilInstruction)o;
-                return obj.OpCode.Code != Code.Nop;
-            };
         }
 
         private void UpdateMethodsFilter() {
@@ -160,7 +184,7 @@ namespace Quart.Msiler
                 if (String.IsNullOrEmpty(this.FilterString)) {
                     return true;
                 }
-                var obj = (MsilMethodEntity)o;
+                var obj = (MethodEntity)o;
                 return obj.Name.ToLower().Contains(this.FilterString.ToLower());
             };
         }

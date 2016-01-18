@@ -62,6 +62,10 @@
     <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ICSharpCode.AvalonEdit, Version=5.0.1.0, Culture=neutral, PublicKeyToken=9cc39be672370310, processorArchitecture=MSIL">
+      <HintPath>..\packages\AvalonEdit.5.0.2\lib\Net40\ICSharpCode.AvalonEdit.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.VisualStudio.CoreUtility, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -175,9 +179,14 @@
   <ItemGroup>
     <Compile Include="Common.cs" />
     <Compile Include="Helpers.cs" />
+    <EmbeddedResource Include="Resources\IL.xshd">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <Compile Include="IsEqualOrGreaterThanConverter.cs" />
-    <Compile Include="MsilInstructionsDescription.cs" />
+    <Compile Include="Instructions.cs" />
+    <Compile Include="ListingGenerator.cs" />
     <Compile Include="MsilReader.cs" />
+    <Compile Include="MvvmTextEditor.cs" />
     <Compile Include="MyControl.xaml.cs">
       <DependentUpon>MyControl.xaml</DependentUpon>
     </Compile>
@@ -190,7 +199,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="MsilerPackage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PkgCmdID.cs" />

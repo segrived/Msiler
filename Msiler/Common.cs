@@ -24,6 +24,7 @@ namespace Quart.Msiler
         public MsilerPackage Package { get; set; }
         public uint SolutionUpdateCookie { get; set; }
         public uint SolutionCookie { get; set; }
+
         private Common() { }
     }
 }

@@ -24,6 +24,7 @@ namespace Quart.Msiler
             } else if (fShow == (int)__FRAMESHOW.FRAMESHOW_WinHidden) {
                 IsVisible = false;
             }
+
             return VSConstants.S_OK;
         }
 
