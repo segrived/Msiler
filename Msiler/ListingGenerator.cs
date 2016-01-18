@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Mono.Cecil.Cil;
+using Mono.Cecil;
 
 namespace Quart.Msiler
 {
@@ -11,6 +11,7 @@ namespace Quart.Msiler
     {
         public bool IgnoreNops { get; set; }
         public bool NumbersAsHex { get; set; }
+        public bool SimplifyFunctionNames { get; set; }
 
         private string GetOffset(Instruction i) =>
             String.Format("IL_{0:X4}", i.Offset);
@@ -31,6 +32,11 @@ namespace Quart.Msiler
             if (i.Operand is Instruction[]) {
                 var operands = (Instruction[])i.Operand;
                 return String.Join(" | ", operands.Select(GetOffset));
+            }
+
+            if (this.SimplifyFunctionNames && (i.Operand is MethodReference)) {
+                var m = (MethodReference)i.Operand;
+                return $"{m.DeclaringType.FullName}.{m.Name}";
             }
 
             if (this.NumbersAsHex) {

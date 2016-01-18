@@ -92,6 +92,12 @@
                           Foreground="{DynamicResource {x:Static vs:EnvironmentColors.ToolWindowTextBrushKey}}"
                           IsChecked="{Binding NumbersAsHex}"
                             Margin="5"/>
+
+                        <CheckBox
+                          Content="Simplify function names"
+                          Foreground="{DynamicResource {x:Static vs:EnvironmentColors.ToolWindowTextBrushKey}}"
+                          IsChecked="{Binding SimplifyFunctionNames}"
+                            Margin="5"/>
                     </StackPanel>
                 </Grid>
 

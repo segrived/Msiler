@@ -62,6 +62,21 @@ namespace Quart.Msiler
             }
         }
 
+        private bool _simplifyFunctionNames;
+        public bool SimplifyFunctionNames {
+            get { return _simplifyFunctionNames; }
+            set
+            {
+                if (value == _simplifyFunctionNames) {
+                    return;
+                }
+                _simplifyFunctionNames = value;
+                this._generator.SimplifyFunctionNames = value;
+                UpdateListing();
+                OnPropertyChanged();
+            }
+        }
+
         public void UpdateListing() {
             this.BytecodeListing =
                 _generator.Generate(this.SelectedMethod.Instructions);
