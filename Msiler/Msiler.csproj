@@ -183,7 +183,7 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <Compile Include="IsEqualOrGreaterThanConverter.cs" />
-    <Compile Include="MsilInstructionsDescription.cs" />
+    <Compile Include="Instructions.cs" />
     <Compile Include="MsilReader.cs" />
     <Compile Include="MvvmTextEditor.cs" />
     <Compile Include="MyControl.xaml.cs">

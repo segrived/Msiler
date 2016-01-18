@@ -22,8 +22,8 @@ namespace Quart.Msiler
             get
             {
                 return
-                    MsilInstructionsDescription.InstructionDescriptions.ContainsKey(this.OpCode.Name)
-                        ? MsilInstructionsDescription.InstructionDescriptions[this.OpCode.Name]
+                    Instructions.Description.ContainsKey(this.OpCode.Name)
+                        ? Instructions.Description[this.OpCode.Name]
                         : String.Empty;
             }
         }

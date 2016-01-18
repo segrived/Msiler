@@ -12,8 +12,8 @@
 
     <UserControl.Resources>
         <ResourceDictionary Source="XamlResources.xaml" />
-    </UserControl.Resources>
 
+    </UserControl.Resources>
 
     <Grid>
         <Grid>
@@ -38,7 +38,7 @@
                      BorderThickness="0,0,0,1"
                      Style="{StaticResource FilterHintTextBox}"
                      Text="{Binding Path=FilterString,
-                                    UpdateSourceTrigger=PropertyChanged}" />
+                     UpdateSourceTrigger=PropertyChanged}" />
             <ListBox Name="MethodList"
                      Grid.Row="1"
                      BorderThickness="0,0,0,1"
@@ -63,7 +63,7 @@
                        FontWeight="Bold"
                        Padding="5,5,5,5"
                        Text="{Binding Path=SelectedMethod.MethodData.Name,
-                                      StringFormat=Method name: {0}}" />
+                       StringFormat=Method name: {0}}" />
             <Grid Grid.Row="4">
                 <Grid.Style>
                     <Style TargetType="{x:Type Grid}">
@@ -85,21 +85,23 @@
                           Content="Hide NOP instructions"
                           Foreground="{DynamicResource {x:Static vs:EnvironmentColors.ToolWindowTextBrushKey}}"
                           IsChecked="{Binding HideNopInstructions}" />
-                
+
                 <local:MvvmTextEditor
-                x:Name="InstructionList"
-                Grid.Row="1"
-                FontFamily="Consolas"
-                ShowLineNumbers="True"
-                Text="{Binding Path=SelectedMethod.InstructionsStr, Mode=OneWay}"
-                    SyntaxHighlighting="{Binding Path=Highlighter}"
-                FontSize="10pt"
+                    x:Name="InstructionList"
+                    Grid.Row="1"
+                    FontFamily="Consolas"
+                    ShowLineNumbers="True"
+                    Text="{Binding Path=InstructionsString, Mode=OneWay}"
+                    SyntaxHighlighting="{Binding Source={StaticResource HighlightingDefinition}}"
+                    FontSize="10pt"
+                    MouseHover="InstructionList_MouseHover" 
+                    MouseHoverStopped="InstructionList_MouseHoverStopped"
                     />
                 <TextBlock Grid.Row="2"
                            FontStyle="Italic"
                            Padding="5"
-                           Text="{Binding Path=SelectedInstruction.Description,
-                                          Mode=OneWay}" />
+                           Text="{Binding   Path=SelectedInstruction.Description,
+                           Mode=OneWay}" />
             </Grid>
         </Grid>
     </Grid>
