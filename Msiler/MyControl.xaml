@@ -87,7 +87,7 @@
                     <RowDefinition />
                 </Grid.RowDefinitions>
                 <Grid Grid.Row="0">
-                    <StackPanel Orientation="Vertical">
+                    <WrapPanel Orientation="Horizontal">
                         <CheckBox Content="Ignore NOPs"
                                   Foreground="{DynamicResource {x:Static vs:EnvironmentColors.ToolWindowTextBrushKey}}"
                                   IsChecked="{Binding IgnoreNops}"
@@ -112,7 +112,7 @@
                                   Foreground="{DynamicResource {x:Static vs:EnvironmentColors.ToolWindowTextBrushKey}}"
                                   IsChecked="{Binding AlignListing}"
                                   Margin="5" />
-                    </StackPanel>
+                    </WrapPanel>
                 </Grid>
 
 

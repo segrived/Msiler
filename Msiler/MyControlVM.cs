@@ -42,7 +42,7 @@ namespace Quart.Msiler
                 }
                 _ignoreNops = value;
                 this._generator.IgnoreNops = value;
-                UpdateListing();
+                UpdateBytecodeListing();
                 OnPropertyChanged();
             }
         }
@@ -57,7 +57,7 @@ namespace Quart.Msiler
                 }
                 _numbersAsHex = value;
                 this._generator.NumbersAsHex = value;
-                UpdateListing();
+                UpdateBytecodeListing();
                 OnPropertyChanged();
             }
         }
@@ -72,7 +72,7 @@ namespace Quart.Msiler
                 }
                 _simplifyFunctionNames = value;
                 this._generator.SimplifyFunctionNames = value;
-                UpdateListing();
+                UpdateBytecodeListing();
                 OnPropertyChanged();
             }
         }
@@ -87,7 +87,7 @@ namespace Quart.Msiler
                 }
                 _upcaseInstructionNames = value;
                 this._generator.UpcaseInstructionNames = value;
-                UpdateListing();
+                UpdateBytecodeListing();
                 OnPropertyChanged();
             }
         }
@@ -102,14 +102,13 @@ namespace Quart.Msiler
                 }
                 _alignListing = value;
                 this._generator.AlignListing = value;
-                UpdateListing();
+                UpdateBytecodeListing();
                 OnPropertyChanged();
             }
         }
 
-        public void UpdateListing() {
-            this.BytecodeListing =
-                _generator.Generate(this.SelectedMethod.Instructions);
+        public void UpdateBytecodeListing() {
+            this.BytecodeListing = _generator.Generate(this.SelectedMethod.Instructions);
         }
 
         private string _bytecodeListing;
@@ -139,8 +138,7 @@ namespace Quart.Msiler
             }
         }
 
-        private ObservableCollection<MethodEntity> _methods
-            = new ObservableCollection<MethodEntity>();
+        private ObservableCollection<MethodEntity> _methods = new ObservableCollection<MethodEntity>();
         public ObservableCollection<MethodEntity> Methods {
             get { return _methods; }
             set
@@ -171,7 +169,7 @@ namespace Quart.Msiler
                     return;
                 }
                 _selectedMethod = value;
-                this.BytecodeListing = _generator.Generate(value.Instructions);
+                UpdateBytecodeListing();
                 OnPropertyChanged();
             }
         }

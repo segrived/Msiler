@@ -38,7 +38,7 @@ namespace Quart.Msiler
                 return;
             }
 
-            string instruction = regMatch.Groups["Instruction"].Value;
+            string instruction = regMatch.Groups["Instruction"].Value.ToLower();
 
             if (!Instructions.Description.ContainsKey(instruction)) {
                 return;
