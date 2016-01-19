@@ -6,6 +6,9 @@ using Microsoft.VisualStudio.Shell;
 using ICSharpCode.AvalonEdit.Highlighting.Xshd;
 using ICSharpCode.AvalonEdit.Highlighting;
 using System.Reflection;
+using Microsoft.VisualStudio.Shell.Interop;
+using EnvDTE80;
+using System.Linq;
 
 namespace Quart.Msiler
 {
@@ -37,12 +40,20 @@ namespace Quart.Msiler
 
         public static string GetOutputAssemblyFileName() {
             var dte = GetCurrentDocument();
-            var prj = dte.ActiveDocument.ProjectItem.ContainingProject;
+
+            SolutionBuild2 sb = (SolutionBuild2)dte.Solution.SolutionBuild;
+            var projects = sb.StartupProjects as Array;
+            var activeProject = dte.Solution.Item(projects.GetValue(0));
+
             string outFn =
-                prj.ConfigurationManager.ActiveConfiguration.Properties.Item("OutputPath")
-                   .Value.ToString();
-            string fullPath = GetFullPath(outFn, Path.GetDirectoryName(prj.FileName));
-            return Path.Combine(fullPath, prj.Properties.Item("OutputFileName").Value.ToString());
+                activeProject.ConfigurationManager
+                    .ActiveConfiguration
+                    .Properties
+                    .Item("OutputPath")
+                    .Value
+                    .ToString();
+            string fullPath = GetFullPath(outFn, Path.GetDirectoryName(activeProject.FileName));
+            return Path.Combine(fullPath, activeProject.Properties.Item("OutputFileName").Value.ToString());
         }
 
         public static byte[] ComputeMd5(string fn) {

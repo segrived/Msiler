@@ -118,7 +118,7 @@
 
                 <local:MvvmTextEditor x:Name="InstructionList"
                                       Grid.Row="1"
-                                      FontFamily="Consolas"
+                                      FontFamily="Hack"
                                       ShowLineNumbers="True"
                                       Text="{Binding Path=BytecodeListing, Mode=OneWay}"
                                       SyntaxHighlighting="{Binding Source={StaticResource HighlightingDefinition}}"

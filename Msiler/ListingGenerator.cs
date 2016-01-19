@@ -35,7 +35,8 @@ namespace Quart.Msiler
 
             if (i.Operand is Instruction[]) {
                 var operands = (Instruction[])i.Operand;
-                return String.Join(" | ", operands.Select(GetOffset));
+                var joined = String.Join(" | ", operands.Select(GetOffset));
+                return $"[ {joined} ]";
             }
 
             if (this.SimplifyFunctionNames && (i.Operand is MethodReference)) {
