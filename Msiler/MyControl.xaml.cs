@@ -19,6 +19,8 @@ namespace Quart.Msiler
         }
 
         private void InstructionList_MouseHover(object sender, System.Windows.Input.MouseEventArgs e) {
+            Common.Instance.Package.ShowOptionPage(typeof(MsilerOptions));
+
             var pos = InstructionList.GetPositionFromPoint(e.GetPosition(InstructionList));
 
             if (pos == null)
@@ -51,6 +53,10 @@ namespace Quart.Msiler
 
         private void InstructionList_MouseHoverStopped(object sender, System.Windows.Input.MouseEventArgs e) {
             toolTip.IsOpen = false;
+        }
+
+        private void Hyperlink_Click(object sender, System.Windows.RoutedEventArgs e) {
+            Common.Instance.Package.ShowOptionPage(typeof(MsilerOptions));
         }
     }
 }

@@ -70,81 +70,6 @@ namespace Quart.Msiler
             }
         }
 
-        private bool _ignoreNops;
-        public bool IgnoreNops {
-            get { return _ignoreNops; }
-            set
-            {
-                if (value == _ignoreNops) {
-                    return;
-                }
-                _ignoreNops = value;
-                this._generator.IgnoreNops = value;
-                UpdateBytecodeListing();
-                OnPropertyChanged();
-            }
-        }
-
-        private bool _numbersAsHex;
-        public bool NumbersAsHex {
-            get { return _numbersAsHex; }
-            set
-            {
-                if (value == _numbersAsHex) {
-                    return;
-                }
-                _numbersAsHex = value;
-                this._generator.NumbersAsHex = value;
-                UpdateBytecodeListing();
-                OnPropertyChanged();
-            }
-        }
-
-        private bool _simplifyFunctionNames;
-        public bool SimplifyFunctionNames {
-            get { return _simplifyFunctionNames; }
-            set
-            {
-                if (value == _simplifyFunctionNames) {
-                    return;
-                }
-                _simplifyFunctionNames = value;
-                this._generator.SimplifyFunctionNames = value;
-                UpdateBytecodeListing();
-                OnPropertyChanged();
-            }
-        }
-
-        private bool _upcaseInstructionNames;
-        public bool UpcaseInstructionNames {
-            get { return _upcaseInstructionNames; }
-            set
-            {
-                if (value == _upcaseInstructionNames) {
-                    return;
-                }
-                _upcaseInstructionNames = value;
-                this._generator.UpcaseInstructionNames = value;
-                UpdateBytecodeListing();
-                OnPropertyChanged();
-            }
-        }
-
-        private bool _alignListing;
-        public bool AlignListing {
-            get { return _alignListing; }
-            set
-            {
-                if (value == _alignListing) {
-                    return;
-                }
-                _alignListing = value;
-                this._generator.AlignListing = value;
-                UpdateBytecodeListing();
-                OnPropertyChanged();
-            }
-        }
-
         public void UpdateBytecodeListing() {
             this.BytecodeListing = _generator.Generate(this.SelectedMethod.Instructions);
         }
@@ -220,7 +145,7 @@ namespace Quart.Msiler
         }
 
         public int UpdateSolution_Done(int fSucceeded, int fModified, int fCancelCommand) {
-            if (!MyToolWindow.IsVisible || fSucceeded != 1) {
+            if (!MsilerToolWindow.IsVisible || fSucceeded != 1) {
                 return VSConstants.S_OK;
             }
             Debug.Write("Compiled, generating IL code...");

@@ -6,11 +6,11 @@ using Microsoft.VisualStudio.Shell.Interop;
 namespace Quart.Msiler
 {
     [Guid("0c127690-de92-4d02-a743-634bb922145c")]
-    public sealed class MyToolWindow : ToolWindowPane, IVsWindowFrameNotify
+    public sealed class MsilerToolWindow : ToolWindowPane, IVsWindowFrameNotify
     {
         public static bool IsVisible { get; private set; }
 
-        public MyToolWindow() : base(null) {
+        public MsilerToolWindow() : base(null) {
             this.Caption = Resources.ToolWindowTitle;
             this.BitmapResourceID = 301;
             this.BitmapIndex = 1;

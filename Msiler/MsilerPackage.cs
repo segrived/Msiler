@@ -5,13 +5,22 @@ using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using System.ComponentModel;
+using System.IO;
 
 namespace Quart.Msiler
 {
+    internal static class GuidList
+    {
+        public const string guidMsilerPkgString = "2e50f4f0-18d1-419e-a204-f1156c910f2b";
+        public const string guidMsilerCmdSetString = "04d989fc-bbaa-4e42-aef8-c93d8727da2b";
+        public const string guidToolWindowPersistanceString = "0c127690-de92-4d02-a743-634bb922145c";
+        public static readonly Guid guidMsilerCmdSet = new Guid(guidMsilerCmdSetString);
+    };
+
     [PackageRegistration(UseManagedResourcesOnly = true)]
     [InstalledProductRegistration("#110", "#112", "1.0", IconResourceID = 400)]
     [ProvideMenuResource("Menus.ctmenu", 1)]
-    [ProvideToolWindow(typeof(MyToolWindow), MultiInstances = false)]
+    [ProvideToolWindow(typeof(MsilerToolWindow), MultiInstances = false)]
     [ProvideOptionPage(typeof(MsilerOptions), "Msiler", "Msiler", 0, 0, true)]
     [Guid(GuidList.guidMsilerPkgString)]
     public sealed class MsilerPackage : Package
@@ -20,7 +29,7 @@ namespace Quart.Msiler
         private IVsSolution _solutionManager;
 
         private void ShowToolWindow(object sender, EventArgs e) {
-            var window = this.FindToolWindow(typeof(MyToolWindow), 0, true);
+            var window = this.FindToolWindow(typeof(MsilerToolWindow), 0, true);
             if ((null == window) || (null == window.Frame)) {
                 throw new NotSupportedException(Resources.CanNotCreateWindow);
             }
@@ -68,6 +77,12 @@ namespace Quart.Msiler
         string fontName = "Consolas";
         int fontSize = 10;
 
+        bool ignoreNops = false;
+        bool numbersAsHex = false;
+        bool simplifyFunctionNames = false;
+        bool upcasedInstructionNames = false;
+        bool alignListing = false;
+
         [Category("Display")]
         [DisplayName("Font name")]
         [Description("")]
@@ -82,6 +97,46 @@ namespace Quart.Msiler
         public int FontSize {
             get { return fontSize; }
             set { fontSize = value; }
+        }
+
+        [Category("Listing generation options")]
+        [DisplayName("Ignore NOPs")]
+        [Description("")]
+        public bool IgnoreNops {
+            get { return ignoreNops; }
+            set { ignoreNops = value; }
+        }
+
+        [Category("Listing generation options")]
+        [DisplayName("Display numbers as HEX values")]
+        [Description("")]
+        public bool NumbersAsHex {
+            get { return numbersAsHex; }
+            set { numbersAsHex = value; }
+        }
+
+        [Category("Listing generation options")]
+        [DisplayName("Simplify function names")]
+        [Description("")]
+        public bool SimplifyFunctionNames {
+            get { return simplifyFunctionNames; }
+            set { simplifyFunctionNames = value; }
+        }
+
+        [Category("Listing generation options")]
+        [DisplayName("Upcased instruction names")]
+        [Description("")]
+        public bool UpcasedInstructionNames {
+            get { return upcasedInstructionNames; }
+            set { upcasedInstructionNames = value; }
+        }
+
+        [Category("Listing generation options")]
+        [DisplayName("Align listing")]
+        [Description("")]
+        public bool AlignListing {
+            get { return alignListing; }
+            set { alignListing = value; }
         }
     }
 }

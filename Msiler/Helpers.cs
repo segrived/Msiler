@@ -77,5 +77,9 @@ namespace Quart.Msiler
             var fontsCollection = new InstalledFontCollection();
             return fontsCollection.Families.Any(ff => ff.Name == fontFamily);
         }
+
+        public static string ReplaceNewLineCharacters(string str) {
+            return str.Replace("\n", "\\n");
+        }
     }
 }

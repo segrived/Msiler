@@ -183,7 +183,6 @@
     <EmbeddedResource Include="Resources\IL.xshd">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <Compile Include="IsEqualOrGreaterThanConverter.cs" />
     <Compile Include="Instructions.cs" />
     <Compile Include="ListingGenerator.cs" />
     <Compile Include="MsilReader.cs" />
@@ -192,8 +191,7 @@
       <DependentUpon>MyControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="MyControlVM.cs" />
-    <Compile Include="MyToolWindow.cs" />
-    <Compile Include="Guids.cs" />
+    <Compile Include="MsilerToolWindow.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>

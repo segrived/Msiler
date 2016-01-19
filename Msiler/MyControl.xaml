@@ -62,12 +62,13 @@
                           Background="{DynamicResource {x:Static vs:EnvironmentColors.AccentBorderBrushKey}}"
                           ResizeDirection="Rows"
                           ShowsPreview="True" />
-            <TextBlock Grid.Row="3"
-                       FontSize="14"
-                       FontWeight="Bold"
-                       Padding="5,5,5,5"
-                       Text="{Binding Path=SelectedMethod.MethodData.Name,
-                       StringFormat=Method name: {0}}" />
+            <TextBlock HorizontalAlignment="Right"
+                       FontSize="12"
+                       Grid.Row="3"
+                       Padding="3">                                
+                <Hyperlink Click="Hyperlink_Click"
+                           TextDecorations="None">Options</Hyperlink>
+            </TextBlock>
             <Grid Grid.Row="4">
                 <Grid.Style>
                     <Style TargetType="{x:Type Grid}">
@@ -83,39 +84,8 @@
                     </Style>
                 </Grid.Style>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
                     <RowDefinition />
                 </Grid.RowDefinitions>
-                <Grid Grid.Row="0">
-                    <WrapPanel Orientation="Horizontal">
-                        <CheckBox Content="Ignore NOPs"
-                                  Foreground="{DynamicResource {x:Static vs:EnvironmentColors.ToolWindowTextBrushKey}}"
-                                  IsChecked="{Binding IgnoreNops}"
-                                  Margin="5" />
-
-                        <CheckBox Content="Display numbers as HEX values"
-                                  Foreground="{DynamicResource {x:Static vs:EnvironmentColors.ToolWindowTextBrushKey}}"
-                                  IsChecked="{Binding NumbersAsHex}"
-                                  Margin="5" />
-
-                        <CheckBox Content="Simplify function names"
-                                  Foreground="{DynamicResource {x:Static vs:EnvironmentColors.ToolWindowTextBrushKey}}"
-                                  IsChecked="{Binding SimplifyFunctionNames}"
-                                  Margin="5" />
-
-                        <CheckBox Content="Upcase instruction names"
-                                  Foreground="{DynamicResource {x:Static vs:EnvironmentColors.ToolWindowTextBrushKey}}"
-                                  IsChecked="{Binding UpcaseInstructionNames}"
-                                  Margin="5" />
-
-                        <CheckBox Content="Align listing"
-                                  Foreground="{DynamicResource {x:Static vs:EnvironmentColors.ToolWindowTextBrushKey}}"
-                                  IsChecked="{Binding AlignListing}"
-                                  Margin="5" />
-                    </WrapPanel>
-                </Grid>
-
-
                 <local:MvvmTextEditor x:Name="InstructionList"
                                       Grid.Row="1"
                                       FontFamily="{Binding ListingFontName}"

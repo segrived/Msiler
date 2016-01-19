@@ -9,20 +9,20 @@ namespace Quart.Msiler
 {
     public class ListingGenerator
     {
-        public bool IgnoreNops { get; set; }
-        public bool NumbersAsHex { get; set; }
-        public bool SimplifyFunctionNames { get; set; }
-        public bool UpcaseInstructionNames { get; set; }
-        public bool AlignListing { get; set; }
-
         private int _longestOpCode;
+
+        private MsilerOptions _options;
+
+        public ListingGenerator() {
+            this._options = Common.Instance.Options;
+        }
 
         private string GetOffset(Instruction i) =>
             String.Format("IL_{0:X4}", i.Offset);
 
         private string GetOperand(Instruction i) {
             if (i.OpCode.Code == Code.Ldstr) {
-                return @"""" + i.Operand.ToString() + @"""";
+                return @"""" + Helpers.ReplaceNewLineCharacters(i.Operand.ToString()) + @"""";
             }
 
             if (i.Operand == null) {
@@ -39,16 +39,17 @@ namespace Quart.Msiler
                 return $"[ {joined} ]";
             }
 
-            if (this.SimplifyFunctionNames && (i.Operand is MethodReference)) {
+            if (this._options.SimplifyFunctionNames && (i.Operand is MethodReference)) {
                 var m = (MethodReference)i.Operand;
                 return $"{m.DeclaringType.FullName}.{m.Name}";
             }
 
-            if (this.NumbersAsHex) {
+            if (this._options.NumbersAsHex) {
                 Int64 number;
                 bool isNumeric = Int64.TryParse(i.Operand.ToString(), out number);
-                if (isNumeric)
+                if (isNumeric) {
                     return $"0x{number.ToString("X")}";
+                }
             }
 
             return i.Operand.ToString();
@@ -56,27 +57,25 @@ namespace Quart.Msiler
 
         public string GetOpCode(Instruction i) {
             var name = i.OpCode.Name;
-            return (this.UpcaseInstructionNames) ? name.ToUpper() : name;
+            return (this._options.UpcasedInstructionNames) ? name.ToUpper() : name;
         }
 
         private string InstructionToString(Instruction i, int longestOpcode) {
-            if (this.AlignListing) {
-                return $"{GetOffset(i)} {GetOpCode(i).PadRight(longestOpcode + 1)} {GetOperand(i)}";
-            } else {
-                return $"{GetOffset(i)} {GetOpCode(i)} {GetOperand(i)}";
-            }
-
+            var opcodePart = this._options.AlignListing
+                ? GetOpCode(i).PadRight(longestOpcode + 1)
+                : GetOpCode(i);
+            return $"{GetOffset(i)} {opcodePart} {GetOperand(i)}";
         }
 
         public string Generate(IEnumerable<Instruction> instructions) {
-            if (this.AlignListing) {
+            if (this._options.AlignListing) {
                 this._longestOpCode = instructions
                     .Select(i => i.OpCode.Name)
                     .Max(s => s.Length);
             }
             var sb = new StringBuilder();
             foreach (var instruction in instructions) {
-                if (this.IgnoreNops && instruction.OpCode.Code == Code.Nop) {
+                if (this._options.IgnoreNops && instruction.OpCode.Code == Code.Nop) {
                     continue;
                 }
                 sb.AppendLine(InstructionToString(instruction, _longestOpCode));
