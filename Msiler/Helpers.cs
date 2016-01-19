@@ -9,6 +9,8 @@ using System.Reflection;
 using EnvDTE80;
 using System.Drawing.Text;
 using System.Linq;
+using System.CodeDom.Compiler;
+using Mono.Cecil;
 
 namespace Quart.Msiler
 {
@@ -80,6 +82,11 @@ namespace Quart.Msiler
 
         public static string ReplaceNewLineCharacters(string str) {
             return str.Replace("\n", @"\n").Replace("\r", @"\r");
+        }
+
+        public static bool IsAnonymous(this MethodEntity method) {
+            var invalidChars = new[] { '<', '>' };
+            return method.Name.Any(invalidChars.Contains);
         }
     }
 }

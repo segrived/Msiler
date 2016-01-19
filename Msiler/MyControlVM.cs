@@ -36,11 +36,11 @@ namespace Quart.Msiler
             if (Helpers.IsFontFamilyExist(Common.Instance.Options.FontName)) {
                 fontFamily = Common.Instance.Options.FontName;
             }
-
             this.ListingFontName = new FontFamily(fontFamily);
             this.ListingFontSize = Common.Instance.Options.FontSize;
             this.ShowLineNumbers = Common.Instance.Options.LineNumbers;
             this.ExcludeProperties = Common.Instance.Options.ExcludeProperties;
+            this.ExcludeSpecialMethods = Common.Instance.Options.ExludeSpecialMethods;
         }
 
         public void InitCommon() {
@@ -100,6 +100,20 @@ namespace Quart.Msiler
                     return;
                 }
                 _excludeProperties = value;
+                this._methodsView.Refresh();
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _excludeSpecialMethods;
+        public bool ExcludeSpecialMethods {
+            get { return _excludeSpecialMethods; }
+            set
+            {
+                if (value == _excludeSpecialMethods) {
+                    return;
+                }
+                _excludeSpecialMethods = value;
                 this._methodsView.Refresh();
                 OnPropertyChanged();
             }
@@ -216,9 +230,14 @@ namespace Quart.Msiler
         private void UpdateMethodsFilter() {
             this._methodsView = CollectionViewSource.GetDefaultView(this.Methods);
             this._methodsView.Filter = o => {
-                var obj = (MethodEntity)o;
+                var method = (MethodEntity)o;
+                if (this.ExcludeSpecialMethods) {
+                    if (method.IsAnonymous()) {
+                        return false;
+                    }
+                }
                 if (this.ExcludeProperties) {
-                    if (obj.MethodData.IsGetter || obj.MethodData.IsSetter) {
+                    if (method.MethodData.IsGetter || method.MethodData.IsSetter) {
                         return false;
                     }
                 }
@@ -226,7 +245,7 @@ namespace Quart.Msiler
                     return true;
                 }
 
-                return obj.Name.ToLower().Contains(this.FilterString.ToLower());
+                return method.Name.ToLower().Contains(this.FilterString.ToLower());
             };
         }
 
