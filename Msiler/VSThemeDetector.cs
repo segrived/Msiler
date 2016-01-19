@@ -1,9 +1,7 @@
 ﻿using Microsoft.Win32;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Text.RegularExpressions;
+using System.Windows;
 
 namespace Quart.Msiler
 {
@@ -24,7 +22,23 @@ namespace Quart.Msiler
             return Themes[guid];
         }
 
-        private VisualStudioTheme VisualStudio15Theme() {
+
+        private VisualStudioTheme VisualStudio2013Theme() {
+            var rKey = @"Software\Microsoft\VisualStudio\12.0\General";
+
+            using (var key = Registry.CurrentUser.OpenSubKey(rKey)) {
+                if (key != null) {
+                    var keyText = (string)key.GetValue("CurrentTheme", string.Empty);
+                    if (!string.IsNullOrEmpty(keyText)) {
+                        return this.GuidToThemeName(keyText.Replace("{", "").Replace("}", ""));
+                    }
+                }
+            }
+
+            return VisualStudioTheme.Unknown;
+        }
+
+        private VisualStudioTheme VisualStudio2015Theme() {
             var rKey = @"Software\Microsoft\VisualStudio\14.0\ApplicationPrivateSettings\Microsoft\VisualStudio";
 
             using (var key = Registry.CurrentUser.OpenSubKey(rKey)) {
@@ -46,9 +60,12 @@ namespace Quart.Msiler
         public static VisualStudioTheme GetTheme() {
             var version = Helpers.GetDTE().Application.Version;
             if (version == "14.0") {
-                return new VSThemeDetector().VisualStudio15Theme();
+                return new VSThemeDetector().VisualStudio2015Theme();
+            } else if (version == "12.0") {
+                return new VSThemeDetector().VisualStudio2013Theme();
+            } else {
+                return VisualStudioTheme.Unknown;
             }
-            return VisualStudioTheme.Unknown;
         }
     }
 }

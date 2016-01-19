@@ -1,6 +1,5 @@
 ﻿using ICSharpCode.AvalonEdit.Highlighting;
 using Microsoft.VisualStudio.PlatformUI;
-using Microsoft.VisualStudio.Shell;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Windows.Controls;

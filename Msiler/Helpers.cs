@@ -9,8 +9,6 @@ using System.Reflection;
 using EnvDTE80;
 using System.Drawing.Text;
 using System.Linq;
-using System.CodeDom.Compiler;
-using Mono.Cecil;
 using System.Runtime.CompilerServices;
 
 namespace Quart.Msiler
