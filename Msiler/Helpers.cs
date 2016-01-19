@@ -6,9 +6,7 @@ using Microsoft.VisualStudio.Shell;
 using ICSharpCode.AvalonEdit.Highlighting.Xshd;
 using ICSharpCode.AvalonEdit.Highlighting;
 using System.Reflection;
-using Microsoft.VisualStudio.Shell.Interop;
 using EnvDTE80;
-using System.Linq;
 
 namespace Quart.Msiler
 {
