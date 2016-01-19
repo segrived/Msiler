@@ -94,7 +94,13 @@
                                       SyntaxHighlighting="{Binding Source={StaticResource HighlightingDefinition}}"
                                       FontSize="{Binding ListingFontSize}"
                                       MouseHover="InstructionList_MouseHover"
-                                      MouseHoverStopped="InstructionList_MouseHoverStopped" />
+                                      MouseHoverStopped="InstructionList_MouseHoverStopped">
+                    <local:MvvmTextEditor.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Command="Copy" />
+                        </ContextMenu>
+                    </local:MvvmTextEditor.ContextMenu>
+                </local:MvvmTextEditor>
             </Grid>
         </Grid>
     </Grid>
