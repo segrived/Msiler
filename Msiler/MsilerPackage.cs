@@ -81,7 +81,8 @@ namespace Quart.Msiler
         bool lineNumbers = true;
 
         bool excludeAutoProperties = false;
-        bool exludeSpecialMethods = false;
+        bool excludeSpecialMethods = false;
+        bool excludeConstructors = false;
 
         bool ignoreNops = false;
         bool numbersAsHex = false;
@@ -182,9 +183,17 @@ namespace Quart.Msiler
         [Category("Excluded methods")]
         [DisplayName("Exclude special (anonymous) methods")]
         [Description("")]
-        public bool ExludeSpecialMethods {
-            get { return exludeSpecialMethods; }
-            set { exludeSpecialMethods = value; }
+        public bool ExcludeSpecialMethods {
+            get { return excludeSpecialMethods; }
+            set { excludeSpecialMethods = value; }
+        }
+
+        [Category("Excluded methods")]
+        [DisplayName("Exclude constructors")]
+        [Description("")]
+        public bool ExcludeConstructors {
+            get { return excludeConstructors; }
+            set { excludeConstructors = value; }
         }
 
         protected override void OnApply(PageApplyEventArgs e) {

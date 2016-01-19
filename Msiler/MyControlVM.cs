@@ -40,7 +40,8 @@ namespace Quart.Msiler
             this.ListingFontSize = Common.Instance.Options.FontSize;
             this.ShowLineNumbers = Common.Instance.Options.LineNumbers;
             this.ExcludeProperties = Common.Instance.Options.ExcludeProperties;
-            this.ExcludeSpecialMethods = Common.Instance.Options.ExludeSpecialMethods;
+            this.ExcludeSpecialMethods = Common.Instance.Options.ExcludeSpecialMethods;
+            this.ExcludeContructors = Common.Instance.Options.ExcludeConstructors;
         }
 
         public void InitCommon() {
@@ -114,6 +115,20 @@ namespace Quart.Msiler
                     return;
                 }
                 _excludeSpecialMethods = value;
+                this._methodsView.Refresh();
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _excludeContructors;
+        public bool ExcludeContructors {
+            get { return _excludeContructors; }
+            set
+            {
+                if (value == _excludeContructors) {
+                    return;
+                }
+                _excludeContructors = value;
                 this._methodsView.Refresh();
                 OnPropertyChanged();
             }
@@ -230,22 +245,21 @@ namespace Quart.Msiler
         private void UpdateMethodsFilter() {
             this._methodsView = CollectionViewSource.GetDefaultView(this.Methods);
             this._methodsView.Filter = o => {
-                var method = (MethodEntity)o;
-                if (this.ExcludeSpecialMethods) {
-                    if (method.IsAnonymous()) {
-                        return false;
-                    }
+                var me = (MethodEntity)o;
+                if (this.ExcludeSpecialMethods && me.IsAnonymous()) {
+                    return false;
                 }
-                if (this.ExcludeProperties) {
-                    if (method.MethodData.IsGetter || method.MethodData.IsSetter) {
-                        return false;
-                    }
+                if (this.ExcludeProperties && me.IsProperty()) {
+                    return false;
+                }
+                if (this.ExcludeContructors && me.MethodData.IsConstructor) {
+                    return false;
                 }
                 if (String.IsNullOrEmpty(this.FilterString)) {
                     return true;
                 }
 
-                return method.Name.ToLower().Contains(this.FilterString.ToLower());
+                return me.Name.ToLower().Contains(this.FilterString.ToLower());
             };
         }
 

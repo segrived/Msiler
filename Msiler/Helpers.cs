@@ -11,6 +11,7 @@ using System.Drawing.Text;
 using System.Linq;
 using System.CodeDom.Compiler;
 using Mono.Cecil;
+using System.Runtime.CompilerServices;
 
 namespace Quart.Msiler
 {
@@ -84,9 +85,15 @@ namespace Quart.Msiler
             return str.Replace("\n", @"\n").Replace("\r", @"\r");
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsAnonymous(this MethodEntity method) {
             var invalidChars = new[] { '<', '>' };
             return method.Name.Any(invalidChars.Contains);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsProperty(this MethodEntity method) {
+            return method.MethodData.IsGetter || method.MethodData.IsSetter;
         }
     }
 }
