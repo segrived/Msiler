@@ -89,7 +89,7 @@
                 <local:MvvmTextEditor x:Name="InstructionList"
                                       Grid.Row="1"
                                       FontFamily="{Binding ListingFontName}"
-                                      ShowLineNumbers="True"
+                                      ShowLineNumbers="{Binding ShowLineNumbers}"
                                       Text="{Binding Path=BytecodeListing, Mode=OneWay}"
                                       SyntaxHighlighting="{Binding Source={StaticResource HighlightingDefinition}}"
                                       FontSize="{Binding ListingFontSize}"

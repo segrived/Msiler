@@ -39,6 +39,7 @@ namespace Quart.Msiler
 
             this.ListingFontName = new FontFamily(fontFamily);
             this.ListingFontSize = Common.Instance.Options.FontSize;
+            this.ShowLineNumbers = Common.Instance.Options.LineNumbers;
         }
 
         public void InitCommon() {
@@ -72,6 +73,19 @@ namespace Quart.Msiler
                     return;
                 }
                 _listingFontName = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool _showLineNumbers;
+        public bool ShowLineNumbers {
+            get { return _showLineNumbers; }
+            set
+            {
+                if (value == _showLineNumbers) {
+                    return;
+                }
+                _showLineNumbers = value;
                 OnPropertyChanged();
             }
         }

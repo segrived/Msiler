@@ -78,6 +78,7 @@ namespace Quart.Msiler
     {
         string fontName = "Consolas";
         int fontSize = 10;
+        bool lineNumbers = true;
 
         bool ignoreNops = false;
         bool numbersAsHex = false;
@@ -108,6 +109,14 @@ namespace Quart.Msiler
         public int FontSize {
             get { return fontSize; }
             set { fontSize = value; }
+        }
+
+        [Category("Display")]
+        [DisplayName("Show line numbers")]
+        [Description("")]
+        public bool LineNumbers {
+            get { return lineNumbers; }
+            set { lineNumbers = value; }
         }
 
         [Category("Listing generation options")]
