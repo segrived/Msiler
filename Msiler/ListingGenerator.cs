@@ -48,7 +48,7 @@ namespace Quart.Msiler
                 Int64 number;
                 bool isNumeric = Int64.TryParse(i.Operand.ToString(), out number);
                 if (isNumeric)
-                    return number.ToString("X");
+                    return $"0x{number.ToString("X")}";
             }
 
             return i.Operand.ToString();
