@@ -18,12 +18,14 @@ namespace Quart.Msiler
             }
         }
 
-        public IVsSolutionBuildManager Build { get; set; }
-        public IVsSolution Solution { get; set; }
+        public IVsSolutionBuildManager BuildManager { get; set; }
+        public IVsSolution SolutionManager { get; set; }
         public IVsWindowFrame Frame { get; set; }
         public MsilerPackage Package { get; set; }
         public uint SolutionUpdateCookie { get; set; }
         public uint SolutionCookie { get; set; }
+
+        public MsilerOptions Options { get; set; }
 
         private Common() { }
     }

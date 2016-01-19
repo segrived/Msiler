@@ -7,6 +7,8 @@ using ICSharpCode.AvalonEdit.Highlighting.Xshd;
 using ICSharpCode.AvalonEdit.Highlighting;
 using System.Reflection;
 using EnvDTE80;
+using System.Drawing.Text;
+using System.Linq;
 
 namespace Quart.Msiler
 {
@@ -69,6 +71,11 @@ namespace Quart.Msiler
                     return HighlightingLoader.Load(reader, HighlightingManager.Instance);
                 }
             }
+        }
+
+        public static bool IsFontFamilyExist(string fontFamily) {
+            var fontsCollection = new InstalledFontCollection();
+            return fontsCollection.Families.Any(ff => ff.Name == fontFamily);
         }
     }
 }

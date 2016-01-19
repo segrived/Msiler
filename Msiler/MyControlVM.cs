@@ -8,6 +8,7 @@ using System.Windows.Data;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell.Interop;
 using Quart.Msiler.Annotations;
+using System.Windows.Media;
 
 namespace Quart.Msiler
 {
@@ -21,15 +22,52 @@ namespace Quart.Msiler
         public MyControlVM() {
             this.UpdateMethodsFilter();
             InitCommon();
+            ProcessOptions();
+        }
+
+        public void ProcessOptions() {
+            string fontFamily = "Consolas"; // default font family
+            if (Helpers.IsFontFamilyExist(Common.Instance.Options.FontName)) {
+                fontFamily = Common.Instance.Options.FontName;
+            }
+
+            this.ListingFontName = new FontFamily(fontFamily);
+            this.ListingFontSize = Common.Instance.Options.FontSize;
         }
 
         public void InitCommon() {
             uint solutionUpdateCookie;
             uint solutionCookie;
-            Common.Instance.Build.AdviseUpdateSolutionEvents(this, out solutionUpdateCookie);
-            Common.Instance.Solution.AdviseSolutionEvents(this, out solutionCookie);
+            Common.Instance.BuildManager.AdviseUpdateSolutionEvents(this, out solutionUpdateCookie);
+            Common.Instance.SolutionManager.AdviseSolutionEvents(this, out solutionCookie);
             Common.Instance.SolutionUpdateCookie = solutionUpdateCookie;
             Common.Instance.SolutionCookie = solutionCookie;
+        }
+
+        private int _listingFontSize;
+        public int ListingFontSize {
+            get { return _listingFontSize; }
+            set
+            {
+                if (value == _listingFontSize) {
+                    return;
+                }
+                _listingFontSize = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private FontFamily _listingFontName;
+        public FontFamily ListingFontName {
+            get { return _listingFontName; }
+            set
+            {
+                if (value == _listingFontName) {
+                    return;
+                }
+                _listingFontName = value;
+                OnPropertyChanged();
+            }
         }
 
         private bool _ignoreNops;

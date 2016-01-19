@@ -118,11 +118,11 @@
 
                 <local:MvvmTextEditor x:Name="InstructionList"
                                       Grid.Row="1"
-                                      FontFamily="Consolas"
+                                      FontFamily="{Binding ListingFontName}"
                                       ShowLineNumbers="True"
                                       Text="{Binding Path=BytecodeListing, Mode=OneWay}"
                                       SyntaxHighlighting="{Binding Source={StaticResource HighlightingDefinition}}"
-                                      FontSize="10pt"
+                                      FontSize="{Binding ListingFontSize}"
                                       MouseHover="InstructionList_MouseHover"
                                       MouseHoverStopped="InstructionList_MouseHoverStopped" />
             </Grid>
