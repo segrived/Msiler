@@ -84,6 +84,7 @@ namespace Quart.Msiler
         bool simplifyFunctionNames = false;
         bool upcasedInstructionNames = false;
         bool alignListing = false;
+        bool updateListingOnlyIfVisible = true;
 
         // maybe it was bad idea
         public event ApplySettingsHandler Applied;
@@ -147,6 +148,14 @@ namespace Quart.Msiler
         public bool AlignListing {
             get { return alignListing; }
             set { alignListing = value; }
+        }
+
+        [Category("Global")]
+        [DisplayName("Update listing only if toolbox is visible")]
+        [Description("Bytecode listing  will be updated, only if Msiler toolbox visible on screen, it can reduce compilation times.")]
+        public bool UpdateListingOnlyIfVisible {
+            get { return updateListingOnlyIfVisible; }
+            set { updateListingOnlyIfVisible = value; }
         }
 
         protected override void OnApply(PageApplyEventArgs e) {

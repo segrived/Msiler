@@ -28,7 +28,7 @@ namespace Quart.Msiler
             }
         }
 
-        public static DTE GetCurrentDocument() {
+        public static DTE GetDTE() {
             var provider = ServiceProvider.GlobalProvider;
             var vs = (DTE)provider.GetService(typeof(DTE));
 
@@ -39,7 +39,7 @@ namespace Quart.Msiler
         }
 
         public static string GetOutputAssemblyFileName() {
-            var dte = GetCurrentDocument();
+            var dte = GetDTE();
 
             SolutionBuild2 sb = (SolutionBuild2)dte.Solution.SolutionBuild;
             var projects = sb.StartupProjects as Array;
@@ -56,7 +56,7 @@ namespace Quart.Msiler
             return Path.Combine(fullPath, activeProject.Properties.Item("OutputFileName").Value.ToString());
         }
 
-        public static byte[] ComputeMd5(string fn) {
+        public static byte[] ComputeMD5(string fn) {
             using (var md5 = MD5.Create()) {
                 using (var stream = File.OpenRead(fn)) {
                     return md5.ComputeHash(stream);

@@ -157,13 +157,16 @@ namespace Quart.Msiler
         }
 
         public int UpdateSolution_Done(int fSucceeded, int fModified, int fCancelCommand) {
-            if (!MsilerToolWindow.IsVisible || fSucceeded != 1) {
+            if (Common.Instance.Options.UpdateListingOnlyIfVisible && !MsilerToolWindow.IsVisible) {
+                return VSConstants.S_OK;
+            }
+            if (fSucceeded != 1) {
                 return VSConstants.S_OK;
             }
             Debug.Write("Compiled, generating IL code...");
             string assemblyFile = Helpers.GetOutputAssemblyFileName();
             try {
-                var hash = Helpers.ComputeMd5(assemblyFile);
+                var hash = Helpers.ComputeMD5(assemblyFile);
                 // if assembly was not changed
                 if (_lastBuildMd5Hash != null && _lastBuildMd5Hash.SequenceEqual(hash)) {
                     return VSConstants.S_OK;
