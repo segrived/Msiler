@@ -30,6 +30,10 @@ namespace Quart.Msiler
             this._module = ModuleDefinition.ReadModule(assemblyName);
         }
 
+        //public IEnumerable<MethodEntity> FilterMaethods(IEnumerable<MethodEntity> methods) {
+        //return methods.Where(m => m.MethodData.)
+        //}
+
         public IEnumerable<MethodEntity> EnumerateMethods() {
             var types = this._module.GetTypes();
             return

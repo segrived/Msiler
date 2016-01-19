@@ -80,6 +80,8 @@ namespace Quart.Msiler
         int fontSize = 10;
         bool lineNumbers = true;
 
+        bool excludeAutoProperties = false;
+
         bool ignoreNops = false;
         bool numbersAsHex = false;
         bool simplifyFunctionNames = false;
@@ -165,6 +167,14 @@ namespace Quart.Msiler
         public bool UpdateListingOnlyIfVisible {
             get { return updateListingOnlyIfVisible; }
             set { updateListingOnlyIfVisible = value; }
+        }
+
+        [Category("Excluded methods")]
+        [DisplayName("Exclude getters/setters")]
+        [Description("")]
+        public bool ExcludeProperties {
+            get { return excludeAutoProperties; }
+            set { excludeAutoProperties = value; }
         }
 
         protected override void OnApply(PageApplyEventArgs e) {

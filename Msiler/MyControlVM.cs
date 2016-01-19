@@ -40,6 +40,7 @@ namespace Quart.Msiler
             this.ListingFontName = new FontFamily(fontFamily);
             this.ListingFontSize = Common.Instance.Options.FontSize;
             this.ShowLineNumbers = Common.Instance.Options.LineNumbers;
+            this.ExcludeProperties = Common.Instance.Options.ExcludeProperties;
         }
 
         public void InitCommon() {
@@ -86,6 +87,20 @@ namespace Quart.Msiler
                     return;
                 }
                 _showLineNumbers = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _excludeProperties;
+        public bool ExcludeProperties {
+            get { return _excludeProperties; }
+            set
+            {
+                if (value == _excludeProperties) {
+                    return;
+                }
+                _excludeProperties = value;
+                this._methodsView.Refresh();
                 OnPropertyChanged();
             }
         }
@@ -201,10 +216,16 @@ namespace Quart.Msiler
         private void UpdateMethodsFilter() {
             this._methodsView = CollectionViewSource.GetDefaultView(this.Methods);
             this._methodsView.Filter = o => {
+                var obj = (MethodEntity)o;
+                if (this.ExcludeProperties) {
+                    if (obj.MethodData.IsGetter || obj.MethodData.IsSetter) {
+                        return false;
+                    }
+                }
                 if (String.IsNullOrEmpty(this.FilterString)) {
                     return true;
                 }
-                var obj = (MethodEntity)o;
+
                 return obj.Name.ToLower().Contains(this.FilterString.ToLower());
             };
         }
