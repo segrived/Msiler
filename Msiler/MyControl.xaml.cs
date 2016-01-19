@@ -19,8 +19,6 @@ namespace Quart.Msiler
         }
 
         private void InstructionList_MouseHover(object sender, System.Windows.Input.MouseEventArgs e) {
-            Common.Instance.Package.ShowOptionPage(typeof(MsilerOptions));
-
             var pos = InstructionList.GetPositionFromPoint(e.GetPosition(InstructionList));
 
             if (pos == null)

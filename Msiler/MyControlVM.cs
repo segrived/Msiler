@@ -23,6 +23,12 @@ namespace Quart.Msiler
             this.UpdateMethodsFilter();
             InitCommon();
             ProcessOptions();
+            Common.Instance.Options.Applied += Options_Applied;
+        }
+
+        private void Options_Applied(object sender, EventArgs e) {
+            ProcessOptions();
+            UpdateBytecodeListing();
         }
 
         public void ProcessOptions() {
@@ -71,7 +77,12 @@ namespace Quart.Msiler
         }
 
         public void UpdateBytecodeListing() {
-            this.BytecodeListing = _generator.Generate(this.SelectedMethod.Instructions);
+
+            if (this.SelectedMethod != null) {
+                this.BytecodeListing = _generator.Generate(this.SelectedMethod.Instructions);
+            } else {
+                this.BytecodeListing = "Please select method";
+            }
         }
 
         private string _bytecodeListing;
@@ -141,6 +152,7 @@ namespace Quart.Msiler
 
         public int OnAfterCloseSolution(object pUnkReserved) {
             this.Methods.Clear(); // empty collection
+            this.SelectedMethod = null;
             return VSConstants.S_OK;
         }
 

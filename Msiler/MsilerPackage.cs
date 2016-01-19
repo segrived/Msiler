@@ -72,6 +72,8 @@ namespace Quart.Msiler
         }
     }
 
+    public delegate void ApplySettingsHandler(object sender, EventArgs e);
+
     public class MsilerOptions : DialogPage
     {
         string fontName = "Consolas";
@@ -82,6 +84,14 @@ namespace Quart.Msiler
         bool simplifyFunctionNames = false;
         bool upcasedInstructionNames = false;
         bool alignListing = false;
+
+        // maybe it was bad idea
+        public event ApplySettingsHandler Applied;
+
+        protected virtual void OnApplied(EventArgs e) {
+            if (Applied != null)
+                Applied(this, e);
+        }
 
         [Category("Display")]
         [DisplayName("Font name")]
@@ -137,6 +147,11 @@ namespace Quart.Msiler
         public bool AlignListing {
             get { return alignListing; }
             set { alignListing = value; }
+        }
+
+        protected override void OnApply(PageApplyEventArgs e) {
+            OnApplied(e);
+            base.OnApply(e);
         }
     }
 }

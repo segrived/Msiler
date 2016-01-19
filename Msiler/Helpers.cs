@@ -79,7 +79,7 @@ namespace Quart.Msiler
         }
 
         public static string ReplaceNewLineCharacters(string str) {
-            return str.Replace("\n", "\\n");
+            return str.Replace("\n", @"\n").Replace("\r", @"\r");
         }
     }
 }
