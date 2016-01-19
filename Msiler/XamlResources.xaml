@@ -44,6 +44,15 @@
                 Value="{DynamicResource {x:Static vs:EnvironmentColors.ToolWindowBorderBrushKey}}" />
     </Style>
 
+    <Style TargetType="local:MvvmTextEditor">
+        <Setter Property="Foreground"
+                Value="{DynamicResource {x:Static vs:EnvironmentColors.ToolWindowTextBrushKey}}" />
+        <Setter Property="BorderBrush"
+                Value="{DynamicResource {x:Static vs:EnvironmentColors.ToolWindowBorderBrushKey}}" />
+        <Setter Property="Background"
+                Value="{DynamicResource {x:Static vs:EnvironmentColors.ToolWindowBackgroundBrushKey}}" />
+    </Style>
+
     <Style xmlns:sys="clr-namespace:System;assembly=mscorlib"
            x:Key="FilterHintTextBox"
            TargetType="TextBox">

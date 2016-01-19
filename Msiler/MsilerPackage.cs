@@ -74,6 +74,11 @@ namespace Quart.Msiler
 
     public delegate void ApplySettingsHandler(object sender, EventArgs e);
 
+    public enum MsilerColorTheme
+    {
+        Light, Dark, Auto
+    }
+
     public class MsilerOptions : DialogPage
     {
         string fontName = "Consolas";
@@ -90,6 +95,8 @@ namespace Quart.Msiler
         bool upcasedInstructionNames = false;
         bool alignListing = false;
         bool updateListingOnlyIfVisible = true;
+
+        MsilerColorTheme colorTheme = MsilerColorTheme.Auto;
 
         // maybe it was bad idea
         public event ApplySettingsHandler Applied;
@@ -122,6 +129,15 @@ namespace Quart.Msiler
             get { return lineNumbers; }
             set { lineNumbers = value; }
         }
+
+        [Category("Display")]
+        [DisplayName("Color theme")]
+        [Description("")]
+        public MsilerColorTheme ColorTheme {
+            get { return colorTheme; }
+            set { colorTheme = value; }
+        }
+
 
         [Category("Listing generation options")]
         [DisplayName("Ignore NOPs")]

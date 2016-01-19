@@ -180,6 +180,7 @@
   <ItemGroup>
     <Compile Include="Common.cs" />
     <Compile Include="Helpers.cs" />
+    <Compile Include="VSThemeDetector.cs" />
     <EmbeddedResource Include="Resources\IL.xshd">
       <SubType>Designer</SubType>
     </EmbeddedResource>

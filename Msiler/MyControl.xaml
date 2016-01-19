@@ -91,7 +91,6 @@
                                       FontFamily="{Binding ListingFontName}"
                                       ShowLineNumbers="{Binding ShowLineNumbers}"
                                       Text="{Binding Path=BytecodeListing, Mode=OneWay}"
-                                      SyntaxHighlighting="{Binding Source={StaticResource HighlightingDefinition}}"
                                       FontSize="{Binding ListingFontSize}"
                                       MouseHover="InstructionList_MouseHover"
                                       IsReadOnly="True"
