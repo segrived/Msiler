@@ -21,7 +21,8 @@ namespace Quart.Msiler
             ["String"] = Color.FromRgb(177, 233, 98),
             ["Offset"] = Color.FromRgb(242, 248, 104),
             ["Instruction"] = Color.FromRgb(93, 181, 222),
-            ["Number"] = Color.FromRgb(232, 97, 153)
+            ["Number"] = Color.FromRgb(232, 97, 153),
+            ["BuiltInTypes"] = Color.FromRgb(150, 150, 150)
         };
 
         public Dictionary<string, Color> LightTheme = new Dictionary<string, Color> {
@@ -29,7 +30,8 @@ namespace Quart.Msiler
             ["String"] = Color.FromRgb(35, 145, 63),
             ["Offset"] = Color.FromRgb(128, 35, 145),
             ["Instruction"] = Color.FromRgb(171, 124, 41),
-            ["Number"] = Color.FromRgb(163, 168, 41)
+            ["Number"] = Color.FromRgb(163, 168, 41),
+            ["BuiltInTypes"] = Color.FromRgb(88, 88, 88)
         };
 
         public MyControl() {

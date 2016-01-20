@@ -4,6 +4,7 @@
   <Color name="Offset" foreground="Brown" />
   <Color name="Instruction" fontWeight="bold" foreground="Blue" />
   <Color name="Number" fontWeight="bold" foreground="Orange" />
+  <Color name="BuiltInTypes" foreground="Gray" />
 
   <RuleSet ignoreCase="true">
     <Span color="Comment" begin="//" />
@@ -27,6 +28,24 @@
     <Rule color="Number">
       (?&lt;=\s)\-?(0x)?[\dA-Fa-f]+$
     </Rule>
+
+    <Keywords color="BuiltInTypes">
+      <Word>System.Boolean</Word>
+      <Word>System.Byte</Word>
+      <Word>System.SByte</Word>
+      <Word>System.Char</Word>
+      <Word>System.Decimal</Word>
+      <Word>System.Double</Word>
+      <Word>System.Single</Word>
+      <Word>System.Int32</Word>
+      <Word>System.UInt32</Word>
+      <Word>System.Int64</Word>
+      <Word>System.UInt64</Word>
+      <Word>System.Object</Word>
+      <Word>System.Int16</Word>
+      <Word>System.UInt16</Word>
+      <Word>System.String</Word>
+    </Keywords>
       
     <Keywords color="Instruction">
       <Word>add </Word>
