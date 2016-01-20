@@ -10,7 +10,6 @@
 
     <Span color="String">
       <Begin>"</Begin>
-      <End>"</End>
       <RuleSet>
         <Span begin = "\\" end="." />
       </RuleSet>
