@@ -213,6 +213,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common.cs" />
+    <Compile Include="Converters\IsGreaterThenConverter.cs" />
     <Compile Include="Helpers.cs" />
     <Compile Include="VSThemeDetector.cs" />
     <EmbeddedResource Include="Resources\IL.xshd">

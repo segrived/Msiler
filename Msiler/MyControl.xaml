@@ -5,6 +5,7 @@
              xmlns:local="clr-namespace:Quart.Msiler"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vs="clr-namespace:Microsoft.VisualStudio.PlatformUI;assembly=Microsoft.VisualStudio.Shell.12.0"
+             xmlns:conv="clr-namespace:Quart.Msiler.Converters"
              Name="MyToolWindow"
              d:DesignHeight="300"
              d:DesignWidth="300"
@@ -12,7 +13,6 @@
 
     <UserControl.Resources>
         <ResourceDictionary Source="XamlResources.xaml" />
-
     </UserControl.Resources>
 
     <Grid>
@@ -66,7 +66,7 @@
                        FontSize="12"
                        Grid.Row="3"
                        Padding="3">                                
-                <Hyperlink Click="Hyperlink_Click"
+                <Hyperlink Click="HyperlinkOptions_Click"
                            TextDecorations="None">Options</Hyperlink>
             </TextBlock>
             <Grid Grid.Row="4">
@@ -102,6 +102,64 @@
                     </local:MvvmTextEditor.ContextMenu>
                 </local:MvvmTextEditor>
             </Grid>
+        </Grid>
+        <Grid>
+            <Grid.Resources>
+                <Style TargetType="{x:Type TextBlock}"
+                       BasedOn="{StaticResource {x:Type TextBlock}}">
+                    <Setter Property="Margin"
+                            Value="4" />
+                </Style>
+            </Grid.Resources>
+            <Grid.Style>
+                <Style TargetType="{x:Type Grid}">
+                    <Setter Property="Visibility"
+                            Value="Visible" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Path=Methods.Count, Converter={x:Static conv:IsGreaterThenConverter.Instance}, ConverterParameter=0}"
+                                     Value="True">
+                            <Setter Property="Visibility"
+                                    Value="Hidden" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Grid.Style>
+            <StackPanel HorizontalAlignment="Left"
+                        Orientation="Vertical"
+                        Margin="2">
+                <TextBlock FontWeight="Bold"
+                           FontSize="22"
+                           HorizontalAlignment="Center"
+                           Text="Msiler">
+                </TextBlock>
+                <Rectangle HorizontalAlignment="Center"
+                           Fill="{DynamicResource {x:Static vs:EnvironmentColors.DropDownBorderBrushKey}}"
+                           Height="1"
+                           Width="{Binding ActualWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Grid}}}"
+                           Margin="0,0,0,10" />
+                <TextBlock FontWeight="Bold"
+                           TextWrapping="Wrap"
+                           Text="Follow the steps below:">
+                </TextBlock>
+                <TextBlock TextWrapping="Wrap"
+                           Text="1. Open solution" />
+                <TextBlock TextWrapping="Wrap"
+                           Text="2. Select start-up projext (if needed)" />
+                <TextBlock TextWrapping="Wrap"
+                           Text="3. Build/rebuild project (you can use Ctrl+Shift+B shortcut by default)" />
+                <Rectangle HorizontalAlignment="Stretch"
+                           Fill="{DynamicResource {x:Static vs:EnvironmentColors.DropDownBorderBrushKey}}"
+                           Height="1"
+                           Width="{Binding ActualWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Grid}}}"
+                           Margin="0,10,0,0" />
+                <TextBlock HorizontalAlignment="Center">
+                    <Hyperlink Click="HyperlinkOptions_Click"
+                               TextDecorations="None">Options</Hyperlink>
+                    <Run Text=" | " />
+                    <Hyperlink Click="HyperlinkGithub_Click"
+                               TextDecorations="None">GitHub</Hyperlink>
+                </TextBlock>
+            </StackPanel>
         </Grid>
     </Grid>
 </UserControl>

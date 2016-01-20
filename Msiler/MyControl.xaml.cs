@@ -9,6 +9,8 @@ namespace Quart.Msiler
 {
     public partial class MyControl : UserControl
     {
+        private const string RepoUrl = @"https://github.com/segrived/Msiler";
+
         private readonly MyControlVM _viewModel;
 
         ToolTip toolTip = new ToolTip();
@@ -111,8 +113,12 @@ namespace Quart.Msiler
             toolTip.IsOpen = false;
         }
 
-        private void Hyperlink_Click(object sender, System.Windows.RoutedEventArgs e) {
+        private void HyperlinkOptions_Click(object sender, System.Windows.RoutedEventArgs e) {
             Common.Instance.Package.ShowOptionPage(typeof(MsilerOptions));
+        }
+
+        private void HyperlinkGithub_Click(object sender, System.Windows.RoutedEventArgs e) {
+            System.Diagnostics.Process.Start(RepoUrl);
         }
     }
 }
