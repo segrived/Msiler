@@ -53,6 +53,11 @@
                 Value="{DynamicResource {x:Static vs:EnvironmentColors.ToolWindowBackgroundBrushKey}}" />
     </Style>
 
+    <Style TargetType="Hyperlink">
+        <Setter Property="Foreground"
+                Value="{DynamicResource {x:Static vs:EnvironmentColors.PanelHyperlinkBrushKey}}" />
+    </Style>
+
     <Style xmlns:sys="clr-namespace:System;assembly=mscorlib"
            x:Key="FilterHintTextBox"
            TargetType="TextBox">
