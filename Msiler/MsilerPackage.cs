@@ -17,7 +17,7 @@ namespace Quart.Msiler
     };
 
     [PackageRegistration(UseManagedResourcesOnly = true)]
-    [InstalledProductRegistration("#110", "#112", "1.0", IconResourceID = 400)]
+    [InstalledProductRegistration("#110", "#112", "2.0.beta", IconResourceID = 400)]
     [ProvideMenuResource("Menus.ctmenu", 1)]
     [ProvideToolWindow(typeof(MsilerToolWindow), MultiInstances = false)]
     [ProvideOptionPage(typeof(MsilerOptions), "Msiler", "Msiler", 0, 0, true)]
