@@ -17,10 +17,10 @@ namespace Quart.Msiler
     };
 
     [PackageRegistration(UseManagedResourcesOnly = true)]
-    [InstalledProductRegistration("#110", "#112", "2.0.beta", IconResourceID = 400)]
+    [InstalledProductRegistration("#110", "#112", "2.0.beta1", IconResourceID = 400)]
     [ProvideMenuResource("Menus.ctmenu", 1)]
     [ProvideToolWindow(typeof(MsilerToolWindow), MultiInstances = false)]
-    [ProvideOptionPage(typeof(MsilerOptions), "Msiler", "Msiler", 0, 0, true)]
+    [ProvideOptionPage(typeof(MsilerOptions), "Msiler", "General", 0, 0, true)]
     [Guid(GuidList.guidMsilerPkgString)]
     public sealed class MsilerPackage : Package
     {
@@ -94,6 +94,7 @@ namespace Quart.Msiler
         bool upcasedInstructionNames = false;
         bool alignListing = false;
         bool updateListingOnlyIfVisible = true;
+        bool decimalOffsets = false;
 
         MsilerColorTheme colorTheme = MsilerColorTheme.Auto;
 
@@ -177,6 +178,15 @@ namespace Quart.Msiler
             get { return alignListing; }
             set { alignListing = value; }
         }
+
+        [Category("Listing generation options")]
+        [DisplayName("Align listing")]
+        [Description("")]
+        public bool DecimalOffsets {
+            get { return decimalOffsets; }
+            set { decimalOffsets = value; }
+        }
+
 
         [Category("Global")]
         [DisplayName("Update listing only if toolbox is visible")]

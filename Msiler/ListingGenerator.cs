@@ -11,14 +11,16 @@ namespace Quart.Msiler
     {
         private int _longestOpCode;
 
-        private MsilerOptions _options;
+        private readonly MsilerOptions _options;
 
         public ListingGenerator() {
             this._options = Common.Instance.Options;
         }
 
-        private string GetOffset(Instruction i) =>
-            String.Format("IL_{0:X4}", i.Offset);
+        private string GetOffset(Instruction i) {
+            var f = (Common.Instance.Options.DecimalOffsets) ? "IL_{0:D4}" : "IL_{0:X4}";
+            return String.Format(f, i.Offset);
+        }
 
         private string GetOperand(Instruction i) {
             if (i.OpCode.Code == Code.Ldstr) {

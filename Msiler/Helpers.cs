@@ -42,7 +42,7 @@ namespace Quart.Msiler
         public static string GetOutputAssemblyFileName() {
             var dte = GetDTE();
 
-            SolutionBuild2 sb = (SolutionBuild2)dte.Solution.SolutionBuild;
+            var sb = (SolutionBuild2)dte.Solution.SolutionBuild;
             var projects = sb.StartupProjects as Array;
             var activeProject = dte.Solution.Item(projects.GetValue(0));
 
