@@ -180,7 +180,7 @@ namespace Quart.Msiler
         }
 
         [Category("Listing generation options")]
-        [DisplayName("Align listing")]
+        [DisplayName("Decimal Offsets")]
         [Description("")]
         public bool DecimalOffsets {
             get { return decimalOffsets; }
