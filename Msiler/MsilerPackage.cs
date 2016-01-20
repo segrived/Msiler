@@ -81,7 +81,7 @@ namespace Quart.Msiler
     public class MsilerOptions : DialogPage
     {
         string fontName = "Consolas";
-        int fontSize = 10;
+        int fontSize = 12;
         bool lineNumbers = true;
 
         bool excludeAutoProperties = false;
