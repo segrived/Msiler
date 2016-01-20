@@ -94,7 +94,8 @@
                                       FontSize="{Binding ListingFontSize}"
                                       MouseHover="InstructionList_MouseHover"
                                       IsReadOnly="True"
-                                      MouseHoverStopped="InstructionList_MouseHoverStopped">
+                                      MouseHoverStopped="InstructionList_MouseHoverStopped"
+                                      SyntaxHighlighting="{Binding HighlightingDefinition}">
                     <local:MvvmTextEditor.ContextMenu>
                         <ContextMenu>
                             <MenuItem Command="Copy" />

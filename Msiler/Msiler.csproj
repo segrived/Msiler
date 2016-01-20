@@ -212,6 +212,7 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ColorTheme.cs" />
     <Compile Include="Common.cs" />
     <Compile Include="Converters\IsGreaterThenConverter.cs" />
     <Compile Include="Helpers.cs" />

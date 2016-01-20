@@ -3,9 +3,6 @@ using System.IO;
 using System.Security.Cryptography;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
-using ICSharpCode.AvalonEdit.Highlighting.Xshd;
-using ICSharpCode.AvalonEdit.Highlighting;
-using System.Reflection;
 using EnvDTE80;
 using System.Drawing.Text;
 using System.Linq;
@@ -61,15 +58,6 @@ namespace Quart.Msiler
             using (var md5 = MD5.Create()) {
                 using (var stream = File.OpenRead(fn)) {
                     return md5.ComputeHash(stream);
-                }
-            }
-        }
-
-        public static IHighlightingDefinition GetILHighlightingDefinition() {
-            var ilRes = "Quart.Msiler.Resources.IL.xshd";
-            using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(ilRes)) {
-                using (var reader = new System.Xml.XmlTextReader(stream)) {
-                    return HighlightingLoader.Load(reader, HighlightingManager.Instance);
                 }
             }
         }

@@ -9,6 +9,8 @@ using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell.Interop;
 using Quart.Msiler.Annotations;
 using System.Windows.Media;
+using ICSharpCode.AvalonEdit.Highlighting;
+using Microsoft.VisualStudio.PlatformUI;
 
 namespace Quart.Msiler
 {
@@ -24,6 +26,11 @@ namespace Quart.Msiler
             InitCommon();
             ProcessOptions();
             Common.Instance.Options.Applied += Options_Applied;
+            VSColorTheme.ThemeChanged += VSColorTheme_ThemeChanged;
+        }
+
+        private void VSColorTheme_ThemeChanged(ThemeChangedEventArgs e) {
+            this.HighlightingDefinition = ColorTheme.GetColorTheme(Common.Instance.Options.ColorTheme);
         }
 
         private void Options_Applied(object sender, EventArgs e) {
@@ -42,6 +49,8 @@ namespace Quart.Msiler
             this.ExcludeProperties = Common.Instance.Options.ExcludeProperties;
             this.ExcludeSpecialMethods = Common.Instance.Options.ExcludeSpecialMethods;
             this.ExcludeContructors = Common.Instance.Options.ExcludeConstructors;
+
+            this.HighlightingDefinition = ColorTheme.GetColorTheme(Common.Instance.Options.ColorTheme);
         }
 
         public void InitCommon() {
@@ -130,6 +139,19 @@ namespace Quart.Msiler
                 }
                 _excludeContructors = value;
                 this._methodsView.Refresh();
+                OnPropertyChanged();
+            }
+        }
+
+        private IHighlightingDefinition _highlightingDefinition;
+        public IHighlightingDefinition HighlightingDefinition {
+            get { return _highlightingDefinition; }
+            set
+            {
+                if (value == _highlightingDefinition) {
+                    return;
+                }
+                _highlightingDefinition = value;
                 OnPropertyChanged();
             }
         }
