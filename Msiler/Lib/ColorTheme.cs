@@ -1,6 +1,5 @@
 ﻿using ICSharpCode.AvalonEdit.Highlighting;
 using ICSharpCode.AvalonEdit.Highlighting.Xshd;
-using Quart.Msiler.Lib;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Windows.Media;
@@ -47,11 +46,10 @@ namespace Quart.Msiler.Lib
             return high;
         }
 
-        private static IHighlightingDefinition ApplyColorTheme(IHighlightingDefinition def, Dictionary<string, Color> theme) {
+        private static void ApplyColorTheme(IHighlightingDefinition def, Dictionary<string, Color> theme) {
             foreach (var kv in theme) {
                 def.GetNamedColor(kv.Key).Foreground = new SimpleHighlightingBrush(kv.Value);
             }
-            return def;
         }
 
         public static IHighlightingDefinition GetDefaultHighlightingDefinition() {
