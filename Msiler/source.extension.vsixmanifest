@@ -10,8 +10,8 @@
     <License>License.txt</License>
     <ReleaseNotes>https://github.com/segrived/Msiler/wiki/Version-History</ReleaseNotes>
     <Icon>Resources\Package.ico</Icon>
-    <PreviewImage>preview.png</PreviewImage>
-    <Tags>msil,il,assembly</Tags>
+    <PreviewImage>Resources\Preview.png</PreviewImage>
+    <Tags>msil,il,assembly,disassembler</Tags>
   </Metadata>
   <Installation InstalledByMsi="false">
     <InstallationTarget Version="[12.0,15.0)" Id="Microsoft.VisualStudio.Pro" />
