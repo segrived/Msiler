@@ -5,8 +5,10 @@
   <Color name="Instruction" fontWeight="bold" foreground="Blue" />
   <Color name="Number" fontWeight="bold" foreground="Orange" />
   <Color name="BuiltInTypes" foreground="Gray" />
-
+  <Color name="Header" foreground="Gray" />
+  
   <RuleSet ignoreCase="true">
+    <Span color="Header" begin="Method: " />
     <Span color="Comment" begin="//" />
 
     <Span color="String">

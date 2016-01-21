@@ -7,7 +7,7 @@
         <Setter Property="BorderThickness"
                 Value="0" />
         <Setter Property="Padding"
-                Value="3" />
+                Value="2" />
     </Style>
 
     <Style TargetType="UserControl">
@@ -75,7 +75,7 @@
                          AlignmentY="Center"
                          Stretch="None">
                 <VisualBrush.Visual>
-                    <Label Content="Filter..."
+                    <Label Content="Filter methods..."
                            FontStyle="Italic"
                            Foreground="{DynamicResource {x:Static vs:EnvironmentColors.SystemGrayTextBrushKey}}" />
                 </VisualBrush.Visual>

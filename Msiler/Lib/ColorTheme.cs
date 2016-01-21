@@ -14,7 +14,8 @@ namespace Quart.Msiler.Lib
             ["Offset"] = Color.FromRgb(242, 248, 104),
             ["Instruction"] = Color.FromRgb(93, 181, 222),
             ["Number"] = Color.FromRgb(232, 97, 153),
-            ["BuiltInTypes"] = Color.FromRgb(150, 150, 150)
+            ["BuiltInTypes"] = Color.FromRgb(150, 150, 150),
+            ["Header"] = Color.FromRgb(110, 110, 110)
         };
 
         public static Dictionary<string, Color> LightTheme = new Dictionary<string, Color> {
@@ -23,7 +24,8 @@ namespace Quart.Msiler.Lib
             ["Offset"] = Color.FromRgb(128, 35, 145),
             ["Instruction"] = Color.FromRgb(171, 124, 41),
             ["Number"] = Color.FromRgb(163, 168, 41),
-            ["BuiltInTypes"] = Color.FromRgb(88, 88, 88)
+            ["BuiltInTypes"] = Color.FromRgb(90, 90, 90),
+            ["Header"] = Color.FromRgb(130, 130, 130)
         };
 
         public static IHighlightingDefinition GetColorTheme(MsilerColorTheme mt) {

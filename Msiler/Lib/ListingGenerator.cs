@@ -17,6 +17,9 @@ namespace Quart.Msiler.Lib
             this._options = Common.Instance.Options;
         }
 
+
+        private string GetHeader(MethodEntity m) => $"Method: {m.Name}";
+
         private string GetOffset(Instruction i) {
             var f = (Common.Instance.Options.DecimalOffsets) ? "IL_{0:D4}" : "IL_{0:X4}";
             return String.Format(f, i.Offset);
@@ -59,7 +62,7 @@ namespace Quart.Msiler.Lib
 
         public string GetOpCode(Instruction i) {
             var name = i.OpCode.Name;
-            return (this._options.UpcasedInstructionNames) ? name.ToUpper() : name;
+            return (this._options.UpcaseOpCodes) ? name.ToUpper() : name;
         }
 
         private string InstructionToString(Instruction i, int longestOpcode) {
@@ -69,14 +72,20 @@ namespace Quart.Msiler.Lib
             return $"{GetOffset(i)} {opcodePart} {GetOperand(i)}";
         }
 
-        public string Generate(IEnumerable<Instruction> instructions) {
+        public string Generate(MethodEntity method) {
             if (this._options.AlignListing) {
-                this._longestOpCode = instructions
+                this._longestOpCode = method.Instructions
                     .Select(i => i.OpCode.Name)
                     .Max(s => s.Length);
             }
             var sb = new StringBuilder();
-            foreach (var instruction in instructions) {
+
+            if (this._options.DisplayMethodNames) {
+                sb.AppendLine(this.GetHeader(method));
+                sb.AppendLine();
+            }
+
+            foreach (var instruction in method.Instructions) {
                 if (this._options.IgnoreNops && instruction.OpCode.Code == Code.Nop) {
                     continue;
                 }

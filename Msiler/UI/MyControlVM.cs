@@ -48,7 +48,7 @@ namespace Quart.Msiler.UI
             this.ListingFontSize = Common.Instance.Options.FontSize;
             this.ShowLineNumbers = Common.Instance.Options.LineNumbers;
             this.ExcludeProperties = Common.Instance.Options.ExcludeProperties;
-            this.ExcludeSpecialMethods = Common.Instance.Options.ExcludeSpecialMethods;
+            this.ExcludeSpecialMethods = Common.Instance.Options.ExcludeAnonymousMethods;
             this.ExcludeContructors = Common.Instance.Options.ExcludeConstructors;
 
             this.HighlightingDefinition = ColorTheme.GetColorTheme(Common.Instance.Options.ColorTheme);
@@ -160,7 +160,7 @@ namespace Quart.Msiler.UI
         public void UpdateBytecodeListing() {
 
             if (this.SelectedMethod != null) {
-                this.BytecodeListing = _generator.Generate(this.SelectedMethod.Instructions);
+                this.BytecodeListing = _generator.Generate(this.SelectedMethod);
             } else {
                 this.BytecodeListing = "Please select method";
             }

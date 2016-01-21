@@ -80,23 +80,32 @@ namespace Quart.Msiler
 
     public class MsilerOptions : DialogPage
     {
+        // Default values
+
+        // display options
         string fontName = "Consolas";
         int fontSize = 12;
         bool lineNumbers = true;
+        MsilerColorTheme colorTheme = MsilerColorTheme.Auto;
 
+        // exclude options
         bool excludeAutoProperties = false;
-        bool excludeSpecialMethods = false;
+        bool excludeAnonymousMethods = false;
         bool excludeConstructors = false;
 
+        // listing generation options
         bool ignoreNops = false;
         bool numbersAsHex = false;
         bool simplifyFunctionNames = false;
-        bool upcasedInstructionNames = false;
+        bool upcaseOpCodes = false;
         bool alignListing = false;
-        bool updateListingOnlyIfVisible = true;
         bool decimalOffsets = false;
+        bool methodNames = true;
 
-        MsilerColorTheme colorTheme = MsilerColorTheme.Auto;
+        // global options
+        bool updateListingOnlyIfVisible = true;
+
+        // End of default Values
 
         // maybe it was bad idea
         public event ApplySettingsHandler Applied;
@@ -107,7 +116,7 @@ namespace Quart.Msiler
         }
 
         [Category("Display")]
-        [DisplayName("Font name")]
+        [DisplayName("Listing font name")]
         [Description("")]
         public string FontName {
             get { return fontName; }
@@ -115,7 +124,7 @@ namespace Quart.Msiler
         }
 
         [Category("Display")]
-        [DisplayName("Font size")]
+        [DisplayName("Listing font size")]
         [Description("")]
         public int FontSize {
             get { return fontSize; }
@@ -131,8 +140,8 @@ namespace Quart.Msiler
         }
 
         [Category("Display")]
-        [DisplayName("Color theme")]
-        [Description("")]
+        [DisplayName("VS Color theme")]
+        [Description("Visual Studio color theme, Msiler highlighting will be adjusted based on this value")]
         public MsilerColorTheme ColorTheme {
             get { return colorTheme; }
             set { colorTheme = value; }
@@ -141,7 +150,7 @@ namespace Quart.Msiler
 
         [Category("Listing generation options")]
         [DisplayName("Ignore NOPs")]
-        [Description("")]
+        [Description("If true, Nop instrutions will be excluded from listing")]
         public bool IgnoreNops {
             get { return ignoreNops; }
             set { ignoreNops = value; }
@@ -164,11 +173,11 @@ namespace Quart.Msiler
         }
 
         [Category("Listing generation options")]
-        [DisplayName("Upcased instruction names")]
-        [Description("")]
-        public bool UpcasedInstructionNames {
-            get { return upcasedInstructionNames; }
-            set { upcasedInstructionNames = value; }
+        [DisplayName("Upcase OpCodes")]
+        [Description("If true, OpCodes will be upcased (for example LDSTR instead of ldstr)")]
+        public bool UpcaseOpCodes {
+            get { return upcaseOpCodes; }
+            set { upcaseOpCodes = value; }
         }
 
         [Category("Listing generation options")]
@@ -180,13 +189,20 @@ namespace Quart.Msiler
         }
 
         [Category("Listing generation options")]
-        [DisplayName("Decimal Offsets")]
+        [DisplayName("Display offsets as decimal numbers")]
         [Description("")]
         public bool DecimalOffsets {
             get { return decimalOffsets; }
             set { decimalOffsets = value; }
         }
 
+        [Category("Listing generation options")]
+        [DisplayName("Display method names in listing")]
+        [Description("")]
+        public bool DisplayMethodNames {
+            get { return methodNames; }
+            set { methodNames = value; }
+        }
 
         [Category("Global")]
         [DisplayName("Update listing only if toolbox is visible")]
@@ -206,11 +222,11 @@ namespace Quart.Msiler
 
 
         [Category("Excluded methods")]
-        [DisplayName("Exclude special (anonymous) methods")]
+        [DisplayName("Exclude anonymous methods")]
         [Description("")]
-        public bool ExcludeSpecialMethods {
-            get { return excludeSpecialMethods; }
-            set { excludeSpecialMethods = value; }
+        public bool ExcludeAnonymousMethods {
+            get { return excludeAnonymousMethods; }
+            set { excludeAnonymousMethods = value; }
         }
 
         [Category("Excluded methods")]
