@@ -145,7 +145,7 @@
                 <TextBlock TextWrapping="Wrap"
                            Text="1. Open solution" />
                 <TextBlock TextWrapping="Wrap"
-                           Text="2. Select start-up projext (if needed)" />
+                           Text="2. Select start-up project (if needed)" />
                 <TextBlock TextWrapping="Wrap"
                            Text="3. Build/rebuild project (you can use Ctrl+Shift+B shortcut by default)" />
                 <Rectangle HorizontalAlignment="Stretch"
