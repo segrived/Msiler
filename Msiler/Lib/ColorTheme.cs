@@ -1,10 +1,11 @@
 ﻿using ICSharpCode.AvalonEdit.Highlighting;
 using ICSharpCode.AvalonEdit.Highlighting.Xshd;
+using Quart.Msiler.Lib;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Windows.Media;
 
-namespace Quart.Msiler
+namespace Quart.Msiler.Lib
 {
     public class ColorTheme
     {

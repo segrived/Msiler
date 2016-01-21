@@ -1,7 +1,4 @@
-﻿// PkgCmdID.cs
-// MUST match PkgCmdID.h
-
-namespace Quart.Msiler
+﻿namespace Quart.Msiler
 {
     internal static class PkgCmdIDList
     {

@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Diagnostics;
 
-namespace Quart.Msiler
+namespace Quart.Msiler.UI
 {
     public partial class AboutWindow : Window
     {

@@ -5,7 +5,7 @@
   <Metadata>
     <Identity Id="2e50f4f0-18d1-419e-a204-f1156c910f2b" Version="1.999" Language="en-US" Publisher="segrived" />
     <DisplayName>Msiler</DisplayName>
-    <Description xml:space="preserve">MSIL Code Viewer for Visual Studio 2013/2015</Description>
+    <Description xml:space="preserve">MSIL Code Viewer Extension for Visual Studio 2013/2015</Description>
     <MoreInfo>https://github.com/segrived/Msiler</MoreInfo>
     <License>License.txt</License>
     <ReleaseNotes>https://github.com/segrived/Msiler/wiki/Version-History</ReleaseNotes>

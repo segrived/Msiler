@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 
-namespace Quart.Msiler
+namespace Quart.Msiler.Lib
 {
     // taken from wikipedia
-    internal static class Instructions
+    internal static class OpCodesInfo
     {
         public static readonly Dictionary<string, string> Description =
             new Dictionary<string, string> {

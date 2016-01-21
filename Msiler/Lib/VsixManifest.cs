@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Xml;
 
-namespace Quart.Msiler
+namespace Quart.Msiler.Lib
 {
     public class VsixManifest
     {
@@ -12,9 +12,7 @@ namespace Quart.Msiler
 
         public string Version { get; set; }
 
-        private VsixManifest() {
-
-        }
+        private VsixManifest() { }
 
         private VsixManifest(string manifestPath) {
             var doc = new XmlDocument();

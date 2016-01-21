@@ -9,6 +9,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Xml;
 using System.Reflection;
+using Quart.Msiler.Lib;
 
 namespace Quart.Msiler
 {

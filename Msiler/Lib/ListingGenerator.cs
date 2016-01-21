@@ -5,7 +5,7 @@ using System.Text;
 using Mono.Cecil.Cil;
 using Mono.Cecil;
 
-namespace Quart.Msiler
+namespace Quart.Msiler.Lib
 {
     public class ListingGenerator
     {

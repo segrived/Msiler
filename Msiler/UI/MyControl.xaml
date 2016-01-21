@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="Quart.Msiler.MyControl"
+﻿<UserControl x:Class="Quart.Msiler.UI.MyControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -12,7 +12,7 @@
              mc:Ignorable="d">
 
     <UserControl.Resources>
-        <ResourceDictionary Source="XamlResources.xaml" />
+        <ResourceDictionary Source="../UI/XamlResources.xaml" />
     </UserControl.Resources>
 
     <Grid>

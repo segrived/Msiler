@@ -1,7 +1,8 @@
-﻿using System.Text.RegularExpressions;
+﻿using Quart.Msiler.Lib;
+using System.Text.RegularExpressions;
 using System.Windows.Controls;
 
-namespace Quart.Msiler
+namespace Quart.Msiler.UI
 {
     public partial class MyControl : UserControl
     {
@@ -42,13 +43,13 @@ namespace Quart.Msiler
 
             string instruction = regMatch.Groups["Instruction"].Value.ToLower();
 
-            if (!Instructions.Description.ContainsKey(instruction)) {
+            if (!OpCodesInfo.Description.ContainsKey(instruction)) {
                 return;
             }
 
             toolTip.PlacementTarget = this;
             toolTip.Content = new ICSharpCode.AvalonEdit.TextEditor {
-                Text = $"{instruction}: {Instructions.Description[instruction]}",
+                Text = $"{instruction}: {OpCodesInfo.Description[instruction]}",
                 Opacity = 0.6,
                 HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden,
                 VerticalScrollBarVisibility = ScrollBarVisibility.Hidden

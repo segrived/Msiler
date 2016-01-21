@@ -212,27 +212,28 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AboutWindow.xaml.cs">
+    <Compile Include="Lib\MethodEntity.cs" />
+    <Compile Include="Lib\MsilReader.cs" />
+    <Compile Include="UI\AboutWindow.xaml.cs">
       <DependentUpon>AboutWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="AboutWindowVM.cs" />
-    <Compile Include="ColorTheme.cs" />
+    <Compile Include="UI\AboutWindowVM.cs" />
+    <Compile Include="Lib\ColorTheme.cs" />
     <Compile Include="Common.cs" />
     <Compile Include="Converters\IsGreaterThenConverter.cs" />
     <Compile Include="Helpers.cs" />
-    <Compile Include="VsixManifest.cs" />
-    <Compile Include="VSThemeDetector.cs" />
+    <Compile Include="Lib\VsixManifest.cs" />
+    <Compile Include="Lib\VSThemeDetector.cs" />
     <EmbeddedResource Include="Resources\IL.xshd">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <Compile Include="Instructions.cs" />
-    <Compile Include="ListingGenerator.cs" />
-    <Compile Include="MsilReader.cs" />
+    <Compile Include="Lib\OpCodesInfo.cs" />
+    <Compile Include="Lib\ListingGenerator.cs" />
     <Compile Include="MvvmTextEditor.cs" />
-    <Compile Include="MyControl.xaml.cs">
+    <Compile Include="UI\MyControl.xaml.cs">
       <DependentUpon>MyControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MyControlVM.cs" />
+    <Compile Include="UI\MyControlVM.cs" />
     <Compile Include="MsilerToolWindow.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Resources.Designer.cs">
@@ -273,15 +274,15 @@
     <None Include="Resources\Images.png" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="AboutWindow.xaml">
+    <Page Include="UI\AboutWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MyControl.xaml">
+    <Page Include="UI\MyControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="XamlResources.xaml">
+    <Page Include="UI\XamlResources.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

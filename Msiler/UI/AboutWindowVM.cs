@@ -1,8 +1,9 @@
 ﻿using Quart.Msiler.Annotations;
+using Quart.Msiler.Lib;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace Quart.Msiler
+namespace Quart.Msiler.UI
 {
     public class AboutWindowVM : INotifyPropertyChanged
     {

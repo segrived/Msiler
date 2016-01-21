@@ -11,8 +11,9 @@ using Quart.Msiler.Annotations;
 using System.Windows.Media;
 using ICSharpCode.AvalonEdit.Highlighting;
 using Microsoft.VisualStudio.PlatformUI;
+using Quart.Msiler.Lib;
 
-namespace Quart.Msiler
+namespace Quart.Msiler.UI
 {
     public class MyControlVM : INotifyPropertyChanged, IVsUpdateSolutionEvents, IVsSolutionEvents
     {

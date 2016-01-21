@@ -1,25 +1,9 @@
-﻿using System;
+﻿using Mono.Cecil;
 using System.Collections.Generic;
 using System.Linq;
-using Mono.Cecil;
-using Mono.Cecil.Cil;
 
-namespace Quart.Msiler
+namespace Quart.Msiler.Lib
 {
-    public class MethodEntity
-    {
-        public MethodDefinition MethodData { get; set; }
-        public List<Instruction> Instructions { get; set; }
-
-        public string Name =>
-            String.Format("{0}.{1}", MethodData.DeclaringType.FullName, MethodData.Name);
-
-        public MethodEntity(MethodDefinition methodData, List<Instruction> instructions) {
-            MethodData = methodData;
-            Instructions = instructions;
-        }
-    }
-
     public class MsilReader
     {
         private readonly ModuleDefinition _module;
