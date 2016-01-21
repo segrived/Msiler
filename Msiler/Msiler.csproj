@@ -212,10 +212,15 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AboutWindow.xaml.cs">
+      <DependentUpon>AboutWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="AboutWindowVM.cs" />
     <Compile Include="ColorTheme.cs" />
     <Compile Include="Common.cs" />
     <Compile Include="Converters\IsGreaterThenConverter.cs" />
     <Compile Include="Helpers.cs" />
+    <Compile Include="VsixManifest.cs" />
     <Compile Include="VSThemeDetector.cs" />
     <EmbeddedResource Include="Resources\IL.xshd">
       <SubType>Designer</SubType>
@@ -268,6 +273,10 @@
     <None Include="Resources\Images.png" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="AboutWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MyControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -286,6 +295,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
+    <Resource Include="Resources\Logo.png" />
     <Content Include="Resources\Package.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>

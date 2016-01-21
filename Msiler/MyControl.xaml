@@ -159,6 +159,9 @@
                     <Run Text=" | " />
                     <Hyperlink Click="HyperlinkGithub_Click"
                                TextDecorations="None">GitHub</Hyperlink>
+                    <Run Text=" | " />
+                    <Hyperlink Click="HyperlinkAbout_Click"
+                               TextDecorations="None">About</Hyperlink>
                 </TextBlock>
             </StackPanel>
         </Grid>

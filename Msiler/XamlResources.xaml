@@ -104,9 +104,4 @@
             </Trigger>
         </Style.Triggers>
     </Style>
-
-    <ObjectDataProvider x:Key="HighlightingDefinition"
-                        ObjectType="{x:Type local:Helpers}"
-                        MethodName="GetILHighlightingDefinition" />
-
 </ResourceDictionary>

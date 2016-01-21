@@ -68,5 +68,10 @@ namespace Quart.Msiler
         private void HyperlinkGithub_Click(object sender, System.Windows.RoutedEventArgs e) {
             System.Diagnostics.Process.Start(RepoUrl);
         }
+
+        private void HyperlinkAbout_Click(object sender, System.Windows.RoutedEventArgs e) {
+            var win = new AboutWindow();
+            win.ShowDialog();
+        }
     }
 }
