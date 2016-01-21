@@ -233,6 +233,7 @@ namespace Quart.Msiler.UI
 
         public int OnAfterCloseSolution(object pUnkReserved) {
             this.Methods.Clear(); // empty collection
+            this._lastBuildMd5Hash = null;
             this.SelectedMethod = null;
             return VSConstants.S_OK;
         }
