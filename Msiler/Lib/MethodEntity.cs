@@ -2,6 +2,7 @@
 using Mono.Cecil.Cil;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Quart.Msiler.Lib
 {
@@ -10,8 +11,12 @@ namespace Quart.Msiler.Lib
         public MethodDefinition MethodData { get; set; }
         public List<Instruction> Instructions { get; set; }
 
-        public string Name =>
-            String.Format("{0}.{1}", MethodData.DeclaringType.FullName, MethodData.Name);
+        public string MethodName =>
+            $"{MethodData.DeclaringType.FullName}.{MethodData.Name}";
+
+
+        public string Parameters =>
+            String.Join(", ", MethodData.Parameters.Select(p => p.ParameterType.FullName));
 
         public MethodEntity(MethodDefinition methodData, List<Instruction> instructions) {
             MethodData = methodData;
@@ -23,11 +28,11 @@ namespace Quart.Msiler.Lib
                 return false;
             }
             var objEntity = (MethodEntity)obj;
-            return this.Name == objEntity.Name;
+            return this.MethodData.FullName == objEntity.MethodData.FullName;
         }
 
         public override int GetHashCode() {
-            return this.Name.GetHashCode();
+            return this.MethodName.GetHashCode();
         }
     }
 }

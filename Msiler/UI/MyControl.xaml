@@ -49,8 +49,12 @@
                      SelectedValue="{Binding SelectedMethod}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding Name}"
-                                   ToolTip="{Binding MethodData.FullName}" />
+                        <StackPanel Orientation="Horizontal"
+                                    ToolTip="{Binding MethodData.FullName}">
+                            <TextBlock Text="{Binding MethodName}" />
+                            <TextBlock Text="{Binding Parameters, StringFormat=({0})}"
+                                       Foreground="{DynamicResource {x:Static vs:EnvironmentColors.SystemGrayTextBrushKey}}" />
+                        </StackPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>

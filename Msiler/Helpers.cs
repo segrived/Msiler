@@ -75,7 +75,7 @@ namespace Quart.Msiler
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsAnonymous(this MethodEntity method) {
             var invalidChars = new[] { '<', '>' };
-            return method.Name.Any(invalidChars.Contains);
+            return method.MethodName.Any(invalidChars.Contains);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

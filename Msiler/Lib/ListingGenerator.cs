@@ -18,7 +18,7 @@ namespace Quart.Msiler.Lib
         }
 
 
-        private string GetHeader(MethodEntity m) => $"Method: {m.Name}";
+        private string GetHeader(MethodEntity m) => $"Method: {m.MethodName}";
 
         private string GetOffset(Instruction i) {
             var f = (Common.Instance.Options.DecimalOffsets) ? "IL_{0:D4}" : "IL_{0:X4}";
