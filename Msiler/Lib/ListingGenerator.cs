@@ -98,11 +98,20 @@ namespace Quart.Msiler.Lib
                     continue;
                 }
                 if (instruction.SequencePoint != null) {
+                    // If hidden line
                     if (instruction.SequencePoint.StartLine == 0xfeefee) {
+                        continue;
+                    }
+                    // If invalid Url
+                    if (instruction.SequencePoint.Document?.Url == null) {
                         continue;
                     }
                     var docUrl = instruction.SequencePoint.Document.Url;
                     if (!_pdbCache.ContainsKey(docUrl)) {
+                        // if file not exists
+                        if (!File.Exists(docUrl)) {
+                            continue;
+                        }
                         _pdbCache[docUrl] = File.ReadAllLines(docUrl).Select(s => s.Trim()).ToList();
                     }
                     for (int i = instruction.SequencePoint.StartLine; i <= instruction.SequencePoint.EndLine; i++) {
@@ -110,6 +119,7 @@ namespace Quart.Msiler.Lib
                             symbols.ForEach(s => sb.AppendLine(s));
                             symbols.Clear();
                         }
+                        // ignore empty lines
                         if (!String.IsNullOrWhiteSpace(_pdbCache[docUrl][i])) {
                             symbols.Add($"// {_pdbCache[docUrl][i]}");
                         }
