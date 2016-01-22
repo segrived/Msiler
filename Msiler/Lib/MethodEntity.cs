@@ -17,5 +17,17 @@ namespace Quart.Msiler.Lib
             MethodData = methodData;
             Instructions = instructions;
         }
+
+        public override bool Equals(object obj) {
+            if (obj == null || GetType() != obj.GetType()) {
+                return false;
+            }
+            var objEntity = (MethodEntity)obj;
+            return this.Name == objEntity.Name;
+        }
+
+        public override int GetHashCode() {
+            return this.Name.GetHashCode();
+        }
     }
 }

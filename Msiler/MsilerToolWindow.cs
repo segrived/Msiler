@@ -22,8 +22,8 @@ namespace Quart.Msiler
         public int OnShow(int fShow) {
             if (fShow == (int)__FRAMESHOW.FRAMESHOW_WinShown) {
                 IsVisible = true;
-            } else if (fShow == (int)__FRAMESHOW.FRAMESHOW_WinHidden) {
-                IsVisible = false;
+            } else {
+                IsVisible &= (fShow != (int)__FRAMESHOW.FRAMESHOW_WinHidden);
             }
 
             return VSConstants.S_OK;

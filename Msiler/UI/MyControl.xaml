@@ -21,8 +21,8 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="100" />
                 <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <Grid.Style>
                 <Style TargetType="{x:Type Grid}">
@@ -55,34 +55,14 @@
                 </ListBox.ItemTemplate>
             </ListBox>
             <GridSplitter Grid.Row="2"
-                          Height="3"
+                          Height="1"
                           Margin="0"
                           HorizontalAlignment="Stretch"
                           VerticalAlignment="Top"
                           Background="{DynamicResource {x:Static vs:EnvironmentColors.AccentBorderBrushKey}}"
                           ResizeDirection="Rows"
                           ShowsPreview="True" />
-            <TextBlock HorizontalAlignment="Right"
-                       FontSize="12"
-                       Grid.Row="3"
-                       Padding="3">                                
-                <Hyperlink Click="HyperlinkOptions_Click"
-                           TextDecorations="None">Options</Hyperlink>
-            </TextBlock>
-            <Grid Grid.Row="4">
-                <Grid.Style>
-                    <Style TargetType="{x:Type Grid}">
-                        <Setter Property="Visibility"
-                                Value="Visible" />
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding Path=SelectedMethod}"
-                                         Value="{x:Null}">
-                                <Setter Property="Visibility"
-                                        Value="Hidden" />
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </Grid.Style>
+            <Grid Grid.Row="3">
                 <Grid.RowDefinitions>
                     <RowDefinition />
                 </Grid.RowDefinitions>
@@ -103,6 +83,13 @@
                     </local:MvvmTextEditor.ContextMenu>
                 </local:MvvmTextEditor>
             </Grid>
+            <TextBlock HorizontalAlignment="Right"
+                       FontSize="12"
+                       Grid.Row="4"
+                       Padding="3">                                
+                <Hyperlink Click="HyperlinkOptions_Click"
+                           TextDecorations="None">Options</Hyperlink>
+            </TextBlock>
         </Grid>
         <Grid>
             <Grid.Resources>

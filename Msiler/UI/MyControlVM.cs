@@ -198,20 +198,11 @@ namespace Quart.Msiler.UI
             get { return _methods; }
             set
             {
-                if (value == null || Equals(value, _methods)) {
-                    return;
-                }
                 _methods = new ObservableCollection<MethodEntity>(value);
-                OnPropertyChanged();
-                try {
-                    if (this.SelectedMethod == null) {
-                        return;
-                    }
-                    string selectedName = this.SelectedMethod.MethodData.FullName;
-                    this.SelectedMethod = value.FirstOrDefault(x => x.MethodData.FullName == selectedName);
-                } catch {
-                    // ignored
+                if (this.SelectedMethod != null) {
+                    this.SelectedMethod = value.FirstOrDefault(m => m.Name == this.SelectedMethod.Name);
                 }
+                OnPropertyChanged();
             }
         }
 
@@ -220,9 +211,6 @@ namespace Quart.Msiler.UI
             get { return _selectedMethod; }
             set
             {
-                if (value == null || value.Equals(_selectedMethod)) {
-                    return;
-                }
                 _selectedMethod = value;
                 UpdateBytecodeListing();
                 OnPropertyChanged();

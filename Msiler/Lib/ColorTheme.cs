@@ -6,7 +6,7 @@ using System.Windows.Media;
 
 namespace Quart.Msiler.Lib
 {
-    public class ColorTheme
+    public static class ColorTheme
     {
         public static Dictionary<string, Color> DarkTheme = new Dictionary<string, Color> {
             ["Comment"] = Color.FromRgb(93, 130, 221),

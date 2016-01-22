@@ -6,7 +6,7 @@
     <Style TargetType="ListBoxItem">
         <Setter Property="BorderThickness"
                 Value="0" />
-        <Setter Property="Padding"
+        <Setter Property="Margin"
                 Value="2" />
     </Style>
 
@@ -51,6 +51,12 @@
                 Value="{DynamicResource {x:Static vs:EnvironmentColors.ToolWindowBorderBrushKey}}" />
         <Setter Property="Background"
                 Value="{DynamicResource {x:Static vs:EnvironmentColors.ToolWindowBackgroundBrushKey}}" />
+        <Setter Property="Padding"
+                Value="5" />
+        <Setter Property="HorizontalScrollBarVisibility"
+                Value="Auto" />
+        <Setter Property="VerticalScrollBarVisibility"
+                Value="Auto" />
     </Style>
 
     <Style TargetType="Hyperlink">
