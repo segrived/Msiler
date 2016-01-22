@@ -244,6 +244,7 @@ namespace Quart.Msiler.UI
                 var msilReader = new MsilReader(assemblyFile);
 
                 var methodsEnumerable = msilReader.EnumerateMethods();
+                this._generator.ClearSourceCache();
                 this.Methods = new ObservableCollection<MethodEntity>(methodsEnumerable);
                 _lastBuildMd5Hash = hash;
                 this.UpdateMethodsFilter();

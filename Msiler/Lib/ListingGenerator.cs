@@ -76,6 +76,10 @@ namespace Quart.Msiler.Lib
             return $"{GetOffset(i)} {opcodePart} {GetOperand(i)}";
         }
 
+        public void ClearSourceCache() {
+            this._pdbCache.Clear();
+        }
+
         public string Generate(MethodEntity method) {
             if (this._options.AlignListing) {
                 this._longestOpCode = method.Instructions
