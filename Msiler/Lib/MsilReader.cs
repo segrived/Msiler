@@ -10,10 +10,10 @@ namespace Quart.Msiler.Lib
         private readonly ModuleDefinition _module;
         private string AssemblyName { get; set; }
 
-        public MsilReader(string assemblyName) {
+        public MsilReader(string assemblyName, bool processSymbols) {
             this.AssemblyName = assemblyName;
-            var readerParameters = new ReaderParameters { ReadSymbols = true };
-            this._module = ModuleDefinition.ReadModule(assemblyName, readerParameters);
+            var readerParams = new ReaderParameters { ReadSymbols = processSymbols };
+            this._module = ModuleDefinition.ReadModule(assemblyName, readerParams);
         }
 
         public IEnumerable<MethodEntity> EnumerateMethods() {

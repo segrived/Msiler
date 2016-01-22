@@ -241,7 +241,7 @@ namespace Quart.Msiler.UI
                 if (_lastBuildMd5Hash != null && _lastBuildMd5Hash.SequenceEqual(hash)) {
                     return VSConstants.S_OK;
                 }
-                var msilReader = new MsilReader(assemblyFile);
+                var msilReader = new MsilReader(assemblyFile, Common.Instance.Options.ProcessPDBFiles);
 
                 var methodsEnumerable = msilReader.EnumerateMethods();
                 this._generator.ClearSourceCache();
@@ -271,7 +271,6 @@ namespace Quart.Msiler.UI
                 if (String.IsNullOrEmpty(this.FilterString)) {
                     return true;
                 }
-
                 return me.Name.ToLower().Contains(this.FilterString.ToLower());
             };
         }
