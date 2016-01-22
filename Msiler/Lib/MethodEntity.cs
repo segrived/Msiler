@@ -32,7 +32,7 @@ namespace Quart.Msiler.Lib
         }
 
         public override int GetHashCode() {
-            return this.MethodName.GetHashCode();
+            return this.MethodData.FullName.GetHashCode();
         }
     }
 }
