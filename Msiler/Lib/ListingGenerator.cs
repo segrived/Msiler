@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Mono.Cecil.Cil;
 using Mono.Cecil;
+using System.IO;
 
 namespace Quart.Msiler.Lib
 {
@@ -12,6 +13,9 @@ namespace Quart.Msiler.Lib
         private int _longestOpCode;
 
         private readonly MsilerOptions _options;
+
+        private Dictionary<string, List<string>> _pdbCache =
+            new Dictionary<string, List<string>>();
 
         public ListingGenerator() {
             this._options = Common.Instance.Options;
@@ -84,10 +88,27 @@ namespace Quart.Msiler.Lib
                 sb.AppendLine(this.GetHeader(method));
                 sb.AppendLine();
             }
-
+            List<string> symbols = new List<string>();
             foreach (var instruction in method.Instructions) {
                 if (this._options.IgnoreNops && instruction.OpCode.Code == Code.Nop) {
                     continue;
+                }
+                if (instruction.SequencePoint != null) {
+                    if (instruction.SequencePoint.StartLine == 0xfeefee) {
+                        continue;
+                    }
+                    var docUrl = instruction.SequencePoint.Document.Url;
+                    if (!_pdbCache.ContainsKey(docUrl)) {
+                        _pdbCache[docUrl] = File.ReadAllLines(docUrl).Select(s => s.Trim()).ToList();
+                    }
+                    for (int i = instruction.SequencePoint.StartLine; i <= instruction.SequencePoint.EndLine; i++) {
+                        //sb.AppendLine($"// {_pdbCache[docUrl][i]}");
+                        if (symbols.Count > 0) {
+                            symbols.ForEach(s => sb.AppendLine(s));
+                            symbols.Clear();
+                        }
+                        symbols.Add($"// {_pdbCache[docUrl][i]}");
+                    }
                 }
                 sb.AppendLine(InstructionToString(instruction, _longestOpCode));
             }

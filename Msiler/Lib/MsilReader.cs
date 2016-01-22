@@ -1,4 +1,5 @@
 ﻿using Mono.Cecil;
+using Mono.Cecil.Pdb;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -11,7 +12,8 @@ namespace Quart.Msiler.Lib
 
         public MsilReader(string assemblyName) {
             this.AssemblyName = assemblyName;
-            this._module = ModuleDefinition.ReadModule(assemblyName);
+            var readerParameters = new ReaderParameters { ReadSymbols = true };
+            this._module = ModuleDefinition.ReadModule(assemblyName, readerParameters);
         }
 
         public IEnumerable<MethodEntity> EnumerateMethods() {
