@@ -102,12 +102,13 @@ namespace Quart.Msiler.Lib
                         _pdbCache[docUrl] = File.ReadAllLines(docUrl).Select(s => s.Trim()).ToList();
                     }
                     for (int i = instruction.SequencePoint.StartLine; i <= instruction.SequencePoint.EndLine; i++) {
-                        //sb.AppendLine($"// {_pdbCache[docUrl][i]}");
                         if (symbols.Count > 0) {
                             symbols.ForEach(s => sb.AppendLine(s));
                             symbols.Clear();
                         }
-                        symbols.Add($"// {_pdbCache[docUrl][i]}");
+                        if (!String.IsNullOrWhiteSpace(_pdbCache[docUrl][i])) {
+                            symbols.Add($"// {_pdbCache[docUrl][i]}");
+                        }
                     }
                 }
                 sb.AppendLine(InstructionToString(instruction, _longestOpCode));
