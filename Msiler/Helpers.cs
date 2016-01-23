@@ -55,14 +55,6 @@ namespace Quart.Msiler
             return Path.Combine(fullPath, activeProject.Properties.Item("OutputFileName").Value.ToString());
         }
 
-        public static byte[] ComputeMD5(string fn) {
-            using (var md5 = MD5.Create()) {
-                using (var stream = File.OpenRead(fn)) {
-                    return md5.ComputeHash(stream);
-                }
-            }
-        }
-
         public static bool IsFontFamilyExist(string fontFamily) {
             var fontsCollection = new InstalledFontCollection();
             return fontsCollection.Families.Any(ff => ff.Name == fontFamily);

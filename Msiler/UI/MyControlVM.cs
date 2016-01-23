@@ -12,13 +12,14 @@ using System.Windows.Media;
 using ICSharpCode.AvalonEdit.Highlighting;
 using Microsoft.VisualStudio.PlatformUI;
 using Quart.Msiler.Lib;
+using System.IO;
 
 namespace Quart.Msiler.UI
 {
     public class MyControlVM : INotifyPropertyChanged, IVsUpdateSolutionEvents, IVsSolutionEvents
     {
         ICollectionView _methodsView;
-        byte[] _lastBuildMd5Hash;
+        DateTime _previousAssemblyWriteTime;
 
         public ListingGenerator _generator = new ListingGenerator();
 
@@ -221,7 +222,7 @@ namespace Quart.Msiler.UI
 
         public int OnAfterCloseSolution(object pUnkReserved) {
             this.Methods.Clear(); // empty collection
-            this._lastBuildMd5Hash = null;
+            this._previousAssemblyWriteTime = default(DateTime);
             this.SelectedMethod = null;
             return VSConstants.S_OK;
         }
@@ -236,9 +237,9 @@ namespace Quart.Msiler.UI
             Debug.Write("Compiled, generating IL code...");
             string assemblyFile = Helpers.GetOutputAssemblyFileName();
             try {
-                var hash = Helpers.ComputeMD5(assemblyFile);
+                var assemblyWriteTime = new FileInfo(assemblyFile).LastWriteTime;
                 // if assembly was not changed
-                if (_lastBuildMd5Hash != null && _lastBuildMd5Hash.SequenceEqual(hash)) {
+                if (_previousAssemblyWriteTime == assemblyWriteTime) {
                     return VSConstants.S_OK;
                 }
                 var msilReader = new MsilReader(assemblyFile, Common.Instance.Options.ProcessPDBFiles);
@@ -246,7 +247,7 @@ namespace Quart.Msiler.UI
                 var methodsEnumerable = msilReader.EnumerateMethods();
                 this._generator.ClearSourceCache();
                 this.Methods = new ObservableCollection<MethodEntity>(methodsEnumerable);
-                _lastBuildMd5Hash = hash;
+                _previousAssemblyWriteTime = assemblyWriteTime;
                 this.UpdateMethodsFilter();
             } catch {
                 this.Methods = new ObservableCollection<MethodEntity>();
