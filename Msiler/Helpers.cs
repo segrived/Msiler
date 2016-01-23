@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Security.Cryptography;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
 using EnvDTE80;

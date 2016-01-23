@@ -234,7 +234,6 @@ namespace Quart.Msiler.UI
             if (fSucceeded != 1) {
                 return VSConstants.S_OK;
             }
-            Debug.Write("Compiled, generating IL code...");
             string assemblyFile = Helpers.GetOutputAssemblyFileName();
             try {
                 var assemblyWriteTime = new FileInfo(assemblyFile).LastWriteTime;
@@ -251,7 +250,6 @@ namespace Quart.Msiler.UI
             } catch {
                 this.Methods = new ObservableCollection<MethodEntity>();
             }
-            Debug.WriteLine("Done");
             return VSConstants.S_OK;
         }
 
