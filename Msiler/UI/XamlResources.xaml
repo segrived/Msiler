@@ -35,7 +35,7 @@
                 Value="{DynamicResource {x:Static vs:EnvironmentColors.ToolWindowBackgroundBrushKey}}" />
     </Style>
 
-    <Style TargetType="ListBox">
+    <Style TargetType="local:ListBoxScroll">
         <Setter Property="Background"
                 Value="{DynamicResource {x:Static vs:EnvironmentColors.ToolWindowBackgroundBrushKey}}" />
         <Setter Property="Foreground"

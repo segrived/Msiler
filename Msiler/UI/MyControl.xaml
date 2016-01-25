@@ -42,12 +42,12 @@
                      Style="{StaticResource FilterHintTextBox}"
                      Text="{Binding Path=FilterString,
                      UpdateSourceTrigger=PropertyChanged}" />
-            <ListBox Name="MethodList"
-                     Grid.Row="1"
-                     BorderThickness="0,0,0,1"
-                     ItemsSource="{Binding Methods}"
-                     SelectedValue="{Binding SelectedMethod}">
-                <ListBox.ItemTemplate>
+            <local:ListBoxScroll x:Name="MethodList"
+                                 Grid.Row="1"
+                                 BorderThickness="0,0,0,1"
+                                 ItemsSource="{Binding Methods}"
+                                 SelectedValue="{Binding SelectedMethod}">
+                <local:ListBoxScroll.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal"
                                     ToolTip="{Binding MethodData.FullName}">
@@ -56,8 +56,8 @@
                                        Foreground="{DynamicResource {x:Static vs:EnvironmentColors.SystemGrayTextBrushKey}}" />
                         </StackPanel>
                     </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
+                </local:ListBoxScroll.ItemTemplate>
+            </local:ListBoxScroll>
             <GridSplitter Grid.Row="2"
                           Height="1"
                           Margin="0"

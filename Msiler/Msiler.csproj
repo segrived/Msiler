@@ -237,6 +237,7 @@
     <Compile Include="FunctionFollower.cs" />
     <Compile Include="Lib\MethodEntity.cs" />
     <Compile Include="Lib\MsilReader.cs" />
+    <Compile Include="ListBoxScroll.cs" />
     <Compile Include="TextViewCreationListener.cs" />
     <Compile Include="UI\AboutWindow.xaml.cs">
       <DependentUpon>AboutWindow.xaml</DependentUpon>
