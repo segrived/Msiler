@@ -3,6 +3,7 @@ using Mono.Cecil.Cil;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Quart.Msiler.Lib
 {
@@ -11,8 +12,19 @@ namespace Quart.Msiler.Lib
         public MethodDefinition MethodData { get; set; }
         public List<Instruction> Instructions { get; set; }
 
-        public string MethodName =>
-            $"{MethodData.DeclaringType.FullName}.{MethodData.Name}";
+        private static Regex genericRegex =
+            new Regex(@"`\d+$", RegexOptions.Compiled);
+
+        public string MethodName {
+            get
+            {
+                var type = MethodData.DeclaringType;
+                var typeName = (type.HasGenericParameters)
+                    ? genericRegex.Replace(type.FullName, "")
+                    : type.FullName;
+                return $"{typeName}.{MethodData.Name}";
+            }
+        }
 
 
         public string Parameters =>
