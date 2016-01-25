@@ -2,11 +2,6 @@
 using EnvDTE80;
 using Microsoft.VisualStudio.Text.Editor;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 
 namespace Quart.Msiler
 {
@@ -57,7 +52,9 @@ namespace Quart.Msiler
                 var ne = fcm.CodeElementFromPoint(aPoint, vsCMElement.vsCMElementNamespace);
                 var ce = fcm.CodeElementFromPoint(aPoint, vsCMElement.vsCMElementClass);
                 var me = fcm.CodeElementFromPoint(aPoint, vsCMElement.vsCMElementFunction);
-                OnFunctionSelect($"{ne.Name}.{ce.Name}.{me.Name}");
+                // should be compitable with Mono.Cecil method names
+                string fnName = (ce.Name == me.Name) ? ".ctor" : me.Name;
+                OnFunctionSelect($"{ne.Name}.{ce.Name}.{fnName}");
             } catch {
                 // do nothing
             }
