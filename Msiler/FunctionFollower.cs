@@ -38,16 +38,25 @@ namespace Quart.Msiler
 
         private void Caret_PositionChanged(object sender, CaretPositionChangedEventArgs e) {
             var dte = Helpers.GetDTE();
-            if (dte.ActiveDocument == null) {
+            var doc = dte.ActiveDocument;
+            if (doc == null) {
                 return;
             }
-            TextSelection sel = (TextSelection)dte.ActiveDocument.Selection;
-            FileCodeModel2 fcm = (FileCodeModel2)dte.ActiveDocument.ProjectItem.FileCodeModel;
+            // only c# supported at this time
+            if (doc.Language != "CSharp") {
+                return;
+            }
+            TextSelection sel = (TextSelection)doc.Selection;
+            if (sel == null) {
+                return;
+            }
 
             try {
-                var ne = fcm.CodeElementFromPoint(sel.ActivePoint, vsCMElement.vsCMElementNamespace);
-                var ce = fcm.CodeElementFromPoint(sel.ActivePoint, vsCMElement.vsCMElementClass);
-                var me = fcm.CodeElementFromPoint(sel.ActivePoint, vsCMElement.vsCMElementFunction);
+                FileCodeModel2 fcm = (FileCodeModel2)doc.ProjectItem.FileCodeModel;
+                var aPoint = sel.ActivePoint;
+                var ne = fcm.CodeElementFromPoint(aPoint, vsCMElement.vsCMElementNamespace);
+                var ce = fcm.CodeElementFromPoint(aPoint, vsCMElement.vsCMElementClass);
+                var me = fcm.CodeElementFromPoint(aPoint, vsCMElement.vsCMElementFunction);
                 OnFunctionSelect($"{ne.Name}.{ce.Name}.{me.Name}");
             } catch {
                 // do nothing
