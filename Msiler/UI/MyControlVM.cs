@@ -13,6 +13,8 @@ using ICSharpCode.AvalonEdit.Highlighting;
 using Microsoft.VisualStudio.PlatformUI;
 using Quart.Msiler.Lib;
 using System.IO;
+using System.ComponentModel.Composition;
+using System.Windows;
 
 namespace Quart.Msiler.UI
 {
@@ -29,6 +31,18 @@ namespace Quart.Msiler.UI
             ProcessOptions();
             Common.Instance.Options.Applied += Options_Applied;
             VSColorTheme.ThemeChanged += VSColorTheme_ThemeChanged;
+            FunctionFollower.FunctionSelected += FunctionFollower_FunctionSelected;
+        }
+
+        private void FunctionFollower_FunctionSelected(object sender, FunctionEventArgs e) {
+            if (this.Methods == null || this.Methods.Count == 0) {
+                return;
+            }
+            var sMethod = this.Methods.FirstOrDefault(m => m.MethodName == e.FunctionName);
+            if (sMethod == null) {
+                return;
+            }
+            this.SelectedMethod = sMethod;
         }
 
         private void VSColorTheme_ThemeChanged(ThemeChangedEventArgs e) {
