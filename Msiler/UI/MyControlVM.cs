@@ -53,6 +53,8 @@ namespace Quart.Msiler.UI
             this.ExcludeContructors = Common.Instance.Options.ExcludeConstructors;
 
             this.HighlightingDefinition = ColorTheme.GetColorTheme(Common.Instance.Options.ColorTheme);
+            // reset last write time after config change
+            this._previousAssemblyWriteTime = default(DateTime);
         }
 
         public void InitCommon() {
