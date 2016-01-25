@@ -35,6 +35,9 @@ namespace Quart.Msiler.UI
         }
 
         private void FunctionFollower_FunctionSelected(object sender, FunctionEventArgs e) {
+            if (!Common.Instance.Options.FollowSelectedFunctionInEditor) {
+                return;
+            }
             if (this.Methods == null || this.Methods.Count == 0) {
                 return;
             }

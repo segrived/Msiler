@@ -104,6 +104,7 @@ namespace Quart.Msiler
 
         // global options
         bool updateListingOnlyIfVisible = true;
+        bool followSelectedFunctionInEditor = true;
 
         // End of default Values
 
@@ -211,6 +212,15 @@ namespace Quart.Msiler
             get { return updateListingOnlyIfVisible; }
             set { updateListingOnlyIfVisible = value; }
         }
+
+        [Category("Global")]
+        [DisplayName("Follow selected function in editor")]
+        [Description("")]
+        public bool FollowSelectedFunctionInEditor {
+            get { return followSelectedFunctionInEditor; }
+            set { followSelectedFunctionInEditor = value; }
+        }
+
 
         [Category("Excluded methods")]
         [DisplayName("Exclude getters/setters")]
