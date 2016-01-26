@@ -59,8 +59,9 @@
                 </ListBox.ItemTemplate>
             </ListBox>
             <GridSplitter Grid.Row="2"
-                          Height="1"
+                          Height="2"
                           Margin="0"
+                          BorderThickness="0"
                           HorizontalAlignment="Stretch"
                           VerticalAlignment="Top"
                           Background="{DynamicResource {x:Static vs:EnvironmentColors.AccentBorderBrushKey}}"
