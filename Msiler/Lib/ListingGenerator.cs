@@ -3,6 +3,8 @@ using System.Linq;
 using System.Text;
 using Mono.Cecil.Cil;
 using Mono.Cecil;
+using System.IO;
+using System.Collections.Generic;
 
 namespace Quart.Msiler.Lib
 {
@@ -11,6 +13,9 @@ namespace Quart.Msiler.Lib
         private int _longestOpCode;
 
         private readonly MsilerOptions _options;
+
+        private Dictionary<string, List<string>> _pdbCache =
+            new Dictionary<string, List<string>>();
 
         public ListingGenerator() {
             this._options = Common.Instance.Options;
@@ -71,6 +76,10 @@ namespace Quart.Msiler.Lib
             return $"{GetOffset(i)} {opcodePart} {GetOperand(i)}";
         }
 
+        public void ClearSourceCache() {
+            this._pdbCache.Clear();
+        }
+
         public string Generate(MethodEntity method) {
             if (this._options.AlignListing) {
                 this._longestOpCode = method.Instructions
@@ -83,10 +92,38 @@ namespace Quart.Msiler.Lib
                 sb.AppendLine(this.GetHeader(method));
                 sb.AppendLine();
             }
-
+            List<string> symbols = new List<string>();
             foreach (var instruction in method.Instructions) {
                 if (this._options.IgnoreNops && instruction.OpCode.Code == Code.Nop) {
                     continue;
+                }
+                if (instruction.SequencePoint != null) {
+                    // If hidden line
+                    if (instruction.SequencePoint.StartLine == 0xfeefee) {
+                        continue;
+                    }
+                    // If invalid Url
+                    if (instruction.SequencePoint.Document?.Url == null) {
+                        continue;
+                    }
+                    var docUrl = instruction.SequencePoint.Document.Url;
+                    if (!_pdbCache.ContainsKey(docUrl)) {
+                        // if file not exists
+                        if (!File.Exists(docUrl)) {
+                            continue;
+                        }
+                        _pdbCache[docUrl] = File.ReadAllLines(docUrl).Select(s => s.Trim()).ToList();
+                    }
+                    for (int i = instruction.SequencePoint.StartLine; i <= instruction.SequencePoint.EndLine; i++) {
+                        if (symbols.Count > 0) {
+                            symbols.ForEach(s => sb.AppendLine(s));
+                            symbols.Clear();
+                        }
+                        // ignore empty lines
+                        if (i < _pdbCache[docUrl].Count && !String.IsNullOrWhiteSpace(_pdbCache[docUrl][i])) {
+                            symbols.Add($"// {_pdbCache[docUrl][i]}");
+                        }
+                    }
                 }
                 sb.AppendLine(InstructionToString(instruction, _longestOpCode));
             }

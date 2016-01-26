@@ -104,6 +104,7 @@ namespace Quart.Msiler
 
         // global options
         bool updateListingOnlyIfVisible = true;
+        bool processPDBFiles = false;
 
         // End of default Values
 
@@ -210,6 +211,14 @@ namespace Quart.Msiler
         public bool UpdateListingOnlyIfVisible {
             get { return updateListingOnlyIfVisible; }
             set { updateListingOnlyIfVisible = value; }
+        }
+
+        [Category("Global")]
+        [DisplayName("Process PDB files")]
+        [Description("NOTE: rebuilding required")]
+        public bool ProcessPDBFiles {
+            get { return processPDBFiles; }
+            set { processPDBFiles = value; }
         }
 
         [Category("Excluded methods")]

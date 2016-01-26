@@ -53,6 +53,8 @@ namespace Quart.Msiler.UI
             this.ExcludeContructors = Common.Instance.Options.ExcludeConstructors;
 
             this.HighlightingDefinition = ColorTheme.GetColorTheme(Common.Instance.Options.ColorTheme);
+            // reset last write time after config change
+            this._previousAssemblyWriteTime = default(DateTime);
         }
 
         public void InitCommon() {
@@ -234,6 +236,7 @@ namespace Quart.Msiler.UI
             if (fSucceeded != 1) {
                 return VSConstants.S_OK;
             }
+            Debug.Write("Compiled, generating IL code...");
             string assemblyFile = Helpers.GetOutputAssemblyFileName();
             try {
                 var assemblyWriteTime = new FileInfo(assemblyFile).LastWriteTime;
@@ -241,15 +244,17 @@ namespace Quart.Msiler.UI
                 if (_previousAssemblyWriteTime == assemblyWriteTime) {
                     return VSConstants.S_OK;
                 }
-                var msilReader = new MsilReader(assemblyFile);
+                var msilReader = new MsilReader(assemblyFile, Common.Instance.Options.ProcessPDBFiles);
 
                 var methodsEnumerable = msilReader.EnumerateMethods();
+                this._generator.ClearSourceCache();
                 this.Methods = new ObservableCollection<MethodEntity>(methodsEnumerable);
                 _previousAssemblyWriteTime = assemblyWriteTime;
                 this.UpdateMethodsFilter();
             } catch {
                 this.Methods = new ObservableCollection<MethodEntity>();
             }
+            Debug.WriteLine("Done");
             return VSConstants.S_OK;
         }
 
@@ -269,7 +274,6 @@ namespace Quart.Msiler.UI
                 if (String.IsNullOrEmpty(this.FilterString)) {
                     return true;
                 }
-
                 return me.MethodName.ToLower().Contains(this.FilterString.ToLower());
             };
         }
