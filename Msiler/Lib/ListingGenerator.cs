@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Mono.Cecil.Cil;
 using Mono.Cecil;
 using System.IO;
+using System.Collections.Generic;
 
 namespace Quart.Msiler.Lib
 {
@@ -22,7 +22,7 @@ namespace Quart.Msiler.Lib
         }
 
 
-        private string GetHeader(MethodEntity m) => $"Method: {m.Name}";
+        private string GetHeader(MethodEntity m) => $"Method: {m.MethodName}";
 
         private string GetOffset(Instruction i) {
             var f = (Common.Instance.Options.DecimalOffsets) ? "IL_{0:D4}" : "IL_{0:X4}";

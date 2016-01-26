@@ -203,7 +203,7 @@ namespace Quart.Msiler.UI
             {
                 _methods = new ObservableCollection<MethodEntity>(value);
                 if (this.SelectedMethod != null) {
-                    this.SelectedMethod = value.FirstOrDefault(m => m.Name == this.SelectedMethod.Name);
+                    this.SelectedMethod = value.FirstOrDefault(m => m.MethodName == this.SelectedMethod.MethodName);
                 }
                 OnPropertyChanged();
             }
@@ -274,7 +274,7 @@ namespace Quart.Msiler.UI
                 if (String.IsNullOrEmpty(this.FilterString)) {
                     return true;
                 }
-                return me.Name.ToLower().Contains(this.FilterString.ToLower());
+                return me.MethodName.ToLower().Contains(this.FilterString.ToLower());
             };
         }
 

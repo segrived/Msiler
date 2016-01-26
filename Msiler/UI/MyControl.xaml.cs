@@ -1,6 +1,7 @@
 ﻿using Quart.Msiler.Lib;
 using System.Text.RegularExpressions;
 using System.Windows.Controls;
+using ICSharpCode.AvalonEdit;
 
 namespace Quart.Msiler.UI
 {
@@ -21,7 +22,10 @@ namespace Quart.Msiler.UI
             InitializeComponent();
             this._viewModel = new MyControlVM();
             this.DataContext = this._viewModel;
-
+            this.InstructionList.Options = new TextEditorOptions {
+                EnableEmailHyperlinks = false,
+                EnableHyperlinks = false
+            };
         }
 
 

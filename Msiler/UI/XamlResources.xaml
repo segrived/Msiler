@@ -6,7 +6,7 @@
     <Style TargetType="ListBoxItem">
         <Setter Property="BorderThickness"
                 Value="0" />
-        <Setter Property="Margin"
+        <Setter Property="Padding"
                 Value="2" />
     </Style>
 
