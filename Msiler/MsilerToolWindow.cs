@@ -29,6 +29,7 @@ namespace Quart.Msiler
             return VSConstants.S_OK;
         }
 
+        #region Unused
         public int OnMove() {
             return VSConstants.S_OK;
         }
@@ -40,5 +41,6 @@ namespace Quart.Msiler
         public int OnDockableChange(int fDockable) {
             return VSConstants.S_OK;
         }
+        #endregion
     }
 }
