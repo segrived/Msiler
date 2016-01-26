@@ -120,7 +120,7 @@ namespace Quart.Msiler.Lib
                             symbols.Clear();
                         }
                         // ignore empty lines
-                        if (!String.IsNullOrWhiteSpace(_pdbCache[docUrl][i])) {
+                        if (i < _pdbCache[docUrl].Count && !String.IsNullOrWhiteSpace(_pdbCache[docUrl][i])) {
                             symbols.Add($"// {_pdbCache[docUrl][i]}");
                         }
                     }
