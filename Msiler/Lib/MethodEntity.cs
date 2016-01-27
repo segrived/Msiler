@@ -13,7 +13,7 @@ namespace Quart.Msiler.Lib
         public List<Instruction> Instructions { get; set; }
 
         private static Regex genericRegex =
-            new Regex(@"`\d+$", RegexOptions.Compiled);
+            new Regex(@"`\d+", RegexOptions.Compiled);
 
         public string MethodName {
             get
@@ -26,9 +26,15 @@ namespace Quart.Msiler.Lib
             }
         }
 
+        public IEnumerable<string> ParametersList {
+            get { return MethodData.Parameters.Select(p => genericRegex.Replace(p.ParameterType.FullName, "")); }
+        }
 
-        public string Parameters =>
-            String.Join(", ", MethodData.Parameters.Select(p => p.ParameterType.FullName));
+        public string Parameters {
+            get { return String.Join(", ", this.ParametersList); }
+        }
+
+
 
         public MethodEntity(MethodDefinition methodData, List<Instruction> instructions) {
             MethodData = methodData;

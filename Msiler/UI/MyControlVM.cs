@@ -31,17 +31,17 @@ namespace Quart.Msiler.UI
             ProcessOptions();
             Common.Instance.Options.Applied += Options_Applied;
             VSColorTheme.ThemeChanged += VSColorTheme_ThemeChanged;
-            FunctionFollower.FunctionSelected += FunctionFollower_FunctionSelected;
+            FunctionFollower.MethodSelected += FunctionFollower_FunctionSelected;
         }
 
-        private void FunctionFollower_FunctionSelected(object sender, FunctionEventArgs e) {
+        private void FunctionFollower_FunctionSelected(object sender, MethodSignatureEventArgs e) {
             if (!Common.Instance.Options.FollowSelectedFunctionInEditor) {
                 return;
             }
             if (this.Methods == null || this.Methods.Count == 0) {
                 return;
             }
-            var sMethod = this.Methods.FirstOrDefault(m => m.MethodName == e.FunctionName);
+            var sMethod = this.Methods.FirstOrDefault(m => new MethodSignature(m).Equals(e.MethodSignature));
             if (sMethod == null) {
                 return;
             }
