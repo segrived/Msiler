@@ -26,9 +26,9 @@ namespace Quart.Msiler
             }
         }
 
-        public static DTE GetDTE() {
+        public static DTE2 GetDTE() {
             var provider = ServiceProvider.GlobalProvider;
-            var vs = (DTE)provider.GetService(typeof(DTE));
+            var vs = (DTE2)provider.GetService(typeof(DTE));
 
             if (vs == null) {
                 throw new InvalidOperationException("DTE not found.");
