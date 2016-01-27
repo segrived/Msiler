@@ -68,7 +68,7 @@ Feel free to send pull requests.
 [Version history](https://github.com/segrived/Msiler/wiki/Version-History)
 
 ## Roadmap
-### Version 2.0
+### Version 2.0 (Jan 2016)
 * Switching to AvalonEdit
 * Additional listing highlighting (numbers, strings, built-in types)
 * Proper VS theme detection

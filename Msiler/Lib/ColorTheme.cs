@@ -19,13 +19,13 @@ namespace Quart.Msiler.Lib
         };
 
         public static Dictionary<string, Color> LightTheme = new Dictionary<string, Color> {
-            ["Comment"] = Color.FromRgb(171, 125, 42),
+            ["Comment"] = Color.FromRgb(114, 128, 158),
             ["String"] = Color.FromRgb(35, 145, 63),
             ["Offset"] = Color.FromRgb(128, 35, 145),
             ["Instruction"] = Color.FromRgb(171, 124, 41),
             ["Number"] = Color.FromRgb(163, 168, 41),
             ["BuiltInTypes"] = Color.FromRgb(90, 90, 90),
-            ["Header"] = Color.FromRgb(130, 130, 130)
+            ["Header"] = Color.FromRgb(130, 130, 130),
         };
 
         public static IHighlightingDefinition GetColorTheme(MsilerColorTheme mt) {

@@ -17,7 +17,7 @@ namespace Quart.Msiler
     };
 
     [PackageRegistration(UseManagedResourcesOnly = true)]
-    [InstalledProductRegistration("#110", "#112", "2.0.beta3", IconResourceID = 400)]
+    [InstalledProductRegistration("#110", "#112", "2.0", IconResourceID = 400)]
     [ProvideMenuResource("Menus.ctmenu", 1)]
     [ProvideToolWindow(typeof(MsilerToolWindow), MultiInstances = false)]
     [ProvideOptionPage(typeof(MsilerOptions), "Msiler", "General", 0, 0, true)]
@@ -105,6 +105,7 @@ namespace Quart.Msiler
         // global options
         bool updateListingOnlyIfVisible = true;
         bool followSelectedFunctionInEditor = true;
+        bool processPDBFiles = false;
 
         // End of default Values
 
@@ -211,6 +212,14 @@ namespace Quart.Msiler
         public bool UpdateListingOnlyIfVisible {
             get { return updateListingOnlyIfVisible; }
             set { updateListingOnlyIfVisible = value; }
+        }
+
+        [Category("Global")]
+        [DisplayName("Process PDB files")]
+        [Description("NOTE: rebuilding required")]
+        public bool ProcessPDBFiles {
+            get { return processPDBFiles; }
+            set { processPDBFiles = value; }
         }
 
         [Category("Global")]

@@ -1,4 +1,6 @@
 ﻿using Mono.Cecil;
+using Mono.Cecil.Cil;
+using Mono.Cecil.Pdb;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -9,9 +11,11 @@ namespace Quart.Msiler.Lib
         private readonly ModuleDefinition _module;
         private string AssemblyName { get; set; }
 
-        public MsilReader(string assemblyName) {
+        public MsilReader(string assemblyName, bool processSymbols) {
             this.AssemblyName = assemblyName;
-            this._module = ModuleDefinition.ReadModule(assemblyName);
+            ISymbolReaderProvider p = new PdbReaderProvider();
+            var readerParams = new ReaderParameters { ReadSymbols = processSymbols, SymbolReaderProvider = p };
+            this._module = ModuleDefinition.ReadModule(assemblyName, readerParams);
         }
 
         public IEnumerable<MethodEntity> EnumerateMethods() {
