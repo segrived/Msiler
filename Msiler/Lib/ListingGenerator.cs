@@ -14,7 +14,7 @@ namespace Quart.Msiler.Lib
 
         private readonly MsilerOptions _options;
 
-        private Dictionary<string, List<string>> _pdbCache =
+        private readonly Dictionary<string, List<string>> _pdbCache =
             new Dictionary<string, List<string>>();
 
         public ListingGenerator() {
@@ -22,7 +22,7 @@ namespace Quart.Msiler.Lib
         }
 
 
-        private string GetHeader(MethodEntity m) => $"Method: {m.MethodName}";
+        private string GetHeader(MethodEntity m) => $"Method: {m.Signature.Name}";
 
         private string GetOffset(Instruction i) {
             var f = (Common.Instance.Options.DecimalOffsets) ? "IL_{0:D4}" : "IL_{0:X4}";
@@ -92,7 +92,7 @@ namespace Quart.Msiler.Lib
                 sb.AppendLine(this.GetHeader(method));
                 sb.AppendLine();
             }
-            List<string> symbols = new List<string>();
+            var symbols = new List<string>();
             foreach (var instruction in method.Instructions) {
                 if (this._options.IgnoreNops && instruction.OpCode.Code == Code.Nop) {
                     continue;

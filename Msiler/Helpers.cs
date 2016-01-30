@@ -5,8 +5,6 @@ using Microsoft.VisualStudio.Shell;
 using EnvDTE80;
 using System.Drawing.Text;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using Quart.Msiler.Lib;
 
 namespace Quart.Msiler
 {
@@ -38,18 +36,11 @@ namespace Quart.Msiler
 
         public static string GetOutputAssemblyFileName() {
             var dte = GetDTE();
-
             var sb = (SolutionBuild2)dte.Solution.SolutionBuild;
             var projects = sb.StartupProjects as Array;
             var activeProject = dte.Solution.Item(projects.GetValue(0));
-
-            string outFn =
-                activeProject.ConfigurationManager
-                    .ActiveConfiguration
-                    .Properties
-                    .Item("OutputPath")
-                    .Value
-                    .ToString();
+            var activeConf = activeProject.ConfigurationManager.ActiveConfiguration;
+            string outFn = activeConf.Properties.Item("OutputPath").Value.ToString();
             string fullPath = GetFullPath(outFn, Path.GetDirectoryName(activeProject.FileName));
             return Path.Combine(fullPath, activeProject.Properties.Item("OutputFileName").Value.ToString());
         }
@@ -61,17 +52,6 @@ namespace Quart.Msiler
 
         public static string ReplaceNewLineCharacters(string str) {
             return str.Replace("\n", @"\n").Replace("\r", @"\r");
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool IsAnonymous(this MethodEntity method) {
-            var invalidChars = new[] { '<', '>' };
-            return method.MethodName.Any(invalidChars.Contains);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool IsProperty(this MethodEntity method) {
-            return method.MethodData.IsGetter || method.MethodData.IsSetter;
         }
     }
 }

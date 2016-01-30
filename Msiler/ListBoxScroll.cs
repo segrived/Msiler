@@ -9,8 +9,8 @@ namespace Quart.Msiler
 {
     class ListBoxScroll : ListBox
     {
-        public ListBoxScroll() : base() {
-            SelectionChanged += new SelectionChangedEventHandler(ListBoxScroll_SelectionChanged);
+        public ListBoxScroll() {
+            SelectionChanged += ListBoxScroll_SelectionChanged;
         }
 
         void ListBoxScroll_SelectionChanged(object sender, SelectionChangedEventArgs e) {

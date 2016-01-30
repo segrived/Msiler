@@ -236,6 +236,7 @@
   <ItemGroup>
     <Compile Include="FunctionFollower.cs" />
     <Compile Include="Lib\MethodEntity.cs" />
+    <Compile Include="Lib\MethodSignature.cs" />
     <Compile Include="Lib\MsilReader.cs" />
     <Compile Include="ListBoxScroll.cs" />
     <Compile Include="TextViewCreationListener.cs" />

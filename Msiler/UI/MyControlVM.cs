@@ -41,7 +41,7 @@ namespace Quart.Msiler.UI
             if (this.Methods == null || this.Methods.Count == 0) {
                 return;
             }
-            var sMethod = this.Methods.FirstOrDefault(m => new MethodSignature(m).Equals(e.MethodSignature));
+            var sMethod = this.Methods.FirstOrDefault(m => m.Signature.Equals(e.MethodSignature));
             if (sMethod == null) {
                 return;
             }
@@ -220,7 +220,9 @@ namespace Quart.Msiler.UI
             {
                 _methods = new ObservableCollection<MethodEntity>(value);
                 if (this.SelectedMethod != null) {
-                    this.SelectedMethod = value.FirstOrDefault(m => m.MethodName == this.SelectedMethod.MethodName);
+                    this.SelectedMethod = value.FirstOrDefault(m => {
+                        return m.Signature.Equals(this.SelectedMethod.Signature);
+                    });
                 }
                 OnPropertyChanged();
             }
@@ -277,21 +279,21 @@ namespace Quart.Msiler.UI
 
         private void UpdateMethodsFilter() {
             this._methodsView = CollectionViewSource.GetDefaultView(this.Methods);
-            this._methodsView.Filter = o => {
-                var me = (MethodEntity)o;
-                if (this.ExcludeSpecialMethods && me.IsAnonymous()) {
+            this._methodsView.Filter = (obj) => {
+                var m = obj as MethodEntity;
+                if (this.ExcludeSpecialMethods && m.IsAnonymous) {
                     return false;
                 }
-                if (this.ExcludeProperties && me.IsProperty()) {
+                if (this.ExcludeProperties && m.IsProperty) {
                     return false;
                 }
-                if (this.ExcludeContructors && me.MethodData.IsConstructor) {
+                if (this.ExcludeContructors && m.IsConstructor) {
                     return false;
                 }
                 if (String.IsNullOrEmpty(this.FilterString)) {
                     return true;
                 }
-                return me.MethodName.ToLower().Contains(this.FilterString.ToLower());
+                return m.Signature.Name.ToLower().Contains(this.FilterString.ToLower());
             };
         }
 

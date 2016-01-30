@@ -13,7 +13,7 @@ namespace Quart.Msiler.Lib
 
         public MsilReader(string assemblyName, bool processSymbols) {
             this.AssemblyName = assemblyName;
-            ISymbolReaderProvider p = new PdbReaderProvider();
+            var p = new PdbReaderProvider();
             var readerParams = new ReaderParameters { ReadSymbols = processSymbols, SymbolReaderProvider = p };
             this._module = ModuleDefinition.ReadModule(assemblyName, readerParams);
         }

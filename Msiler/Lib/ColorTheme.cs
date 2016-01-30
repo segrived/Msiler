@@ -25,7 +25,7 @@ namespace Quart.Msiler.Lib
             ["Instruction"] = Color.FromRgb(171, 124, 41),
             ["Number"] = Color.FromRgb(163, 168, 41),
             ["BuiltInTypes"] = Color.FromRgb(90, 90, 90),
-            ["Header"] = Color.FromRgb(130, 130, 130),
+            ["Header"] = Color.FromRgb(130, 130, 130)
         };
 
         public static IHighlightingDefinition GetColorTheme(MsilerColorTheme mt) {
