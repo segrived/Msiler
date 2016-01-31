@@ -2,9 +2,6 @@
 using EnvDTE80;
 using Microsoft.VisualStudio.Text.Editor;
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Linq;
 using Quart.Msiler.Lib;
 
 namespace Quart.Msiler

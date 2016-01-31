@@ -1,6 +1,5 @@
-﻿using Mono.Cecil;
-using Mono.Cecil.Cil;
-using System;
+﻿using dnlib.DotNet;
+using dnlib.DotNet.Emit;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -12,13 +11,13 @@ namespace Quart.Msiler.Lib
         public MethodSignature Signature { get; set; }
         public List<Instruction> Instructions { get; set; }
 
-        private MethodDefinition _methodData { get; set; }
+        private MethodDef _methodData { get; set; }
 
         private static Regex genericRegex =
             new Regex(@"`\d+", RegexOptions.Compiled);
         private readonly static char[] DisallowedMethodNameChars = { '<', '>' };
 
-        public MethodEntity(MethodDefinition methodData, List<Instruction> instructions) {
+        public MethodEntity(MethodDef methodData, List<Instruction> instructions) {
             this._methodData = methodData;
             this.Instructions = instructions;
             var fullMethodName = this.ExtractMethodName(methodData);
@@ -31,7 +30,7 @@ namespace Quart.Msiler.Lib
         public bool IsAnonymous => Signature.Name.Any(DisallowedMethodNameChars.Contains);
 
         #region Helper methods
-        private string ExtractMethodName(MethodDefinition definition) {
+        private string ExtractMethodName(MethodDef definition) {
             var type = definition.DeclaringType;
             var typeName = (type.HasGenericParameters)
                 ? genericRegex.Replace(type.FullName, "")
@@ -39,10 +38,10 @@ namespace Quart.Msiler.Lib
             return $"{typeName}.{definition.Name}";
         }
 
-        private List<string> ExtractMethodParameters(MethodDefinition definition) {
+        private List<string> ExtractMethodParameters(MethodDef definition) {
             return definition.Parameters
                 // remove generic indicator
-                .Select(p => genericRegex.Replace(p.ParameterType.FullName, ""))
+                .Select(p => genericRegex.Replace(p.Type.FullName, ""))
                 .ToList();
         }
         #endregion

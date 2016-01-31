@@ -11,3 +11,5 @@ build:
 artifacts:
 - path: '**\*.vsix'
   name: VSIX Extension
+install:
+- cmd: git submodule update --init --recursive

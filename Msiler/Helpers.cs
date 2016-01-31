@@ -5,6 +5,9 @@ using Microsoft.VisualStudio.Shell;
 using EnvDTE80;
 using System.Drawing.Text;
 using System.Linq;
+using dnlib.IO;
+using dnlib.DotNet;
+using dnlib.PE;
 
 namespace Quart.Msiler
 {
@@ -52,6 +55,14 @@ namespace Quart.Msiler
 
         public static string ReplaceNewLineCharacters(string str) {
             return str.Replace("\n", @"\n").Replace("\r", @"\r");
+        }
+
+        public static IImageStream GetImageStream(this ModuleDef module, uint rva) {
+            var m = module as ModuleDefMD;
+            if (m == null)
+                return null;
+
+            return m.MetaData.PEImage.CreateStream((RVA)rva);
         }
     }
 }
