@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq;
 using System.Text;
-using Mono.Cecil.Cil;
-using Mono.Cecil;
 using System.IO;
 using System.Collections.Generic;
+using dnlib.DotNet.Emit;
+using dnlib.DotNet;
 
 namespace Quart.Msiler.Lib
 {
@@ -48,8 +48,8 @@ namespace Quart.Msiler.Lib
                 return $"[ {joined} ]";
             }
 
-            if (this._options.SimplifyFunctionNames && (i.Operand is MethodReference)) {
-                var m = (MethodReference)i.Operand;
+            if (this._options.SimplifyFunctionNames && (i.Operand is MethodDef)) {
+                var m = (MethodDef)i.Operand;
                 return $"{m.DeclaringType.FullName}.{m.Name}";
             }
 

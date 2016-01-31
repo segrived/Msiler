@@ -13,8 +13,6 @@ using ICSharpCode.AvalonEdit.Highlighting;
 using Microsoft.VisualStudio.PlatformUI;
 using Quart.Msiler.Lib;
 using System.IO;
-using System.ComponentModel.Composition;
-using System.Windows;
 
 namespace Quart.Msiler.UI
 {
@@ -229,6 +227,8 @@ namespace Quart.Msiler.UI
         }
 
         private MethodEntity _selectedMethod;
+        private MsilReader msilReader;
+
         public MethodEntity SelectedMethod {
             get { return _selectedMethod; }
             set
@@ -263,9 +263,10 @@ namespace Quart.Msiler.UI
                 if (_previousAssemblyWriteTime == assemblyWriteTime) {
                     return VSConstants.S_OK;
                 }
-                var msilReader = new MsilReader(assemblyFile, Common.Instance.Options.ProcessPDBFiles);
+                this.msilReader = new MsilReader(assemblyFile, Common.Instance.Options.ProcessPDBFiles);
 
                 var methodsEnumerable = msilReader.EnumerateMethods();
+
                 this._generator.ClearSourceCache();
                 this.Methods = new ObservableCollection<MethodEntity>(methodsEnumerable);
                 _previousAssemblyWriteTime = assemblyWriteTime;
@@ -308,6 +309,9 @@ namespace Quart.Msiler.UI
         #region Unused handlers
 
         public int UpdateSolution_Begin(ref int pfCancelUpdate) {
+            if (this.msilReader != null) {
+                this.msilReader.Dispose();
+            }
             return VSConstants.S_OK;
         }
 

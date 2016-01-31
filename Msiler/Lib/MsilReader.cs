@@ -1,21 +1,22 @@
-﻿using Mono.Cecil;
-using Mono.Cecil.Cil;
-using Mono.Cecil.Pdb;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using dnlib.DotNet.Pdb;
+using dnlib.DotNet;
+using System;
 
 namespace Quart.Msiler.Lib
 {
-    public class MsilReader
+    public class MsilReader : IDisposable
     {
-        private readonly ModuleDefinition _module;
+        private readonly ModuleDefMD _module;
         private string AssemblyName { get; set; }
 
         public MsilReader(string assemblyName, bool processSymbols) {
             this.AssemblyName = assemblyName;
-            var p = new PdbReaderProvider();
-            var readerParams = new ReaderParameters { ReadSymbols = processSymbols, SymbolReaderProvider = p };
-            this._module = ModuleDefinition.ReadModule(assemblyName, readerParams);
+            var creationOptions = new ModuleCreationOptions {
+                TryToLoadPdbFromDisk = processSymbols
+            };
+            this._module = ModuleDefMD.Load(assemblyName, creationOptions);
         }
 
         public IEnumerable<MethodEntity> EnumerateMethods() {
@@ -27,6 +28,10 @@ namespace Quart.Msiler.Lib
                 where method.HasBody
                 let instructions = body.Instructions
                 select new MethodEntity(method, instructions.ToList());
+        }
+
+        public void Dispose() {
+            this._module.Dispose();
         }
     }
 }
