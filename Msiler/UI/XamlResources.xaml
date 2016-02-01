@@ -1,7 +1,8 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:Quart.Msiler"
-                    xmlns:vs="clr-namespace:Microsoft.VisualStudio.PlatformUI;assembly=Microsoft.VisualStudio.Shell.12.0">
+                    xmlns:vs="clr-namespace:Microsoft.VisualStudio.PlatformUI;assembly=Microsoft.VisualStudio.Shell.12.0"
+                    xmlns:ctrl="clr-namespace:Quart.Msiler.Controls">
 
     <Style TargetType="ListBoxItem">
         <Setter Property="BorderThickness"
@@ -35,7 +36,7 @@
                 Value="{DynamicResource {x:Static vs:EnvironmentColors.ToolWindowBackgroundBrushKey}}" />
     </Style>
 
-    <Style TargetType="local:ListBoxScroll">
+    <Style TargetType="ctrl:ListBoxScroll">
         <Setter Property="Background"
                 Value="{DynamicResource {x:Static vs:EnvironmentColors.ToolWindowBackgroundBrushKey}}" />
         <Setter Property="Foreground"
@@ -44,7 +45,7 @@
                 Value="{DynamicResource {x:Static vs:EnvironmentColors.ToolWindowBorderBrushKey}}" />
     </Style>
 
-    <Style TargetType="local:MvvmTextEditor">
+    <Style TargetType="ctrl:MvvmTextEditor">
         <Setter Property="Foreground"
                 Value="{DynamicResource {x:Static vs:EnvironmentColors.ToolWindowTextBrushKey}}" />
         <Setter Property="BorderBrush"

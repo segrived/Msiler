@@ -6,6 +6,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vs="clr-namespace:Microsoft.VisualStudio.PlatformUI;assembly=Microsoft.VisualStudio.Shell.12.0"
              xmlns:conv="clr-namespace:Quart.Msiler.Converters"
+             xmlns:ctrl="clr-namespace:Quart.Msiler.Controls"
              Name="MyToolWindow"
              d:DesignHeight="300"
              d:DesignWidth="300"
@@ -42,12 +43,12 @@
                      Style="{StaticResource FilterHintTextBox}"
                      Text="{Binding Path=FilterString,
                      UpdateSourceTrigger=PropertyChanged}" />
-            <local:ListBoxScroll x:Name="MethodList"
-                                 Grid.Row="1"
-                                 BorderThickness="0,0,0,1"
-                                 ItemsSource="{Binding Methods}"
-                                 SelectedValue="{Binding SelectedMethod}">
-                <local:ListBoxScroll.ItemTemplate>
+            <ctrl:ListBoxScroll x:Name="MethodList"
+                                Grid.Row="1"
+                                BorderThickness="0,0,0,1"
+                                ItemsSource="{Binding Methods}"
+                                SelectedValue="{Binding SelectedMethod}">
+                <ctrl:ListBoxScroll.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal"
                                     ToolTip="{Binding Signature.Name}">
@@ -56,8 +57,8 @@
                                        Foreground="{DynamicResource {x:Static vs:EnvironmentColors.SystemGrayTextBrushKey}}" />
                         </StackPanel>
                     </DataTemplate>
-                </local:ListBoxScroll.ItemTemplate>
-            </local:ListBoxScroll>
+                </ctrl:ListBoxScroll.ItemTemplate>
+            </ctrl:ListBoxScroll>
             <GridSplitter Grid.Row="2"
                           Height="2"
                           Margin="0"
@@ -71,22 +72,22 @@
                 <Grid.RowDefinitions>
                     <RowDefinition />
                 </Grid.RowDefinitions>
-                <local:MvvmTextEditor x:Name="InstructionList"
-                                      Grid.Row="1"
-                                      FontFamily="{Binding ListingFontName}"
-                                      ShowLineNumbers="{Binding ShowLineNumbers}"
-                                      Text="{Binding Path=BytecodeListing, Mode=OneWay}"
-                                      FontSize="{Binding ListingFontSize}"
-                                      MouseHover="InstructionList_MouseHover"
-                                      IsReadOnly="True"
-                                      MouseHoverStopped="InstructionList_MouseHoverStopped"
-                                      SyntaxHighlighting="{Binding HighlightingDefinition}">
-                    <local:MvvmTextEditor.ContextMenu>
+                <ctrl:MvvmTextEditor x:Name="InstructionList"
+                                     Grid.Row="1"
+                                     FontFamily="{Binding ListingFontName}"
+                                     ShowLineNumbers="{Binding ShowLineNumbers}"
+                                     Text="{Binding Path=BytecodeListing, Mode=OneWay}"
+                                     FontSize="{Binding ListingFontSize}"
+                                     MouseHover="InstructionList_MouseHover"
+                                     IsReadOnly="True"
+                                     MouseHoverStopped="InstructionList_MouseHoverStopped"
+                                     SyntaxHighlighting="{Binding HighlightingDefinition}">
+                    <ctrl:MvvmTextEditor.ContextMenu>
                         <ContextMenu>
                             <MenuItem Command="Copy" />
                         </ContextMenu>
-                    </local:MvvmTextEditor.ContextMenu>
-                </local:MvvmTextEditor>
+                    </ctrl:MvvmTextEditor.ContextMenu>
+                </ctrl:MvvmTextEditor>
             </Grid>
             <TextBlock HorizontalAlignment="Right"
                        FontSize="12"

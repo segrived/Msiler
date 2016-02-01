@@ -223,7 +223,7 @@
     <Compile Include="Lib\MethodEntity.cs" />
     <Compile Include="Lib\MethodSignature.cs" />
     <Compile Include="Lib\MsilReader.cs" />
-    <Compile Include="ListBoxScroll.cs" />
+    <Compile Include="Controls\ListBoxScroll.cs" />
     <Compile Include="TextViewCreationListener.cs" />
     <Compile Include="UI\AboutWindow.xaml.cs">
       <DependentUpon>AboutWindow.xaml</DependentUpon>
@@ -240,7 +240,7 @@
     </EmbeddedResource>
     <Compile Include="Lib\OpCodesInfo.cs" />
     <Compile Include="Lib\ListingGenerator.cs" />
-    <Compile Include="MvvmTextEditor.cs" />
+    <Compile Include="Controls\MvvmTextEditor.cs" />
     <Compile Include="UI\MyControl.xaml.cs">
       <DependentUpon>MyControl.xaml</DependentUpon>
     </Compile>
