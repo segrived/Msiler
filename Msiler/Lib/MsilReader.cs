@@ -13,7 +13,8 @@ namespace Quart.Msiler.Lib
         public MsilReader(string assemblyName, bool processSymbols) {
             this.AssemblyName = assemblyName;
             var creationOptions = new ModuleCreationOptions {
-                TryToLoadPdbFromDisk = processSymbols
+                TryToLoadPdbFromDisk = processSymbols,
+                PdbImplementation = dnlib.DotNet.Pdb.PdbImplType.Default
             };
             this._module = ModuleDefMD.Load(assemblyName, creationOptions);
         }
