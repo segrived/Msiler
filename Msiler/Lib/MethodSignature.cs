@@ -25,7 +25,14 @@ namespace Quart.Msiler.Lib
                 var cfParams = ((CodeFunction)me).Parameters;
                 var parameterList = new List<string>();
                 foreach (CodeParameter param in cfParams) {
-                    parameterList.Add(param.Type.AsFullName);
+                    if (param.Type.TypeKind == vsCMTypeRef.vsCMTypeRefArray) {
+                        var arrayType = param.Type.ElementType;
+                        var fullType = arrayType.AsFullName + "[]";
+                        parameterList.Add(fullType);
+                    } else {
+                        parameterList.Add(param.Type.AsFullName);
+                    }
+
                 }
                 return new MethodSignature($"{ne.Name}.{ce.Name}.{fnName}", parameterList);
             } catch {
