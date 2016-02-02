@@ -57,7 +57,8 @@ namespace Quart.Msiler.Lib
                 return false;
             }
             var otherMethod = (MethodSignature)obj;
-            return this.strSignature == otherMethod.strSignature;
+            return this.Name == otherMethod.Name &&
+                this.strSignature == otherMethod.strSignature;
         }
 
         public override int GetHashCode() {
