@@ -5,6 +5,7 @@ using System.IO;
 using System.Collections.Generic;
 using dnlib.DotNet.Emit;
 using dnlib.DotNet;
+using dnlib.DotNet.Pdb;
 
 namespace Quart.Msiler.Lib
 {
@@ -60,7 +61,6 @@ namespace Quart.Msiler.Lib
                     return $"0x{number.ToString("X")}";
                 }
             }
-
             return i.Operand.ToString();
         }
 
@@ -80,6 +80,35 @@ namespace Quart.Msiler.Lib
             this._pdbCache.Clear();
         }
 
+        private string ParsePdbInformation(SequencePoint sp) {
+            if (sp == null) {
+                return String.Empty;
+            }
+            // If hidden line
+            if (sp.StartLine == 0xfeefee) {
+                return String.Empty;
+            }
+            // If invalid Url
+            if (sp.Document?.Url == null) {
+                return String.Empty;
+            }
+            var docUrl = sp.Document.Url;
+            if (!_pdbCache.ContainsKey(sp.Document.Url)) {
+                // if file not exists
+                if (!File.Exists(sp.Document.Url)) {
+                    return String.Empty;
+                }
+                _pdbCache[docUrl] = File.ReadAllLines(docUrl).Select(s => s.Trim()).ToList();
+            }
+            var sb = new StringBuilder();
+            for (int i = sp.StartLine - 1; i <= sp.EndLine - 1; i++) {
+                if (i < _pdbCache[docUrl].Count && !String.IsNullOrWhiteSpace(_pdbCache[docUrl][i])) {
+                    sb.AppendLine($"// {_pdbCache[docUrl][i]}");
+                }
+            }
+            return sb.ToString();
+        }
+
         public string Generate(MethodEntity method) {
             if (this._options.AlignListing) {
                 this._longestOpCode = method.Instructions
@@ -88,43 +117,11 @@ namespace Quart.Msiler.Lib
             }
             var sb = new StringBuilder();
 
-            if (this._options.DisplayMethodNames) {
-                sb.AppendLine(this.GetHeader(method));
-                sb.AppendLine();
-            }
-            var symbols = new List<string>();
             foreach (var instruction in method.Instructions) {
                 if (this._options.IgnoreNops && instruction.OpCode.Code == Code.Nop) {
                     continue;
                 }
-                if (instruction.SequencePoint != null) {
-                    // If hidden line
-                    if (instruction.SequencePoint.StartLine == 0xfeefee) {
-                        continue;
-                    }
-                    // If invalid Url
-                    if (instruction.SequencePoint.Document?.Url == null) {
-                        continue;
-                    }
-                    var docUrl = instruction.SequencePoint.Document.Url;
-                    if (!_pdbCache.ContainsKey(docUrl)) {
-                        // if file not exists
-                        if (!File.Exists(docUrl)) {
-                            continue;
-                        }
-                        _pdbCache[docUrl] = File.ReadAllLines(docUrl).Select(s => s.Trim()).ToList();
-                    }
-                    for (int i = instruction.SequencePoint.StartLine; i <= instruction.SequencePoint.EndLine; i++) {
-                        if (symbols.Count > 0) {
-                            symbols.ForEach(s => sb.AppendLine(s));
-                            symbols.Clear();
-                        }
-                        // ignore empty lines
-                        if (i < _pdbCache[docUrl].Count && !String.IsNullOrWhiteSpace(_pdbCache[docUrl][i])) {
-                            symbols.Add($"// {_pdbCache[docUrl][i]}");
-                        }
-                    }
-                }
+                sb.Append(this.ParsePdbInformation(instruction.SequencePoint));
                 sb.AppendLine(InstructionToString(instruction, _longestOpCode));
             }
             return sb.ToString();
