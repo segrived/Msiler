@@ -39,7 +39,11 @@ namespace Quart.Msiler.Lib
         }
 
         private List<string> ExtractMethodParameters(MethodDef definition) {
-            return definition.Parameters
+            IEnumerable<Parameter> paramList = definition.Parameters;
+            if (definition.MethodSig.HasThis) {
+                paramList = paramList.Skip(1);
+            }
+            return paramList
                 // remove generic indicator
                 .Select(p => genericRegex.Replace(p.Type.FullName, ""))
                 .ToList();

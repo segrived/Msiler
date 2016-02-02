@@ -36,6 +36,7 @@
             </StackPanel>
             <Button Click="Ok_Click"
                     Padding="5"
+                    BorderThickness="0,1,0,0"
                     DockPanel.Dock="Bottom">Close</Button>
         </DockPanel>
     </Grid>
