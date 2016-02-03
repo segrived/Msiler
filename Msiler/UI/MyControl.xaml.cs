@@ -67,7 +67,7 @@ namespace Msiler.UI
         }
 
         private void HyperlinkOptions_Click(object sender, System.Windows.RoutedEventArgs e) {
-            Common.Instance.Package.ShowOptionPage(typeof(ExtenstionOptions));
+            Common.Instance.Package.ShowOptionPage(typeof(ExtensionOptions));
         }
 
         private void HyperlinkGithub_Click(object sender, System.Windows.RoutedEventArgs e) {

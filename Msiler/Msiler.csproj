@@ -41,7 +41,7 @@
     <RootNamespace>Msiler</RootNamespace>
     <AssemblyName>Msiler</AssemblyName>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>Key.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>Resources\Key.snk</AssemblyOriginatorKeyFile>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -220,7 +220,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Converters\ListToStringConverter.cs" />
-    <Compile Include="ExtenstionOptions.cs" />
+    <Compile Include="ExtensionOptions.cs" />
     <Compile Include="FunctionFollower.cs" />
     <Compile Include="Controls\ListBoxScroll.cs" />
     <Compile Include="TextViewCreationListener.cs" />
@@ -270,7 +270,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Key.snk" />
+    <None Include="Resources\Key.snk" />
   </ItemGroup>
   <ItemGroup>
     <VSCTCompile Include="Msiler.vsct">

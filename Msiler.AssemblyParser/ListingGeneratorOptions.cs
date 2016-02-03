@@ -1,6 +1,6 @@
 ﻿namespace Msiler.AssemblyParser.SimpleListingGenerator
 {
-    public class GeneratorOptions
+    public class ListingGeneratorOptions
     {
         public bool IgnoreNops { get; set; } = false;
         public bool NumbersAsHex { get; set; } = false;

@@ -20,7 +20,7 @@ namespace Msiler
     [InstalledProductRegistration("#110", "#112", "2.1-prealpha1", IconResourceID = 400)]
     [ProvideMenuResource("Menus.ctmenu", 1)]
     [ProvideToolWindow(typeof(MsilerToolWindow), MultiInstances = false)]
-    [ProvideOptionPage(typeof(ExtenstionOptions), "Msiler", "General", 0, 0, true)]
+    [ProvideOptionPage(typeof(ExtensionOptions), "Msiler", "General", 0, 0, true)]
     [Guid(GuidList.guidMsilerPkgString)]
     public sealed class MsilerPackage : Package
     {
@@ -58,7 +58,7 @@ namespace Msiler
             Common.Instance.Package = this;
             Common.Instance.BuildManager = _buildManager;
             Common.Instance.SolutionManager = _solutionManager;
-            Common.Instance.Options = (ExtenstionOptions)GetDialogPage(typeof(ExtenstionOptions));
+            Common.Instance.Options = (ExtensionOptions)GetDialogPage(typeof(ExtensionOptions));
 
             base.Initialize();
         }

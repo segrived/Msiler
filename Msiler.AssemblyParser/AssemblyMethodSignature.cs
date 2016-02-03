@@ -19,7 +19,7 @@ namespace Msiler.AssemblyParser
         public AssemblyMethodSignature(string methodName, List<string> parameterTypes) {
             this.MethodName = this.ProcessMethodName(methodName);
             this.ParameterTypes = parameterTypes.Select(this.ProcessParameterType).ToList();
-            this._fullSignature = $"{this.MethodName} ({String.Join(",", this.ParameterTypes)})";
+            this._fullSignature = $"{this.MethodName}({String.Join(",", this.ParameterTypes)})";
         }
 
         private string ProcessMethodName(string methodName) {

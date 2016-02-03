@@ -1,11 +1,10 @@
-﻿using System;
+﻿using Microsoft.VisualStudio.Shell;
+using System;
 using System.ComponentModel;
-using Microsoft.VisualStudio.Shell;
 
 namespace Msiler
 {
-    public delegate void ApplySettingsHandler(object sender, EventArgs e);
-
+    [System.ComponentModel.DesignerCategory("")]
     public class ExtensionOptions : DialogPage
     {
         [Category("Display")]
@@ -61,7 +60,7 @@ namespace Msiler
         [Category("Listing generation options")]
         [DisplayName("Display method names in listing")]
         [Description("")]
-        public bool DisplayMethodNames { get; set; } = false;
+        public bool DisplayMethodNames { get; set; } = true;
 
         [Category("Global")]
         [DisplayName("Update listing only if toolbox is visible")]
@@ -95,6 +94,10 @@ namespace Msiler
         [Description("")]
         public bool ExcludeConstructors { get; set; } = false;
 
+        protected override void OnApply(PageApplyEventArgs e) {
+            OnApplied(e);
+            base.OnApply(e);
+        }
 
         // maybe it was bad idea
         public event ApplySettingsHandler Applied;
@@ -102,11 +105,6 @@ namespace Msiler
         protected virtual void OnApplied(EventArgs e) {
             if (Applied != null)
                 Applied(this, e);
-        }
-
-        protected override void OnApply(PageApplyEventArgs e) {
-            OnApplied(e);
-            base.OnApply(e);
         }
     }
 

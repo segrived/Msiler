@@ -9,15 +9,16 @@ using System.IO;
 
 namespace Msiler.AssemblyParser.SimpleListingGenerator
 {
-    public class Generator : IListingGenerator
+    public class ListingGenerator
     {
-        private readonly GeneratorOptions _options;
+        private readonly ListingGeneratorOptions _options;
+
         private readonly Dictionary<string, List<string>> _pdbCache =
             new Dictionary<string, List<string>>();
 
         private int _longestOpCode = -1;
 
-        public Generator(GeneratorOptions options) {
+        public ListingGenerator(ListingGeneratorOptions options) {
             this._options = options;
         }
 
@@ -114,7 +115,7 @@ namespace Msiler.AssemblyParser.SimpleListingGenerator
         public string GenerateListing(AssemblyMethod method) {
             var sb = new StringBuilder();
             if (this._options.DisplayMethodNames) {
-                sb.AppendLine($"Selected method: {method.Signature.MethodName}");
+                sb.AppendLine($"// Selected method: {method.Signature.MethodName}");
                 sb.AppendLine();
             }
 

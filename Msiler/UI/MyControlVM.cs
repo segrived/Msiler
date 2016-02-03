@@ -22,7 +22,7 @@ namespace Msiler.UI
         ICollectionView _methodsView;
         DateTime _previousAssemblyWriteTime;
 
-        public Generator _generator = new Generator(new GeneratorOptions());
+        public ListingGenerator _generator = new ListingGenerator(new ListingGeneratorOptions());
 
         public MyControlVM() {
             this.UpdateMethodsFilter();
@@ -70,7 +70,7 @@ namespace Msiler.UI
 
             this.HighlightingDefinition = ColorTheme.GetColorTheme(Common.Instance.Options.ColorTheme);
 
-            var options = new GeneratorOptions {
+            var options = new ListingGeneratorOptions {
                 AlignListing = Common.Instance.Options.AlignListing,
                 DecimalOffsets = Common.Instance.Options.DecimalOffsets,
                 DisplayMethodNames = Common.Instance.Options.DisplayMethodNames,
@@ -80,7 +80,7 @@ namespace Msiler.UI
                 SimplifyFunctionNames = Common.Instance.Options.SimplifyFunctionNames,
                 UpcaseOpCodes = Common.Instance.Options.UpcaseOpCodes,
             };
-            this._generator = new Generator(options);
+            this._generator = new ListingGenerator(options);
 
             // reset last write time after config change
             this._previousAssemblyWriteTime = default(DateTime);
