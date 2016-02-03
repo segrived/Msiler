@@ -3,7 +3,7 @@ using System;
 using System.ComponentModel;
 using System.Windows;
 
-namespace Quart.Msiler.Controls
+namespace Msiler.Controls
 {
     public class MvvmTextEditor : TextEditor, INotifyPropertyChanged
     {

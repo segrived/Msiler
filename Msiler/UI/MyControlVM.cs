@@ -7,14 +7,13 @@ using System.Runtime.CompilerServices;
 using System.Windows.Data;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell.Interop;
-using Quart.Msiler.Annotations;
 using System.Windows.Media;
 using ICSharpCode.AvalonEdit.Highlighting;
 using Microsoft.VisualStudio.PlatformUI;
-using Quart.Msiler.Lib;
+using Msiler.Lib;
 using System.IO;
 
-namespace Quart.Msiler.UI
+namespace Msiler.UI
 {
     public class MyControlVM : INotifyPropertyChanged, IVsUpdateSolutionEvents, IVsSolutionEvents
     {
@@ -298,7 +297,6 @@ namespace Quart.Msiler.UI
             };
         }
 
-        [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) {
             var handler = PropertyChanged;
             if (handler != null) {

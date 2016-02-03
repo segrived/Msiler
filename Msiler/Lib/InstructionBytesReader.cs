@@ -1,7 +1,7 @@
 ﻿using dnlib.DotNet;
 using dnlib.IO;
 
-namespace Quart.Msiler.Lib
+namespace Msiler.Lib
 {
     sealed class InstructionBytesReader
     {

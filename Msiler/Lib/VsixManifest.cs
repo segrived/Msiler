@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Xml;
 
-namespace Quart.Msiler.Lib
+namespace Msiler.Lib
 {
     public class VsixManifest
     {

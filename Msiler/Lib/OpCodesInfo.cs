@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Quart.Msiler.Lib
+namespace Msiler.Lib
 {
     // taken from wikipedia
     internal static class OpCodesInfo

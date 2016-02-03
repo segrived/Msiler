@@ -1,7 +1,7 @@
 ﻿using Microsoft.Win32;
 using System.Collections.Generic;
 
-namespace Quart.Msiler.Lib
+namespace Msiler.Lib
 {
     public enum VisualStudioTheme { Blue, Light, Dark, Unknown }
 

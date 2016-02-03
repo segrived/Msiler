@@ -2,7 +2,7 @@
 using Microsoft.VisualStudio.Utilities;
 using System.ComponentModel.Composition;
 
-namespace Quart.Msiler
+namespace Msiler
 {
     [ContentType("code")]
     [Export(typeof(IWpfTextViewCreationListener))]

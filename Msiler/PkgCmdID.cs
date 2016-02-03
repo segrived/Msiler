@@ -1,4 +1,4 @@
-﻿namespace Quart.Msiler
+﻿namespace Msiler
 {
     internal static class PkgCmdIDList
     {

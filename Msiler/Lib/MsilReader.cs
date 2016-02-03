@@ -3,7 +3,7 @@ using System.Linq;
 using dnlib.DotNet;
 using System;
 
-namespace Quart.Msiler.Lib
+namespace Msiler.Lib
 {
     public class MsilReader : IDisposable
     {

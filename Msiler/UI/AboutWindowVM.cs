@@ -1,9 +1,8 @@
-﻿using Quart.Msiler.Annotations;
-using Quart.Msiler.Lib;
+﻿using Msiler.Lib;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace Quart.Msiler.UI
+namespace Msiler.UI
 {
     public class AboutWindowVM : INotifyPropertyChanged
     {
@@ -24,7 +23,6 @@ namespace Quart.Msiler.UI
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) {
             var handler = PropertyChanged;
             if (handler != null) {

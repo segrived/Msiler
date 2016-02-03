@@ -6,7 +6,7 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using System.ComponentModel;
 
-namespace Quart.Msiler
+namespace Msiler
 {
     internal static class GuidList
     {

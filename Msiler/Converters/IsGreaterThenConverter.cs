@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Windows.Data;
 
-namespace Quart.Msiler.Converters
+namespace Msiler.Converters
 {
     public class IsGreaterThenConverter : IValueConverter
     {

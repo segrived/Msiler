@@ -1,9 +1,9 @@
-﻿using Quart.Msiler.Lib;
+﻿using Msiler.Lib;
 using System.Text.RegularExpressions;
 using System.Windows.Controls;
 using ICSharpCode.AvalonEdit;
 
-namespace Quart.Msiler.UI
+namespace Msiler.UI
 {
     public partial class MyControl : UserControl
     {

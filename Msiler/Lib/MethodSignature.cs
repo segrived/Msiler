@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Quart.Msiler.Lib
+namespace Msiler.Lib
 {
     public class MethodSignature
     {

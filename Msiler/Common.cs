@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using Microsoft.VisualStudio.Shell.Interop;
 
-namespace Quart.Msiler
+namespace Msiler
 {
     public class Common
     {

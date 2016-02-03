@@ -9,7 +9,7 @@ using dnlib.IO;
 using dnlib.DotNet;
 using dnlib.PE;
 
-namespace Quart.Msiler
+namespace Msiler
 {
     internal static class Helpers
     {

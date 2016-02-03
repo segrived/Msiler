@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace Quart.Msiler.Controls
+namespace Msiler.Controls
 {
     class ListBoxScroll : ListBox
     {

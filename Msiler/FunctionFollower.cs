@@ -2,9 +2,9 @@
 using EnvDTE80;
 using Microsoft.VisualStudio.Text.Editor;
 using System;
-using Quart.Msiler.Lib;
+using Msiler.Lib;
 
-namespace Quart.Msiler
+namespace Msiler
 {
     public class MethodSignatureEventArgs : EventArgs
     {

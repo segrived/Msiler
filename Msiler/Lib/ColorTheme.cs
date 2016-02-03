@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Windows.Media;
 
-namespace Quart.Msiler.Lib
+namespace Msiler.Lib
 {
     public static class ColorTheme
     {
@@ -55,7 +55,7 @@ namespace Quart.Msiler.Lib
         }
 
         public static IHighlightingDefinition GetDefaultHighlightingDefinition() {
-            var ilRes = "Quart.Msiler.Resources.IL.xshd";
+            var ilRes = "Msiler.Resources.IL.xshd";
             using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(ilRes)) {
                 using (var reader = new System.Xml.XmlTextReader(stream)) {
                     return HighlightingLoader.Load(reader, HighlightingManager.Instance);

@@ -2,9 +2,9 @@
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
-using Quart.Msiler.UI;
+using Msiler.UI;
 
-namespace Quart.Msiler
+namespace Msiler
 {
     [Guid("0c127690-de92-4d02-a743-634bb922145c")]
     public sealed class MsilerToolWindow : ToolWindowPane, IVsWindowFrameNotify

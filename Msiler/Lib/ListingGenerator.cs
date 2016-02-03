@@ -7,7 +7,7 @@ using dnlib.DotNet.Emit;
 using dnlib.DotNet;
 using dnlib.DotNet.Pdb;
 
-namespace Quart.Msiler.Lib
+namespace Msiler.Lib
 {
     public class ListingGenerator
     {
