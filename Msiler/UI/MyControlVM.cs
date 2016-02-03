@@ -12,6 +12,8 @@ using ICSharpCode.AvalonEdit.Highlighting;
 using Microsoft.VisualStudio.PlatformUI;
 using Msiler.Lib;
 using System.IO;
+using Msiler.AssemblyParser.SimpleListingGenerator;
+using Msiler.AssemblyParser;
 
 namespace Msiler.UI
 {
@@ -20,7 +22,7 @@ namespace Msiler.UI
         ICollectionView _methodsView;
         DateTime _previousAssemblyWriteTime;
 
-        public ListingGenerator _generator = new ListingGenerator();
+        public Generator _generator = new Generator(new GeneratorOptions());
 
         public MyControlVM() {
             this.UpdateMethodsFilter();
@@ -67,6 +69,19 @@ namespace Msiler.UI
             this.ExcludeContructors = Common.Instance.Options.ExcludeConstructors;
 
             this.HighlightingDefinition = ColorTheme.GetColorTheme(Common.Instance.Options.ColorTheme);
+
+            var options = new GeneratorOptions {
+                AlignListing = Common.Instance.Options.AlignListing,
+                DecimalOffsets = Common.Instance.Options.DecimalOffsets,
+                DisplayMethodNames = Common.Instance.Options.DisplayMethodNames,
+                IgnoreNops = Common.Instance.Options.IgnoreNops,
+                NumbersAsHex = Common.Instance.Options.NumbersAsHex,
+                ProcessPDBFiles = Common.Instance.Options.ProcessPDBFiles,
+                SimplifyFunctionNames = Common.Instance.Options.SimplifyFunctionNames,
+                UpcaseOpCodes = Common.Instance.Options.UpcaseOpCodes,
+            };
+            this._generator = new Generator(options);
+
             // reset last write time after config change
             this._previousAssemblyWriteTime = default(DateTime);
         }
@@ -177,7 +192,7 @@ namespace Msiler.UI
         public void UpdateBytecodeListing() {
 
             if (this.SelectedMethod != null) {
-                this.BytecodeListing = _generator.Generate(this.SelectedMethod);
+                this.BytecodeListing = _generator.GenerateListing(this.SelectedMethod);
             } else {
                 this.BytecodeListing = "Please select method";
             }
@@ -210,12 +225,12 @@ namespace Msiler.UI
             }
         }
 
-        private ObservableCollection<MethodEntity> _methods = new ObservableCollection<MethodEntity>();
-        public ObservableCollection<MethodEntity> Methods {
+        private ObservableCollection<AssemblyMethod> _methods = new ObservableCollection<AssemblyMethod>();
+        public ObservableCollection<AssemblyMethod> Methods {
             get { return _methods; }
             set
             {
-                _methods = new ObservableCollection<MethodEntity>(value);
+                _methods = new ObservableCollection<AssemblyMethod>(value);
                 if (this.SelectedMethod != null) {
                     this.SelectedMethod = value.FirstOrDefault(m => {
                         return m.Signature.Equals(this.SelectedMethod.Signature);
@@ -225,10 +240,10 @@ namespace Msiler.UI
             }
         }
 
-        private MethodEntity _selectedMethod;
-        private MsilReader msilReader;
+        private AssemblyMethod _selectedMethod;
+        private AssemblyReader assemblyReader;
 
-        public MethodEntity SelectedMethod {
+        public AssemblyMethod SelectedMethod {
             get { return _selectedMethod; }
             set
             {
@@ -262,16 +277,17 @@ namespace Msiler.UI
                 if (_previousAssemblyWriteTime == assemblyWriteTime) {
                     return VSConstants.S_OK;
                 }
-                this.msilReader = new MsilReader(assemblyFile, Common.Instance.Options.ProcessPDBFiles);
-
-                var methodsEnumerable = msilReader.EnumerateMethods();
+                var options = new AssemblyParserOptions {
+                    ProcessPDB = Common.Instance.Options.ProcessPDBFiles
+                };
+                this.assemblyReader = new AssemblyReader(assemblyFile, options);
 
                 this._generator.ClearSourceCache();
-                this.Methods = new ObservableCollection<MethodEntity>(methodsEnumerable);
+                this.Methods = new ObservableCollection<AssemblyMethod>(assemblyReader.Methods);
                 _previousAssemblyWriteTime = assemblyWriteTime;
                 this.UpdateMethodsFilter();
             } catch {
-                this.Methods = new ObservableCollection<MethodEntity>();
+                this.Methods = new ObservableCollection<AssemblyMethod>();
             }
             Debug.WriteLine("Done");
             return VSConstants.S_OK;
@@ -280,7 +296,7 @@ namespace Msiler.UI
         private void UpdateMethodsFilter() {
             this._methodsView = CollectionViewSource.GetDefaultView(this.Methods);
             this._methodsView.Filter = (obj) => {
-                var m = obj as MethodEntity;
+                var m = obj as AssemblyMethod;
                 if (this.ExcludeSpecialMethods && m.IsAnonymous) {
                     return false;
                 }
@@ -293,7 +309,7 @@ namespace Msiler.UI
                 if (String.IsNullOrEmpty(this.FilterString)) {
                     return true;
                 }
-                return m.Signature.Name.ToLower().Contains(this.FilterString.ToLower());
+                return m.Signature.MethodName.ToLower().Contains(this.FilterString.ToLower());
             };
         }
 
@@ -307,8 +323,8 @@ namespace Msiler.UI
         #region Unused handlers
 
         public int UpdateSolution_Begin(ref int pfCancelUpdate) {
-            if (this.msilReader != null) {
-                this.msilReader.Dispose();
+            if (this.assemblyReader != null) {
+                this.assemblyReader.Dispose();
             }
             return VSConstants.S_OK;
         }

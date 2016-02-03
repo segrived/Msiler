@@ -40,7 +40,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Msiler</RootNamespace>
     <AssemblyName>Msiler</AssemblyName>
-    <SignAssembly>True</SignAssembly>
+    <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Key.snk</AssemblyOriginatorKeyFile>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
@@ -219,11 +219,9 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Converters\ListToStringConverter.cs" />
+    <Compile Include="ExtenstionOptions.cs" />
     <Compile Include="FunctionFollower.cs" />
-    <Compile Include="Lib\InstructionBytesReader.cs" />
-    <Compile Include="Lib\MethodEntity.cs" />
-    <Compile Include="Lib\MethodSignature.cs" />
-    <Compile Include="Lib\MsilReader.cs" />
     <Compile Include="Controls\ListBoxScroll.cs" />
     <Compile Include="TextViewCreationListener.cs" />
     <Compile Include="UI\AboutWindow.xaml.cs">
@@ -239,8 +237,6 @@
     <EmbeddedResource Include="Resources\IL.xshd">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <Compile Include="Lib\OpCodesInfo.cs" />
-    <Compile Include="Lib\ListingGenerator.cs" />
     <Compile Include="Controls\MvvmTextEditor.cs" />
     <Compile Include="UI\MyControl.xaml.cs">
       <DependentUpon>MyControl.xaml</DependentUpon>
@@ -327,6 +323,10 @@
     <ProjectReference Include="..\dnlib\src\dnlib.csproj">
       <Project>{fdfc1237-143f-4919-8318-4926901f4639}</Project>
       <Name>dnlib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Msiler.AssemblyParser\Msiler.AssemblyParser.csproj">
+      <Project>{9c131df4-716d-46b1-8ead-ea8a95e017e0}</Project>
+      <Name>Msiler.AssemblyParser</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

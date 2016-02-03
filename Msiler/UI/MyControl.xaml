@@ -50,9 +50,9 @@
                 <ctrl:ListBoxScroll.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal"
-                                    ToolTip="{Binding Signature.Name}">
-                            <TextBlock Text="{Binding Signature.Name}" />
-                            <TextBlock Text="{Binding Signature.ParametersString, StringFormat=({0})}"
+                                    ToolTip="{Binding Signature.MethodName}">
+                            <TextBlock Text="{Binding Signature.MethodName}" />
+                            <TextBlock Text="{Binding Signature.ParameterTypes, Converter={StaticResource listToStringConv}, ConverterParameter=', ', StringFormat=({0})}"
                                        Foreground="{DynamicResource {x:Static vs:EnvironmentColors.SystemGrayTextBrushKey}}" />
                         </StackPanel>
                     </DataTemplate>

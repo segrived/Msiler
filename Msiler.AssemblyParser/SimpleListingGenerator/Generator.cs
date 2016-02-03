@@ -1,38 +1,36 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.IO;
-using System.Collections.Generic;
-using dnlib.DotNet.Emit;
 using dnlib.DotNet;
+using dnlib.DotNet.Emit;
 using dnlib.DotNet.Pdb;
+using System.IO;
 
-namespace Msiler.Lib
+namespace Msiler.AssemblyParser.SimpleListingGenerator
 {
-    public class ListingGenerator
+    public class Generator : IListingGenerator
     {
-        private int _longestOpCode;
-
-        private readonly MsilerOptions _options;
-
+        private readonly GeneratorOptions _options;
         private readonly Dictionary<string, List<string>> _pdbCache =
             new Dictionary<string, List<string>>();
 
-        public ListingGenerator() {
-            this._options = Common.Instance.Options;
+        private int _longestOpCode = -1;
+
+        public Generator(GeneratorOptions options) {
+            this._options = options;
         }
 
-
-        private string GetHeader(MethodEntity m) => $"Method: {m.Signature.Name}";
+        private string GetHeader(AssemblyMethod m) => $"Method: {m.Signature.MethodName}";
 
         private string GetOffset(Instruction i) {
-            var f = (Common.Instance.Options.DecimalOffsets) ? "IL_{0:D4}" : "IL_{0:X4}";
+            var f = (this._options.DecimalOffsets) ? "IL_{0:D4}" : "IL_{0:X4}";
             return String.Format(f, i.Offset);
         }
 
         private string GetOperand(Instruction i) {
             if (i.OpCode.Code == Code.Ldstr) {
-                return @"""" + Helpers.ReplaceNewLineCharacters(i.Operand.ToString()) + @"""";
+                return @"""" + i.Operand.ToString().ReplaceNewLineCharacters() + @"""";
             }
 
             if (i.Operand == null) {
@@ -49,9 +47,13 @@ namespace Msiler.Lib
                 return $"[ {joined} ]";
             }
 
-            if (this._options.SimplifyFunctionNames && (i.Operand is MethodDef)) {
+            if (i.Operand is MethodDef) {
                 var m = (MethodDef)i.Operand;
-                return $"{m.DeclaringType.FullName}.{m.Name}";
+                var assemblyMethod = new AssemblyMethod(m);
+                if (this._options.SimplifyFunctionNames) {
+                    return assemblyMethod.Signature.MethodName;
+                }
+                return assemblyMethod.Signature.ToString();
             }
 
             if (this._options.NumbersAsHex) {
@@ -109,19 +111,24 @@ namespace Msiler.Lib
             return sb.ToString();
         }
 
-        public string Generate(MethodEntity method) {
-            if (this._options.AlignListing) {
-                this._longestOpCode = method.Instructions
-                    .Select(i => i.OpCode.Name)
-                    .Max(s => s.Length);
-            }
+        public string GenerateListing(AssemblyMethod method) {
             var sb = new StringBuilder();
+            if (this._options.DisplayMethodNames) {
+                sb.AppendLine($"Selected method: {method.Signature.MethodName}");
+                sb.AppendLine();
+            }
+
+            if (this._options.AlignListing) {
+                this._longestOpCode = method.Instructions.Max(i => i.OpCode.Name.Length);
+            }
 
             foreach (var instruction in method.Instructions) {
                 if (this._options.IgnoreNops && instruction.OpCode.Code == Code.Nop) {
                     continue;
                 }
-                sb.Append(this.ParsePdbInformation(instruction.SequencePoint));
+                if (this._options.ProcessPDBFiles) {
+                    sb.Append(this.ParsePdbInformation(instruction.SequencePoint));
+                }
                 sb.AppendLine(InstructionToString(instruction, _longestOpCode));
             }
             return sb.ToString();

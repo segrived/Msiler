@@ -5,9 +5,8 @@ using Microsoft.VisualStudio.Shell;
 using EnvDTE80;
 using System.Drawing.Text;
 using System.Linq;
-using dnlib.IO;
-using dnlib.DotNet;
-using dnlib.PE;
+using Msiler.AssemblyParser;
+using System.Collections.Generic;
 
 namespace Msiler
 {
@@ -57,12 +56,30 @@ namespace Msiler
             return str.Replace("\n", @"\n").Replace("\r", @"\r");
         }
 
-        public static IImageStream GetImageStream(this ModuleDef module, uint rva) {
-            var m = module as ModuleDefMD;
-            if (m == null)
-                return null;
+        public static AssemblyMethodSignature GetSignature(this VirtualPoint point, FileCodeModel2 fcm) {
+            try {
+                var ne = fcm.CodeElementFromPoint(point, vsCMElement.vsCMElementNamespace);
+                var ce = fcm.CodeElementFromPoint(point, vsCMElement.vsCMElementClass);
+                var me = fcm.CodeElementFromPoint(point, vsCMElement.vsCMElementFunction);
 
-            return m.MetaData.PEImage.CreateStream((RVA)rva);
+                // should be compitable with Mono.Cecil method names
+                string fnName = (ce.Name == me.Name) ? ".ctor" : me.Name;
+
+                var cfParams = ((CodeFunction)me).Parameters;
+                var parameterList = new List<string>();
+                foreach (CodeParameter param in cfParams) {
+                    if (param.Type.TypeKind == vsCMTypeRef.vsCMTypeRefArray) {
+                        var arrayType = param.Type.ElementType;
+                        var fullType = arrayType.AsFullName + "[]";
+                        parameterList.Add(fullType);
+                    } else {
+                        parameterList.Add(param.Type.AsFullName);
+                    }
+                }
+                return new AssemblyMethodSignature($"{ne.Name}.{ce.Name}.{fnName}", parameterList);
+            } catch {
+                return null;
+            }
         }
     }
 }

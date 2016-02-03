@@ -3,14 +3,15 @@ using EnvDTE80;
 using Microsoft.VisualStudio.Text.Editor;
 using System;
 using Msiler.Lib;
+using Msiler.AssemblyParser;
 
 namespace Msiler
 {
     public class MethodSignatureEventArgs : EventArgs
     {
-        public MethodSignature MethodSignature { get; set; }
+        public AssemblyMethodSignature MethodSignature { get; set; }
 
-        public MethodSignatureEventArgs(MethodSignature signature) {
+        public MethodSignatureEventArgs(AssemblyMethodSignature signature) {
             this.MethodSignature = signature;
         }
     }
@@ -28,7 +29,7 @@ namespace Msiler
 
         public static event MethodSelectedHandler MethodSelected;
 
-        protected void OnMethodSelect(MethodSignature methodInfo) {
+        protected void OnMethodSelect(AssemblyMethodSignature methodInfo) {
             MethodSelected?.Invoke(this, new MethodSignatureEventArgs(methodInfo));
         }
 
@@ -48,7 +49,7 @@ namespace Msiler
             }
 
             var fcm = (FileCodeModel2)doc.ProjectItem.FileCodeModel;
-            var signature = MethodSignature.FromPoint(fcm, sel.ActivePoint);
+            var signature = sel.ActivePoint.GetSignature(fcm);
             if (signature != null) {
                 OnMethodSelect(signature);
             }

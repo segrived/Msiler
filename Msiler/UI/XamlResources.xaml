@@ -1,7 +1,10 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:vs="clr-namespace:Microsoft.VisualStudio.PlatformUI;assembly=Microsoft.VisualStudio.Shell.11.0"
+                    xmlns:conv="clr-namespace:Msiler.Converters"
                     xmlns:ctrl="clr-namespace:Msiler.Controls">
+
+    <conv:ListToStringConverter x:Key="listToStringConv" />
 
     <Style TargetType="ListBoxItem">
         <Setter Property="BorderThickness"

@@ -1,5 +1,4 @@
-﻿using Msiler.Lib;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using System.Windows.Controls;
 using ICSharpCode.AvalonEdit;
 
@@ -47,13 +46,14 @@ namespace Msiler.UI
 
             string instruction = regMatch.Groups["Instruction"].Value.ToLower();
 
-            if (!OpCodesInfo.Description.ContainsKey(instruction)) {
+            var info = AssemblyParser.Helpers.GetInstructionInformation(instruction);
+            if (info == null) {
                 return;
             }
 
             toolTip.PlacementTarget = this;
-            toolTip.Content = new ICSharpCode.AvalonEdit.TextEditor {
-                Text = $"{instruction}: {OpCodesInfo.Description[instruction]}",
+            toolTip.Content = new TextEditor {
+                Text = $"{info.Name}: {info.Description}",
                 Opacity = 0.6,
                 HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden,
                 VerticalScrollBarVisibility = ScrollBarVisibility.Hidden
@@ -67,7 +67,7 @@ namespace Msiler.UI
         }
 
         private void HyperlinkOptions_Click(object sender, System.Windows.RoutedEventArgs e) {
-            Common.Instance.Package.ShowOptionPage(typeof(MsilerOptions));
+            Common.Instance.Package.ShowOptionPage(typeof(ExtenstionOptions));
         }
 
         private void HyperlinkGithub_Click(object sender, System.Windows.RoutedEventArgs e) {

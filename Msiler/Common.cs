@@ -25,7 +25,7 @@ namespace Msiler
         public uint SolutionUpdateCookie { get; set; }
         public uint SolutionCookie { get; set; }
 
-        public MsilerOptions Options { get; set; }
+        public ExtenstionOptions Options { get; set; }
 
         private Common() { }
     }
