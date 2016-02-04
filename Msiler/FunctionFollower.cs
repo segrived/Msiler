@@ -2,7 +2,6 @@
 using EnvDTE80;
 using Microsoft.VisualStudio.Text.Editor;
 using System;
-using Msiler.Lib;
 using Msiler.AssemblyParser;
 
 namespace Msiler
