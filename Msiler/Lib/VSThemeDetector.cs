@@ -1,4 +1,5 @@
 ﻿using Microsoft.Win32;
+using Msiler.Helpers;
 using System.Collections.Generic;
 
 namespace Msiler.Lib
@@ -7,20 +8,20 @@ namespace Msiler.Lib
 
     public class VSThemeDetector
     {
-        private static readonly IDictionary<string, VisualStudioTheme> Themes = new Dictionary<string, VisualStudioTheme>{
+        static readonly IDictionary<string, VisualStudioTheme> Themes = new Dictionary<string, VisualStudioTheme>{
             { "de3dbbcd-f642-433c-8353-8f1df4370aba", VisualStudioTheme.Light },
             { "1ded0138-47ce-435e-84ef-9ec1f439b749", VisualStudioTheme.Dark },
             { "a4d6a176-b948-4b29-8c66-53c97a1ed7d0", VisualStudioTheme.Blue }
         };
 
-        private VisualStudioTheme GuidToThemeName(string guid) {
+        VisualStudioTheme GuidToThemeName(string guid) {
             if (!Themes.ContainsKey(guid)) {
                 return VisualStudioTheme.Unknown;
             }
             return Themes[guid];
         }
 
-        private VisualStudioTheme VisualStudio2012Theme() {
+        VisualStudioTheme VisualStudio2012Theme() {
             var rKey = @"Software\Microsoft\VisualStudio\11.0\General";
 
             using (var key = Registry.CurrentUser.OpenSubKey(rKey)) {
@@ -34,7 +35,7 @@ namespace Msiler.Lib
             return VisualStudioTheme.Unknown;
         }
 
-        private VisualStudioTheme VisualStudio2013Theme() {
+        VisualStudioTheme VisualStudio2013Theme() {
             var rKey = @"Software\Microsoft\VisualStudio\12.0\General";
 
             using (var key = Registry.CurrentUser.OpenSubKey(rKey)) {
@@ -48,7 +49,7 @@ namespace Msiler.Lib
             return VisualStudioTheme.Unknown;
         }
 
-        private VisualStudioTheme VisualStudio2015Theme() {
+        VisualStudioTheme VisualStudio2015Theme() {
             var rKey = @"Software\Microsoft\VisualStudio\14.0\ApplicationPrivateSettings\Microsoft\VisualStudio";
 
             using (var key = Registry.CurrentUser.OpenSubKey(rKey)) {
@@ -68,7 +69,7 @@ namespace Msiler.Lib
         }
 
         public static VisualStudioTheme GetTheme() {
-            var version = Helpers.GetDTE().Application.Version;
+            var version = DTEHelpers.GetDTE().Application.Version;
             switch (version) {
                 case "14.0":
                     return new VSThemeDetector().VisualStudio2015Theme();

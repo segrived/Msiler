@@ -37,8 +37,8 @@ namespace Msiler.AssemblyParser
             return this.Signature.GetHashCode();
         }
 
-        public string GenerateListing() {
-            return String.Empty;
+        public string GenerateListing(ListingGeneratorOptions options) {
+            return new ListingGenerator(options).GenerateListing(this);
         }
     }
 }

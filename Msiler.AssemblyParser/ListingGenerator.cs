@@ -7,7 +7,7 @@ using dnlib.DotNet.Emit;
 using dnlib.DotNet.Pdb;
 using System.IO;
 
-namespace Msiler.AssemblyParser.SimpleListingGenerator
+namespace Msiler.AssemblyParser
 {
     public class ListingGenerator
     {

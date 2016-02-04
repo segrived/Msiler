@@ -220,18 +220,25 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Converters\ListToStringConverter.cs" />
-    <Compile Include="ExtensionOptions.cs" />
+    <Compile Include="DialogPages\ExtensionDisplayOptions.cs" />
+    <Compile Include="DialogPages\ExtensionExcludeOptions.cs" />
+    <Compile Include="DialogPages\ExtensionGeneralOptions.cs" />
+    <Compile Include="DialogPages\ExtensionListingGenerationOptions.cs" />
+    <Compile Include="DialogPages\MsilerDialogPage.cs" />
     <Compile Include="FunctionFollower.cs" />
     <Compile Include="Controls\ListBoxScroll.cs" />
+    <Compile Include="AssemblyReaderManager.cs" />
+    <Compile Include="Helpers\AvalonEditHelpers.cs" />
+    <Compile Include="Helpers\DTEHelpers.cs" />
+    <Compile Include="Helpers\FontHelpers.cs" />
+    <Compile Include="Helpers\StringHelpers.cs" />
     <Compile Include="TextViewCreationListener.cs" />
     <Compile Include="UI\AboutWindow.xaml.cs">
       <DependentUpon>AboutWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\AboutWindowVM.cs" />
     <Compile Include="Lib\ColorTheme.cs" />
     <Compile Include="Common.cs" />
     <Compile Include="Converters\IsGreaterThenConverter.cs" />
-    <Compile Include="Helpers.cs" />
     <Compile Include="Lib\VsixManifest.cs" />
     <Compile Include="Lib\VSThemeDetector.cs" />
     <EmbeddedResource Include="Resources\IL.xshd">
@@ -241,7 +248,6 @@
     <Compile Include="UI\MyControl.xaml.cs">
       <DependentUpon>MyControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\MyControlVM.cs" />
     <Compile Include="MsilerToolWindow.cs" />
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -329,6 +335,7 @@
       <Name>Msiler.AssemblyParser</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <UseCodebase>true</UseCodebase>
   </PropertyGroup>

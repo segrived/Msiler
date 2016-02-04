@@ -1,23 +1,23 @@
 ﻿using System.Windows;
 using System.Diagnostics;
+using Msiler.Lib;
 
 namespace Msiler.UI
 {
     public partial class AboutWindow : Window
     {
-        private readonly AboutWindowVM _viewModel;
-
         public AboutWindow() {
             InitializeComponent();
-            this._viewModel = new AboutWindowVM();
-            this.DataContext = this._viewModel;
+
+            var manifest = VsixManifest.GetManifest();
+            this.VersionTextBlock.Text = $"Version {manifest.Version}";
         }
 
-        private void Ok_Click(object sender, RoutedEventArgs e) {
+        void Ok_Click(object sender, RoutedEventArgs e) {
             this.Close();
         }
 
-        private void Hyperlink_Click(object sender, RoutedEventArgs e) {
+        void Hyperlink_Click(object sender, RoutedEventArgs e) {
             Process.Start("https://github.com/segrived/Msiler");
         }
     }

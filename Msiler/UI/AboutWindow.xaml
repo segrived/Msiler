@@ -26,7 +26,7 @@
                        Stretch="None" />
                 <TextBlock FontWeight="Bold"
                            FontSize="22"
-                           Text="{Binding VersionInformation}" />
+                           Name="VersionTextBlock" />
                 <TextBlock FontSize="14"
                            Text="by segrived, 2015-2016" />
                 <TextBlock FontSize="14">

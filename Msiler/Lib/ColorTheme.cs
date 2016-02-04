@@ -48,7 +48,7 @@ namespace Msiler.Lib
             return high;
         }
 
-        private static void ApplyColorTheme(IHighlightingDefinition def, Dictionary<string, Color> theme) {
+        static void ApplyColorTheme(IHighlightingDefinition def, Dictionary<string, Color> theme) {
             foreach (var kv in theme) {
                 def.GetNamedColor(kv.Key).Foreground = new SimpleHighlightingBrush(kv.Value);
             }

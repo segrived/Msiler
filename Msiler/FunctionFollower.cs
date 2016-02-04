@@ -3,12 +3,13 @@ using EnvDTE80;
 using Microsoft.VisualStudio.Text.Editor;
 using System;
 using Msiler.AssemblyParser;
+using Msiler.Helpers;
 
 namespace Msiler
 {
     public class MethodSignatureEventArgs : EventArgs
     {
-        public AssemblyMethodSignature MethodSignature { get; set; }
+        public AssemblyMethodSignature MethodSignature { get; private set; }
 
         public MethodSignatureEventArgs(AssemblyMethodSignature signature) {
             this.MethodSignature = signature;
@@ -19,7 +20,7 @@ namespace Msiler
 
     public class FunctionFollower
     {
-        private ITextView _view;
+        ITextView _view;
 
         public FunctionFollower(ITextView view) {
             this._view = view;
@@ -32,8 +33,8 @@ namespace Msiler
             MethodSelected?.Invoke(this, new MethodSignatureEventArgs(methodInfo));
         }
 
-        private void Caret_PositionChanged(object sender, CaretPositionChangedEventArgs e) {
-            var dte = Helpers.GetDTE();
+        void Caret_PositionChanged(object sender, CaretPositionChangedEventArgs e) {
+            var dte = DTEHelpers.GetDTE();
             var doc = dte.ActiveDocument;
             if (doc == null) {
                 return;
@@ -48,7 +49,7 @@ namespace Msiler
             }
 
             var fcm = (FileCodeModel2)doc.ProjectItem.FileCodeModel;
-            var signature = sel.ActivePoint.GetSignature(fcm);
+            var signature = DTEHelpers.GetSignature(sel.ActivePoint, fcm);
             if (signature != null) {
                 OnMethodSelect(signature);
             }

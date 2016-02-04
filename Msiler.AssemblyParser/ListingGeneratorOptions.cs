@@ -1,4 +1,4 @@
-﻿namespace Msiler.AssemblyParser.SimpleListingGenerator
+﻿namespace Msiler.AssemblyParser
 {
     public class ListingGeneratorOptions
     {

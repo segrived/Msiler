@@ -1,12 +1,12 @@
 ﻿using System.Collections.ObjectModel;
 using Microsoft.VisualStudio.Shell.Interop;
+using Msiler.DialogPages;
 
 namespace Msiler
 {
     public class Common
     {
-        private static Common instance;
-        public ObservableCollection<string> Messages = new ObservableCollection<string>();
+        static Common instance;
 
         public static Common Instance {
             get
@@ -19,14 +19,19 @@ namespace Msiler
         }
 
         public IVsSolutionBuildManager BuildManager { get; set; }
-        public IVsSolution SolutionManager { get; set; }
+        public IVsSolution Solution { get; set; }
         public IVsWindowFrame Frame { get; set; }
         public MsilerPackage Package { get; set; }
         public uint SolutionUpdateCookie { get; set; }
         public uint SolutionCookie { get; set; }
 
-        public ExtensionOptions Options { get; set; }
+        #region Extension options pages
+        public ExtensionGeneralOptions GeneralOptions { get; set; }
+        public ExtensionDisplayOptions DisplayOptions { get; set; }
+        public ExtensionListingGenerationOptions ListingGenerationOptions { get; set; }
+        public ExtensionExcludeOptions ExcludeOptions { get; set; }
+        #endregion
 
-        private Common() { }
+        Common() { }
     }
 }

@@ -1,17 +1,25 @@
 ﻿using System;
 using System.IO;
-using EnvDTE;
-using Microsoft.VisualStudio.Shell;
-using EnvDTE80;
-using System.Drawing.Text;
-using System.Linq;
-using Msiler.AssemblyParser;
 using System.Collections.Generic;
+using EnvDTE;
+using EnvDTE80;
+using Msiler.AssemblyParser;
+using Microsoft.VisualStudio.Shell;
 
-namespace Msiler
+namespace Msiler.Helpers
 {
-    internal static class Helpers
+    public static class DTEHelpers
     {
+        public static DTE2 GetDTE() {
+            var provider = ServiceProvider.GlobalProvider;
+            var vs = (DTE2)provider.GetService(typeof(DTE));
+
+            if (vs == null) {
+                throw new InvalidOperationException("DTE not found.");
+            }
+            return vs;
+        }
+
         public static string GetFullPath(string path, string basePath) {
             bool isAbsolute = Path.IsPathRooted(path);
             if (isAbsolute) {
@@ -26,16 +34,6 @@ namespace Msiler
             }
         }
 
-        public static DTE2 GetDTE() {
-            var provider = ServiceProvider.GlobalProvider;
-            var vs = (DTE2)provider.GetService(typeof(DTE));
-
-            if (vs == null) {
-                throw new InvalidOperationException("DTE not found.");
-            }
-            return vs;
-        }
-
         public static string GetOutputAssemblyFileName() {
             var dte = GetDTE();
             var sb = (SolutionBuild2)dte.Solution.SolutionBuild;
@@ -47,16 +45,7 @@ namespace Msiler
             return Path.Combine(fullPath, activeProject.Properties.Item("OutputFileName").Value.ToString());
         }
 
-        public static bool IsFontFamilyExist(string fontFamily) {
-            var fontsCollection = new InstalledFontCollection();
-            return fontsCollection.Families.Any(ff => ff.Name == fontFamily);
-        }
-
-        public static string ReplaceNewLineCharacters(string str) {
-            return str.Replace("\n", @"\n").Replace("\r", @"\r");
-        }
-
-        public static AssemblyMethodSignature GetSignature(this VirtualPoint point, FileCodeModel2 fcm) {
+        public static AssemblyMethodSignature GetSignature(VirtualPoint point, FileCodeModel2 fcm) {
             try {
                 var ne = fcm.CodeElementFromPoint(point, vsCMElement.vsCMElementNamespace);
                 var ce = fcm.CodeElementFromPoint(point, vsCMElement.vsCMElementClass);
