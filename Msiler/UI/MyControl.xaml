@@ -54,9 +54,6 @@
                           ResizeDirection="Rows"
                           ShowsPreview="True" />
             <Grid Grid.Row="3">
-                <Grid.RowDefinitions>
-                    <RowDefinition />
-                </Grid.RowDefinitions>
                 <ctrl:MvvmTextEditor x:Name="BytecodeListing"
                                      Grid.Row="1"
                                      MouseHover="BytecodeListing_MouseHover"
@@ -69,13 +66,28 @@
                     </ctrl:MvvmTextEditor.ContextMenu>
                 </ctrl:MvvmTextEditor>
             </Grid>
-            <TextBlock HorizontalAlignment="Right"
-                       FontSize="12"
-                       Grid.Row="4"
-                       Padding="3">                                
+            <Grid Grid.Row="4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Grid Grid.Column="0">
+                    <CheckBox Name="IsFollowModeEnabled"
+                              Content="Follow mode"
+                              Checked="IsFollowModeEnabled_CheckedChange"
+                              Unchecked="IsFollowModeEnabled_CheckedChange" />
+                </Grid>
+                <Grid Grid.Column="2">
+                    <TextBlock HorizontalAlignment="Right"
+                               FontSize="12"
+                               Grid.Row="4"
+                               Padding="3">                                
                 <Hyperlink Click="HyperlinkOptions_Click"
                            TextDecorations="None">Options</Hyperlink>
-            </TextBlock>
+                    </TextBlock>
+                </Grid>
+            </Grid>
         </Grid>
     </Grid>
 </UserControl>

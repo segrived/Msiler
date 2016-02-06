@@ -21,11 +21,16 @@ namespace Msiler
     public class FunctionFollower
     {
         ITextView _view;
+        DTE2 _dte;
 
         public FunctionFollower(ITextView view) {
             this._view = view;
             this._view.Caret.PositionChanged += Caret_PositionChanged;
+            this._dte = DTEHelpers.GetDTE();
+            IsFollowingEnabled = true;
         }
+
+        public static bool IsFollowingEnabled { get; set; }
 
         public static event MethodSelectedHandler MethodSelected;
 
@@ -34,8 +39,11 @@ namespace Msiler
         }
 
         void Caret_PositionChanged(object sender, CaretPositionChangedEventArgs e) {
-            var dte = DTEHelpers.GetDTE();
-            var doc = dte.ActiveDocument;
+            if (!IsFollowingEnabled) {
+                return;
+            }
+
+            var doc = _dte.ActiveDocument;
             if (doc == null) {
                 return;
             }

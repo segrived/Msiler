@@ -12,6 +12,7 @@ using System;
 using System.Windows.Data;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace Msiler.UI
 {
@@ -45,8 +46,7 @@ namespace Msiler.UI
             this.MethodsList.ItemsSource = new ObservableCollection<AssemblyMethod>(this._assemblyMethods);
 
             if (this.CurrentMethod != null) {
-                this.CurrentMethod = e.Methods.FirstOrDefault(m => m.Equals(this.CurrentMethod));
-                this.DisassembleCurrentMethod();
+                this.ProcessMethod(e.Methods.FirstOrDefault(m => m.Equals(this.CurrentMethod)));
             }
             var view = CollectionViewSource.GetDefaultView(this.MethodsList.ItemsSource);
             view.Filter = FilterMethodsList;
@@ -61,10 +61,15 @@ namespace Msiler.UI
         }
 
         public void InitEventHandlers() {
+            Common.Instance.GeneralOptions.Applied += (s, e) => {
+                var isEnabled = Common.Instance.GeneralOptions.FollowSelectedFunctionInEditor;
+                FunctionFollower.IsFollowingEnabled = isEnabled;
+                this.IsFollowModeEnabled.IsChecked = isEnabled;
+            };
             Common.Instance.DisplayOptions.Applied += (s, e)
                 => UpdateDisplayOptions();
             Common.Instance.ListingGenerationOptions.Applied += (s, e)
-                => DisassembleCurrentMethod();
+                => this.ProcessMethod(this.CurrentMethod);
             Common.Instance.ExcludeOptions.Applied += (s, e) => {
                 if (MethodsList.ItemsSource != null) {
                     CollectionViewSource.GetDefaultView(MethodsList.ItemsSource).Refresh();
@@ -83,10 +88,13 @@ namespace Msiler.UI
             if (this._assemblyMethods == null || this._assemblyMethods.Count == 0) {
                 return;
             }
+            // do not process if same method
+            if (this.CurrentMethod != null && this.CurrentMethod.Signature.Equals(e.MethodSignature)) {
+                return;
+            }
             var selMethod = this._assemblyMethods.FirstOrDefault(m => m.Signature.Equals(e.MethodSignature));
             if (selMethod != null) {
-                this.CurrentMethod = selMethod;
-                DisassembleCurrentMethod();
+                ProcessMethod(selMethod);
             }
         }
 
@@ -100,6 +108,7 @@ namespace Msiler.UI
             BytecodeListing.FontSize = displayOptions.FontSize;
             BytecodeListing.ShowLineNumbers = displayOptions.LineNumbers;
             BytecodeListing.SyntaxHighlighting = ColorTheme.GetColorTheme(displayOptions.ColorTheme);
+            IsFollowModeEnabled.IsChecked = Common.Instance.GeneralOptions.FollowSelectedFunctionInEditor;
         }
 
         bool FilterMethodsList(object o) {
@@ -125,9 +134,11 @@ namespace Msiler.UI
         public ListingGeneratorOptions GetGeneratorOptions()
             => Common.Instance.ListingGenerationOptions.ToListingGeneratorOptions();
 
-        private void DisassembleCurrentMethod() {
-            if (this.CurrentMethod != null) {
-                var listing = this.CurrentMethod.GenerateListing(this.GetGeneratorOptions());
+        private async void ProcessMethod(AssemblyMethod method) {
+            if (method != null) {
+                this.CurrentMethod = method;
+
+                var listing = await Task.Run(() => this.CurrentMethod.GenerateListing(this.GetGeneratorOptions()));
                 this.BytecodeListing.Text = listing;
             }
         }
@@ -167,8 +178,7 @@ namespace Msiler.UI
 
         #region UI handler
         void MethodsList_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-            this.CurrentMethod = (AssemblyMethod)this.MethodsList.SelectedItem;
-            this.DisassembleCurrentMethod();
+            this.ProcessMethod((AssemblyMethod)this.MethodsList.SelectedItem);
         }
 
         void FilterMethodsTextBox_TextChanged(object sender, TextChangedEventArgs e) =>
@@ -183,5 +193,11 @@ namespace Msiler.UI
         void HyperlinkAbout_Click(object sender, System.Windows.RoutedEventArgs e) =>
             new AboutWindow().ShowDialog();
         #endregion Hyperlink handlers
+
+        private void IsFollowModeEnabled_CheckedChange(object sender, System.Windows.RoutedEventArgs e) {
+            bool isChecked = ((CheckBox)sender).IsChecked.Value;
+            Common.Instance.GeneralOptions.FollowSelectedFunctionInEditor = isChecked;
+            Common.Instance.GeneralOptions.SaveSettingsToStorage();
+        }
     }
 }
