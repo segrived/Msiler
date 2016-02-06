@@ -12,7 +12,6 @@ using System;
 using System.Windows.Data;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Threading.Tasks;
 
 namespace Msiler.UI
 {
@@ -33,6 +32,9 @@ namespace Msiler.UI
         }
 
         List<AssemblyMethod> _assemblyMethods;
+        Dictionary<AssemblyMethod, string> _listingCache =
+            new Dictionary<AssemblyMethod, string>();
+
 
         public MyControl() {
             InitializeComponent();
@@ -44,6 +46,7 @@ namespace Msiler.UI
         void OnMethodListChanged(object sender, MethodsListEventArgs e) {
             this._assemblyMethods = e.Methods;
             this.MethodsList.ItemsSource = new ObservableCollection<AssemblyMethod>(this._assemblyMethods);
+            this._listingCache.Clear();
 
             if (this.CurrentMethod != null) {
                 this.ProcessMethod(e.Methods.FirstOrDefault(m => m.Equals(this.CurrentMethod)));
@@ -68,8 +71,10 @@ namespace Msiler.UI
             };
             Common.Instance.DisplayOptions.Applied += (s, e)
                 => UpdateDisplayOptions();
-            Common.Instance.ListingGenerationOptions.Applied += (s, e)
-                => this.ProcessMethod(this.CurrentMethod);
+            Common.Instance.ListingGenerationOptions.Applied += (s, e) => {
+                this._listingCache.Clear();
+                this.ProcessMethod(this.CurrentMethod);
+            };
             Common.Instance.ExcludeOptions.Applied += (s, e) => {
                 if (MethodsList.ItemsSource != null) {
                     CollectionViewSource.GetDefaultView(MethodsList.ItemsSource).Refresh();
@@ -134,12 +139,14 @@ namespace Msiler.UI
         public ListingGeneratorOptions GetGeneratorOptions()
             => Common.Instance.ListingGenerationOptions.ToListingGeneratorOptions();
 
-        private async void ProcessMethod(AssemblyMethod method) {
+        private void ProcessMethod(AssemblyMethod method) {
             if (method != null) {
                 this.CurrentMethod = method;
-
-                var listing = await Task.Run(() => this.CurrentMethod.GenerateListing(this.GetGeneratorOptions()));
-                this.BytecodeListing.Text = listing;
+                var listingText = (this._listingCache.ContainsKey(method))
+                    ? _listingCache[method]
+                    : this.CurrentMethod.GenerateListing(this.GetGeneratorOptions());
+                this._listingCache[method] = listingText;
+                this.BytecodeListing.Text = listingText;
             }
         }
 
@@ -176,7 +183,7 @@ namespace Msiler.UI
         }
         #endregion
 
-        #region UI handler
+        #region UI handlers
         void MethodsList_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             this.ProcessMethod((AssemblyMethod)this.MethodsList.SelectedItem);
         }
@@ -192,12 +199,13 @@ namespace Msiler.UI
 
         void HyperlinkAbout_Click(object sender, System.Windows.RoutedEventArgs e) =>
             new AboutWindow().ShowDialog();
-        #endregion Hyperlink handlers
 
-        private void IsFollowModeEnabled_CheckedChange(object sender, System.Windows.RoutedEventArgs e) {
+        void IsFollowModeEnabled_CheckedChange(object sender, System.Windows.RoutedEventArgs e) {
             bool isChecked = ((CheckBox)sender).IsChecked.Value;
             Common.Instance.GeneralOptions.FollowSelectedFunctionInEditor = isChecked;
             Common.Instance.GeneralOptions.SaveSettingsToStorage();
         }
+        #endregion UI handlers
+
     }
 }
