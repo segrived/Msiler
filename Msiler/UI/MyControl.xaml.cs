@@ -9,6 +9,9 @@ using Msiler.AssemblyParser;
 using Msiler.Helpers;
 using System.Linq;
 using System;
+using System.Windows.Data;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 
 namespace Msiler.UI
 {
@@ -16,58 +19,75 @@ namespace Msiler.UI
     {
         const string RepoUrl = @"https://github.com/segrived/Msiler";
 
-        AssemblyManager _assemblyManager;
-        IEnumerable<AssemblyMethod> _methodList;
-        AssemblyMethod _selectedMethod;
-        ListingGeneratorOptions _generatorOptions;
+        AssemblyManager _assemblyManager = new AssemblyManager();
 
-        ToolTip toolTip = new ToolTip();
+        AssemblyMethod _currentMethod;
+        AssemblyMethod CurrentMethod {
+            get { return this._currentMethod; }
+            set
+            {
+                this._currentMethod = value;
+                this.MethodsList.SelectedItem = value;
+            }
+        }
+
+        List<AssemblyMethod> _assemblyMethods;
 
         public MyControl() {
             InitializeComponent();
 
-            this._assemblyManager = new AssemblyManager();
+            InitConfiguration();
+            InitEventHandlers();
+        }
 
-            _assemblyManager.MethodListChanged += (s, e) => {
-                this._methodList = e.Methods;
-                this.MethodsList.ItemsSource = this._methodList;
-                ApplySearchFilter();
-            };
+        void OnMethodListChanged(object sender, MethodsListEventArgs e) {
+            this._assemblyMethods = e.Methods;
+            this.MethodsList.ItemsSource = new ObservableCollection<AssemblyMethod>(this._assemblyMethods);
 
+            if (this.CurrentMethod != null) {
+                this.CurrentMethod = e.Methods.FirstOrDefault(m => m.Equals(this.CurrentMethod));
+                this.DisassembleCurrentMethod();
+            }
+            var view = CollectionViewSource.GetDefaultView(this.MethodsList.ItemsSource);
+            view.Filter = FilterMethodsList;
+        }
+
+        public void InitConfiguration() {
             this.BytecodeListing.Options = new TextEditorOptions {
                 EnableEmailHyperlinks = false,
                 EnableHyperlinks = false
             };
-
-            Common.Instance.DisplayOptions.Applied += (s, e) => UpdateDisplayOptions();
-            VSColorTheme.ThemeChanged += (e) => UpdateDisplayOptions();
             UpdateDisplayOptions();
-
-            Common.Instance.ListingGenerationOptions.Applied += (s, e) => {
-                this._generatorOptions = Common.Instance.ListingGenerationOptions.ToListingGeneratorOptions();
-                UpdateBytecodeListing();
-            };
-            this._generatorOptions = Common.Instance.ListingGenerationOptions.ToListingGeneratorOptions();
-
-            FunctionFollower.MethodSelected += FunctionFollower_MethodSelected;
-
-
         }
 
-        void FunctionFollower_MethodSelected(object sender, MethodSignatureEventArgs e) {
+        public void InitEventHandlers() {
+            Common.Instance.DisplayOptions.Applied += (s, e)
+                => UpdateDisplayOptions();
+            Common.Instance.ListingGenerationOptions.Applied += (s, e)
+                => DisassembleCurrentMethod();
+            Common.Instance.ExcludeOptions.Applied += (s, e) => {
+                if (MethodsList.ItemsSource != null) {
+                    CollectionViewSource.GetDefaultView(MethodsList.ItemsSource).Refresh();
+                }
+            };
+            VSColorTheme.ThemeChanged += (e)
+                => UpdateDisplayOptions();
+            FunctionFollower.MethodSelected += OnMethodSelected;
+            _assemblyManager.MethodListChanged += OnMethodListChanged;
+        }
+
+        void OnMethodSelected(object sender, MethodSignatureEventArgs e) {
             if (!Common.Instance.GeneralOptions.FollowSelectedFunctionInEditor) {
                 return;
             }
-            if (this._methodList == null) {
+            if (this._assemblyMethods == null || this._assemblyMethods.Count == 0) {
                 return;
             }
-            var editorMethod = this._methodList
-                .FirstOrDefault(m => m.Signature.Equals(e.MethodSignature));
-            if (editorMethod != null) {
-                this._selectedMethod = editorMethod;
-                this.MethodsList.SelectedItem = this._selectedMethod;
+            var selMethod = this._assemblyMethods.FirstOrDefault(m => m.Signature.Equals(e.MethodSignature));
+            if (selMethod != null) {
+                this.CurrentMethod = selMethod;
+                DisassembleCurrentMethod();
             }
-
         }
 
         void UpdateDisplayOptions() {
@@ -82,17 +102,38 @@ namespace Msiler.UI
             BytecodeListing.SyntaxHighlighting = ColorTheme.GetColorTheme(displayOptions.ColorTheme);
         }
 
-        void UpdateBytecodeListing() {
-            if (this._selectedMethod != null) {
-                this.BytecodeListing.Text = this._selectedMethod.GenerateListing(this._generatorOptions);
+        bool FilterMethodsList(object o) {
+            var method = (AssemblyMethod)o;
+
+            // filter method types
+            var excludeOptions = Common.Instance.ExcludeOptions;
+            if (excludeOptions.ExcludeConstructors && method.IsConstructor)
+                return false;
+            if (excludeOptions.ExcludeProperties && method.IsProperty)
+                return false;
+            if (excludeOptions.ExcludeAnonymousMethods && method.IsAnonymous)
+                return false;
+
+            // filter methods by search
+            var filterQuery = FilterMethodsTextBox.Text;
+            if (String.IsNullOrEmpty(filterQuery))
+                return true;
+
+            return method.Signature.MethodName.Contains(filterQuery, StringComparison.OrdinalIgnoreCase);
+        }
+
+        public ListingGeneratorOptions GetGeneratorOptions()
+            => Common.Instance.ListingGenerationOptions.ToListingGeneratorOptions();
+
+        private void DisassembleCurrentMethod() {
+            if (this.CurrentMethod != null) {
+                var listing = this.CurrentMethod.GenerateListing(this.GetGeneratorOptions());
+                this.BytecodeListing.Text = listing;
             }
         }
 
-        void ApplySearchFilter() {
-            var filterQuery = this.FilterMethodsTextBox.Text;
-            this.MethodsList.ItemsSource = this._methodList
-                .Where(m => m.Signature.MethodName.Contains(filterQuery, StringComparison.OrdinalIgnoreCase));
-        }
+        #region Instruction Hint Tooltip
+        ToolTip toolTip = new ToolTip();
 
         void BytecodeListing_MouseHover(object sender, System.Windows.Input.MouseEventArgs e) {
             var pos = BytecodeListing.GetPositionFromPoint(e.GetPosition(BytecodeListing));
@@ -122,25 +163,25 @@ namespace Msiler.UI
         void BytecodeListing_MouseHoverStopped(object sender, System.Windows.Input.MouseEventArgs e) {
             toolTip.IsOpen = false;
         }
+        #endregion
 
-        void FilterMethodsTextBox_TextChanged(object sender, TextChangedEventArgs e) =>
-            ApplySearchFilter();
-
-        private void MethodsList_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-            this._selectedMethod = (AssemblyMethod)MethodsList.SelectedItem;
-            UpdateBytecodeListing();
+        #region UI handler
+        void MethodsList_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            this.CurrentMethod = (AssemblyMethod)this.MethodsList.SelectedItem;
+            this.DisassembleCurrentMethod();
         }
 
-        #region Hyperlink handler
+        void FilterMethodsTextBox_TextChanged(object sender, TextChangedEventArgs e) =>
+            CollectionViewSource.GetDefaultView(MethodsList.ItemsSource).Refresh();
+
         void HyperlinkOptions_Click(object sender, System.Windows.RoutedEventArgs e) =>
             Common.Instance.Package.ShowOptionPage(typeof(ExtensionGeneralOptions));
 
         void HyperlinkGithub_Click(object sender, System.Windows.RoutedEventArgs e) =>
-            System.Diagnostics.Process.Start(RepoUrl);
+            Process.Start(RepoUrl);
 
         void HyperlinkAbout_Click(object sender, System.Windows.RoutedEventArgs e) =>
             new AboutWindow().ShowDialog();
         #endregion Hyperlink handlers
-
     }
 }

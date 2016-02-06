@@ -7,17 +7,11 @@ namespace Msiler.Controls
 {
     public class MvvmTextEditor : TextEditor, INotifyPropertyChanged
     {
-        /// <summary>
-        /// A bindable Text property
-        /// </summary>
         public new string Text {
             get { return base.Text; }
             set { base.Text = value; }
         }
 
-        /// <summary>
-        /// The bindable text property dependency property
-        /// </summary>
         public static readonly DependencyProperty TextProperty =
             DependencyProperty.Register("Text", typeof(string), typeof(MvvmTextEditor), new PropertyMetadata((obj, args) => {
                 var target = (MvvmTextEditor)obj;
@@ -29,10 +23,6 @@ namespace Msiler.Controls
             base.OnTextChanged(e);
         }
 
-        /// <summary>
-        /// Raises a property changed event
-        /// </summary>
-        /// <param name="property">The name of the property that updates</param>
         public void RaisePropertyChanged(string property) {
             if (PropertyChanged != null) {
                 PropertyChanged(this, new PropertyChangedEventArgs(property));

@@ -44,13 +44,9 @@ namespace Msiler
                 CreateListingGenerator();
                 _previousAssemblyWriteTime = default(DateTime);
             };
-
-            Common.Instance.ExcludeOptions.Applied += (s, e) => {
-                this.OnMethodListChanged(this.FiterMethods(this._assemblyReader));
-            };
         }
 
-        private void CreateListingGenerator() {
+        void CreateListingGenerator() {
             var listingGenOptions = Common.Instance.ListingGenerationOptions;
             this.ListingGenerator = new ListingGenerator(listingGenOptions.ToListingGeneratorOptions());
         }
@@ -88,22 +84,11 @@ namespace Msiler
                 this._assemblyReader = new AssemblyReader(assemblyFile, options);
                 _previousAssemblyWriteTime = assemblyWriteTime;
                 var genOpt = Common.Instance.GeneralOptions;
-                OnMethodListChanged(this.FiterMethods(this._assemblyReader));
+                OnMethodListChanged(this._assemblyReader.Methods);
             } catch (Exception) {
                 OnMethodListChanged(new List<AssemblyMethod>());
             }
             return VSConstants.S_OK;
-        }
-
-        List<AssemblyMethod> FiterMethods(AssemblyReader reader) {
-            if (reader == null) {
-                return new List<AssemblyMethod>();
-            }
-            var genOpt = Common.Instance.ExcludeOptions;
-            var exCtors = genOpt.ExcludeConstructors;
-            var exProps = genOpt.ExcludeProperties;
-            var exAnons = genOpt.ExcludeAnonymousMethods;
-            return reader.FilterMethods(exCtors, exProps, exAnons);
         }
 
         #region Unused handlers
