@@ -33,7 +33,7 @@
     </Rule>
     
     <Rule color="Bytes">
-      \[[\da-fA-F\s]+\]
+      \|[\da-fA-F\s]+\|
     </Rule>
     
     <Keywords color="BuiltInTypes">

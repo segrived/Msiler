@@ -27,10 +27,9 @@ namespace Msiler
             this._view = view;
             this._view.Caret.PositionChanged += Caret_PositionChanged;
             this._dte = DTEHelpers.GetDTE();
-            IsFollowingEnabled = true;
         }
 
-        public static bool IsFollowingEnabled { get; set; }
+        public static bool IsFollowingEnabled { get; set; } = false;
 
         public static event MethodSelectedHandler MethodSelected;
 

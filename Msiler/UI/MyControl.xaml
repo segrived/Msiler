@@ -74,17 +74,39 @@
                 </Grid.ColumnDefinitions>
                 <Grid Grid.Column="0">
                     <CheckBox Name="IsFollowModeEnabled"
-                              Content="Follow mode"
                               Checked="IsFollowModeEnabled_CheckedChange"
-                              Unchecked="IsFollowModeEnabled_CheckedChange" />
+                              Unchecked="IsFollowModeEnabled_CheckedChange"
+                              IsChecked="False"
+                              VerticalAlignment="Center"
+                              VerticalContentAlignment="Center">
+                        <Label VerticalAlignment="Center">Follow Mode</Label>
+                    </CheckBox>
                 </Grid>
                 <Grid Grid.Column="2">
-                    <TextBlock HorizontalAlignment="Right"
+                    <TextBlock MouseDown="OptionsLink_MouseDown"
+                               HorizontalAlignment="Right"
                                FontSize="12"
                                Grid.Row="4"
-                               Padding="3">                                
-                <Hyperlink Click="HyperlinkOptions_Click"
-                           TextDecorations="None">Options</Hyperlink>
+                               Padding="3"
+                               Name="OptionsLink"
+                               Text="[Options]"
+                               Cursor="Hand">
+                        <TextBlock.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Name="MenuItemGeneralOptions"
+                                          Click="MenuItemGeneralOptions_Click"
+                                          Header="General" />
+                                <MenuItem Name="MenuItemListingGenearationOptions"
+                                          Click="MenuItemListingGenearationOptions_Click"
+                                          Header="Listing Generation" />
+                                <MenuItem Name="MenuItemMethodFilteringOptions"
+                                          Click="MenuItemMethodFilteringOptions_Click"
+                                          Header="Methods Filtering" />
+                                <MenuItem Name="MenuItemDisplayOptions"
+                                          Click="MenuItemDisplayOptions_Click"
+                                          Header="Display" />
+                            </ContextMenu>
+                        </TextBlock.ContextMenu>
                     </TextBlock>
                 </Grid>
             </Grid>

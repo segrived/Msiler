@@ -12,6 +12,8 @@ using System;
 using System.Windows.Data;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Windows.Input;
+using System.Windows.Documents;
 
 namespace Msiler.UI
 {
@@ -63,12 +65,19 @@ namespace Msiler.UI
             UpdateDisplayOptions();
         }
 
+        void UpdateDisplayOptions() {
+            var displayOptions = Common.Instance.DisplayOptions;
+            string fontFamily = "Consolas";
+            if (FontHelpers.IsFontFamilyExist(displayOptions.FontName)) {
+                fontFamily = displayOptions.FontName;
+            }
+            BytecodeListing.FontFamily = new FontFamily(fontFamily);
+            BytecodeListing.FontSize = displayOptions.FontSize;
+            BytecodeListing.ShowLineNumbers = displayOptions.LineNumbers;
+            BytecodeListing.SyntaxHighlighting = ColorTheme.GetColorTheme(displayOptions.ColorTheme);
+        }
+
         public void InitEventHandlers() {
-            Common.Instance.GeneralOptions.Applied += (s, e) => {
-                var isEnabled = Common.Instance.GeneralOptions.FollowSelectedFunctionInEditor;
-                FunctionFollower.IsFollowingEnabled = isEnabled;
-                this.IsFollowModeEnabled.IsChecked = isEnabled;
-            };
             Common.Instance.DisplayOptions.Applied += (s, e)
                 => UpdateDisplayOptions();
             Common.Instance.ListingGenerationOptions.Applied += (s, e) => {
@@ -87,9 +96,6 @@ namespace Msiler.UI
         }
 
         void OnMethodSelected(object sender, MethodSignatureEventArgs e) {
-            if (!Common.Instance.GeneralOptions.FollowSelectedFunctionInEditor) {
-                return;
-            }
             if (this._assemblyMethods == null || this._assemblyMethods.Count == 0) {
                 return;
             }
@@ -97,26 +103,13 @@ namespace Msiler.UI
             if (this.CurrentMethod != null && this.CurrentMethod.Signature.Equals(e.MethodSignature)) {
                 return;
             }
+            // find metyhod with same signature
             var selMethod = this._assemblyMethods.FirstOrDefault(m => m.Signature.Equals(e.MethodSignature));
             if (selMethod != null) {
                 ProcessMethod(selMethod);
             }
         }
 
-        void UpdateDisplayOptions() {
-            var displayOptions = Common.Instance.DisplayOptions;
-            string fontFamily = "Consolas";
-            if (FontHelpers.IsFontFamilyExist(displayOptions.FontName)) {
-                fontFamily = displayOptions.FontName;
-            }
-            BytecodeListing.FontFamily = new FontFamily(fontFamily);
-            BytecodeListing.FontSize = displayOptions.FontSize;
-            BytecodeListing.ShowLineNumbers = displayOptions.LineNumbers;
-            BytecodeListing.SyntaxHighlighting = ColorTheme.GetColorTheme(displayOptions.ColorTheme);
-
-            FunctionFollower.IsFollowingEnabled = Common.Instance.GeneralOptions.FollowSelectedFunctionInEditor;
-            IsFollowModeEnabled.IsChecked = Common.Instance.GeneralOptions.FollowSelectedFunctionInEditor;
-        }
 
         bool FilterMethodsList(object o) {
             var method = (AssemblyMethod)o;
@@ -203,11 +196,34 @@ namespace Msiler.UI
             new AboutWindow().ShowDialog();
 
         void IsFollowModeEnabled_CheckedChange(object sender, System.Windows.RoutedEventArgs e) {
-            bool isChecked = ((CheckBox)sender).IsChecked.Value;
-            Common.Instance.GeneralOptions.FollowSelectedFunctionInEditor = isChecked;
-            Common.Instance.GeneralOptions.SaveSettingsToStorage();
+            FunctionFollower.IsFollowingEnabled = ((CheckBox)sender).IsChecked.Value;
         }
         #endregion UI handlers
 
+        private void MenuItemGeneralOptions_Click(object sender, System.Windows.RoutedEventArgs e) {
+            Common.Instance.Package.ShowOptionPage(typeof(ExtensionGeneralOptions));
+        }
+
+        private void MenuItemListingGenearationOptions_Click(object sender, System.Windows.RoutedEventArgs e) {
+            Common.Instance.Package.ShowOptionPage(typeof(ExtensionListingGenerationOptions));
+        }
+
+        private void MenuItemMethodFilteringOptions_Click(object sender, System.Windows.RoutedEventArgs e) {
+            Common.Instance.Package.ShowOptionPage(typeof(ExtensionExcludeOptions));
+        }
+
+        private void MenuItemDisplayOptions_Click(object sender, System.Windows.RoutedEventArgs e) {
+            Common.Instance.Package.ShowOptionPage(typeof(ExtensionDisplayOptions));
+        }
+
+        private void OptionsLink_MouseDown(object sender, MouseButtonEventArgs e) {
+            if (e.ChangedButton == MouseButton.Left) {
+                TextBlock block = sender as TextBlock;
+                ContextMenu contextMenu = block.ContextMenu;
+                contextMenu.PlacementTarget = block;
+                contextMenu.IsOpen = true;
+                e.Handled = true;
+            }
+        }
     }
 }
