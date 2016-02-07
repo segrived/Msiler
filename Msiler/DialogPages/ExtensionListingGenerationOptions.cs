@@ -41,6 +41,11 @@ namespace Msiler.DialogPages
         public bool DisplayMethodNames { get; set; } = true;
 
         [Category("Listing generation")]
+        [DisplayName("Read instruction bytes")]
+        [Description("Can decrease performance")]
+        public bool ReadInstructionBytes { get; set; } = true;
+
+        [Category("Listing generation")]
         [DisplayName("Process PDB files")]
         [Description("NOTE: rebuilding required")]
         public bool ProcessPDBFiles { get; set; } = false;
@@ -54,7 +59,8 @@ namespace Msiler.DialogPages
                 NumbersAsHex = this.NumbersAsHex,
                 ProcessPDBFiles = this.ProcessPDBFiles,
                 SimplifyFunctionNames = this.SimplifyFunctionNames,
-                UpcaseOpCodes = this.UpcaseOpCodes
+                UpcaseOpCodes = this.UpcaseOpCodes,
+                ReadInstructionBytes = this.ReadInstructionBytes
             };
         }
     }

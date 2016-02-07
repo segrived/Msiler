@@ -12,11 +12,13 @@ namespace Msiler.AssemblyParser
     public class ListingGenerator
     {
         private readonly ListingGeneratorOptions _options;
+        private MethodBytesReader _bytesReader;
 
         private readonly Dictionary<string, List<string>> _pdbCache =
             new Dictionary<string, List<string>>();
 
         private int _longestOpCode = -1;
+        private int _longestByteSeq = -1;
 
         public ListingGenerator(ListingGeneratorOptions options) {
             this._options = options;
@@ -73,10 +75,19 @@ namespace Msiler.AssemblyParser
         }
 
         private string InstructionToString(Instruction i, int longestOpcode) {
+            var result = $"{GetOffset(i)} ";
+            if (this._options.ReadInstructionBytes) {
+                var bytesSeq = $"{_bytesReader.ReadInstrution(i)} ";
+                if (this._options.AlignListing) {
+                    bytesSeq = bytesSeq.PadRight(_longestByteSeq + 1);
+                }
+                result += $"| {bytesSeq}| ";
+            }
             var opcodePart = this._options.AlignListing
                 ? GetOpCode(i).PadRight(longestOpcode + 1)
                 : GetOpCode(i);
-            return $"{GetOffset(i)} {opcodePart} {GetOperand(i)}";
+            result += $"{opcodePart} ";
+            return result + $"{GetOperand(i)}";
         }
 
         public void ClearSourceCache() {
@@ -114,13 +125,21 @@ namespace Msiler.AssemblyParser
 
         public string GenerateListing(AssemblyMethod method) {
             var sb = new StringBuilder();
+
             if (this._options.DisplayMethodNames) {
                 sb.AppendLine($"// Selected method: {method.Signature.MethodName}");
                 sb.AppendLine();
             }
 
+            if (this._options.ReadInstructionBytes) {
+                this._bytesReader = new MethodBytesReader(method.MethodDefinition);
+            }
+
             if (this._options.AlignListing) {
                 this._longestOpCode = method.Instructions.Max(i => i.OpCode.Name.Length);
+                if (this._options.ReadInstructionBytes) {
+                    this._longestByteSeq = method.Instructions.Max(i => i.GetSize()) * 2;
+                }
             }
 
             foreach (var instruction in method.Instructions) {
@@ -132,6 +151,11 @@ namespace Msiler.AssemblyParser
                 }
                 sb.AppendLine(InstructionToString(instruction, _longestOpCode));
             }
+
+            if (this._bytesReader != null) {
+                this._bytesReader.Dispose();
+            }
+
             return sb.ToString();
         }
     }

@@ -6,6 +6,7 @@
   <Color name="Number" fontWeight="bold" foreground="Orange" />
   <Color name="BuiltInTypes" foreground="Gray" />
   <Color name="Header" foreground="Gray" />
+  <Color name="Bytes" foreground="Gray" />
   
   <RuleSet ignoreCase="true">
     <Span color="Header" begin="Method: " />
@@ -30,7 +31,11 @@
     <Rule color="Number">
       (?&lt;=\s)\-?(0x)?[\dA-Fa-f]+$
     </Rule>
-
+    
+    <Rule color="Bytes">
+      \[[\da-fA-F\s]+\]
+    </Rule>
+    
     <Keywords color="BuiltInTypes">
       <Word>System.Boolean</Word>
       <Word>System.Byte</Word>

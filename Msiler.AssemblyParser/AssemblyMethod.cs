@@ -13,16 +13,16 @@ namespace Msiler.AssemblyParser
         public AssemblyMethodSignature Signature { get; private set; }
         public List<Instruction> Instructions { get; set; }
 
-        private MethodDef methodDefinition;
+        public MethodDef MethodDefinition { get; set; }
 
         internal AssemblyMethod(MethodDef definition) {
-            this.methodDefinition = definition;
+            this.MethodDefinition = definition;
             this.Signature = AssemblyMethodSignature.FromMethodDef(definition);
-            this.Instructions = methodDefinition.Body.Instructions.ToList();
+            this.Instructions = MethodDefinition.Body.Instructions.ToList();
         }
 
-        public bool IsConstructor => methodDefinition.IsConstructor;
-        public bool IsProperty => methodDefinition.IsGetter || methodDefinition.IsSetter;
+        public bool IsConstructor => MethodDefinition.IsConstructor;
+        public bool IsProperty => MethodDefinition.IsGetter || MethodDefinition.IsSetter;
         public bool IsAnonymous => this.Signature.MethodName.Any(DisallowedMethodNameChars.Contains);
 
         public override bool Equals(object obj) {

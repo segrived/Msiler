@@ -80,8 +80,8 @@ namespace Msiler.UI
                     CollectionViewSource.GetDefaultView(MethodsList.ItemsSource).Refresh();
                 }
             };
-            VSColorTheme.ThemeChanged += (e)
-                => UpdateDisplayOptions();
+            VSColorTheme.ThemeChanged += (e) => UpdateDisplayOptions();
+
             FunctionFollower.MethodSelected += OnMethodSelected;
             _assemblyManager.MethodListChanged += OnMethodListChanged;
         }
@@ -113,6 +113,8 @@ namespace Msiler.UI
             BytecodeListing.FontSize = displayOptions.FontSize;
             BytecodeListing.ShowLineNumbers = displayOptions.LineNumbers;
             BytecodeListing.SyntaxHighlighting = ColorTheme.GetColorTheme(displayOptions.ColorTheme);
+
+            FunctionFollower.IsFollowingEnabled = Common.Instance.GeneralOptions.FollowSelectedFunctionInEditor;
             IsFollowModeEnabled.IsChecked = Common.Instance.GeneralOptions.FollowSelectedFunctionInEditor;
         }
 

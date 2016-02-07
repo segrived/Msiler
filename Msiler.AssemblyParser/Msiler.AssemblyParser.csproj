@@ -51,6 +51,7 @@
     <Compile Include="AssemblyMethodSignature.cs" />
     <Compile Include="AssemblyReader.cs" />
     <Compile Include="Helpers.cs" />
+    <Compile Include="MethodByteReader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>
