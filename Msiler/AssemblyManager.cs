@@ -23,7 +23,6 @@ namespace Msiler
     public class AssemblyManager : IVsUpdateSolutionEvents, IVsSolutionEvents
     {
         public IEnumerable<AssemblyMethod> Methods { get; private set; }
-        public ListingGenerator ListingGenerator { get; private set; }
 
         AssemblyReader _assemblyReader;
         DateTime _previousAssemblyWriteTime;
@@ -38,17 +37,9 @@ namespace Msiler
             Common.Instance.SolutionUpdateCookie = solutionUpdateCookie;
             Common.Instance.SolutionCookie = solutionCookie;
 
-            CreateListingGenerator();
-
             Common.Instance.ListingGenerationOptions.Applied += (s, e) => {
-                CreateListingGenerator();
                 _previousAssemblyWriteTime = default(DateTime);
             };
-        }
-
-        void CreateListingGenerator() {
-            var listingGenOptions = Common.Instance.ListingGenerationOptions;
-            this.ListingGenerator = new ListingGenerator(listingGenOptions.ToListingGeneratorOptions());
         }
 
         public int OnAfterCloseSolution(object pUnkReserved) {
