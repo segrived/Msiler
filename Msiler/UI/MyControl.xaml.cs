@@ -238,7 +238,7 @@ namespace Msiler.UI
 
         private void OptionsLink_MouseDown(object sender, MouseButtonEventArgs e) {
             if (e.ChangedButton == MouseButton.Left) {
-                TextBlock block = sender as TextBlock;
+                var block = sender as TextBlock;
                 ContextMenu contextMenu = block.ContextMenu;
                 contextMenu.PlacementTarget = block;
                 contextMenu.IsOpen = true;

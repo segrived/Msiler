@@ -25,13 +25,13 @@
     </Span>
 
     <Rule color="Number">
-      (?&lt;=\s)\-?(0x)?[\dA-Fa-f]+\s
-    </Rule>
-
-    <Rule color="Number">
-      (?&lt;=\s)\-?(0x)?[\dA-Fa-f]+$
+      (?&lt;=\s)0x[\dA-Fa-f]+(\s|$)
     </Rule>
     
+    <Rule color="Number">
+      (?&lt;=\s)\-?[\d]+(\s|$)
+    </Rule>
+
     <Rule color="Bytes">
       \|[\da-fA-F\s]+\|
     </Rule>

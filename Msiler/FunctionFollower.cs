@@ -21,7 +21,7 @@ namespace Msiler
     public class FunctionFollower
     {
         ITextView _view;
-        DTE2 _dte;
+        readonly DTE2 _dte;
 
         public FunctionFollower(ITextView view) {
             this._view = view;
