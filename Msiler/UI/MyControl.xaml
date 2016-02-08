@@ -6,17 +6,23 @@
              xmlns:vs="clr-namespace:Microsoft.VisualStudio.PlatformUI;assembly=Microsoft.VisualStudio.Shell.11.0"
              xmlns:conv="clr-namespace:Msiler.Converters"
              xmlns:ctrl="clr-namespace:Msiler.Controls"
+             xmlns:uc="clr-namespace:Msiler.UI.UserControls"
              Name="MyToolWindow"
              d:DesignHeight="300"
              d:DesignWidth="300"
              mc:Ignorable="d">
 
     <UserControl.Resources>
-        <ResourceDictionary Source="../UI/XamlResources.xaml" />
+        <ResourceDictionary Source="/Msiler;component/Resources/XamlResources.xaml" />
     </UserControl.Resources>
 
     <Grid>
-        <Grid>
+        <Grid Name="WelcomeUserControl"
+              Visibility="Visible">
+            <uc:WelcomeUserControl />
+        </Grid>
+        <Grid Name="MainView"
+              Visibility="Hidden">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="100" />

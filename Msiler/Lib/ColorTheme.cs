@@ -2,7 +2,6 @@
 using ICSharpCode.AvalonEdit.Highlighting.Xshd;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Windows;
 using System.Windows.Media;
 
 namespace Msiler.Lib

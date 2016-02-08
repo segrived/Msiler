@@ -13,16 +13,13 @@ using System.Windows.Data;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Windows.Input;
-using System.Windows.Documents;
-using System.Text.RegularExpressions;
 using System.Text;
+using System.Windows;
 
 namespace Msiler.UI
 {
     public partial class MyControl : UserControl
     {
-        const string RepoUrl = @"https://github.com/segrived/Msiler";
-
         AssemblyManager _assemblyManager = new AssemblyManager();
 
         AssemblyMethod _currentMethod;
@@ -38,7 +35,6 @@ namespace Msiler.UI
         List<AssemblyMethod> _assemblyMethods;
         Dictionary<AssemblyMethod, string> _listingCache =
             new Dictionary<AssemblyMethod, string>();
-
 
         public MyControl() {
             InitializeComponent();
@@ -57,6 +53,10 @@ namespace Msiler.UI
             }
             var view = CollectionViewSource.GetDefaultView(this.MethodsList.ItemsSource);
             view.Filter = FilterMethodsList;
+
+            bool isAnyMethods = this._assemblyMethods.Count > 0;
+            this.MainView.Visibility = ToVisibilityState(isAnyMethods);
+            this.WelcomeUserControl.Visibility = ToVisibilityState(!isAnyMethods);
         }
 
         public void InitConfiguration() {
@@ -205,7 +205,7 @@ namespace Msiler.UI
             Common.Instance.Package.ShowOptionPage(typeof(ExtensionGeneralOptions));
 
         void HyperlinkGithub_Click(object sender, System.Windows.RoutedEventArgs e) =>
-            Process.Start(RepoUrl);
+            Process.Start(Common.RepoUrl);
 
         void HyperlinkAbout_Click(object sender, System.Windows.RoutedEventArgs e) =>
             new AboutWindow().ShowDialog();
@@ -240,5 +240,11 @@ namespace Msiler.UI
             }
         }
         #endregion UI handlers
+
+        #region Helper methods
+        private Visibility ToVisibilityState(bool b) {
+            return b ? Visibility.Visible : Visibility.Hidden;
+        }
+        #endregion
     }
 }

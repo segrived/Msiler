@@ -243,6 +243,9 @@
     <Compile Include="Converters\IsGreaterThenConverter.cs" />
     <Compile Include="Lib\VsixManifest.cs" />
     <Compile Include="Lib\VSThemeDetector.cs" />
+    <Compile Include="UI\UserControls\WelcomeUserControl.xaml.cs">
+      <DependentUpon>WelcomeUserControl.xaml</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Resources\IL.xshd">
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -297,7 +300,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\XamlResources.xaml">
+    <Page Include="UI\UserControls\WelcomeUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\XamlResources.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -18,6 +18,8 @@ namespace Msiler
             }
         }
 
+        public const string RepoUrl = @"https://github.com/segrived/Msiler";
+
         public IVsSolutionBuildManager BuildManager { get; set; }
         public IVsSolution Solution { get; set; }
         public IVsWindowFrame Frame { get; set; }
