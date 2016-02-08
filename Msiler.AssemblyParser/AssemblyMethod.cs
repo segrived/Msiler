@@ -38,7 +38,9 @@ namespace Msiler.AssemblyParser
         }
 
         public string GenerateListing(ListingGeneratorOptions options) {
-            return new ListingGenerator(options).GenerateListing(this);
+            using (var generator = new ListingGenerator(options)) {
+                return generator.GenerateListing(this);
+            }
         }
     }
 }

@@ -138,12 +138,18 @@ namespace Msiler.UI
 
         private void ProcessMethod(AssemblyMethod method) {
             if (method != null) {
-                this.CurrentMethod = method;
-                var listingText = (this._listingCache.ContainsKey(method))
-                    ? _listingCache[method]
-                    : this.CurrentMethod.GenerateListing(this.GetGeneratorOptions());
-                this._listingCache[method] = listingText;
-                this.BytecodeListing.Text = listingText;
+                try {
+                    this.CurrentMethod = method;
+                    var listingText = (this._listingCache.ContainsKey(method))
+                        ? _listingCache[method]
+                        : this.CurrentMethod.GenerateListing(this.GetGeneratorOptions());
+                    this._listingCache[method] = listingText;
+                    this.BytecodeListing.Text = listingText;
+                } catch (Exception ex) {
+                    this.BytecodeListing.Text = $"ERROR: {ex.Message}."
+                        + Environment.NewLine
+                        + $"STACKTRACE: {ex.StackTrace}";
+                }
             }
         }
 

@@ -9,7 +9,7 @@ using System.IO;
 
 namespace Msiler.AssemblyParser
 {
-    public class ListingGenerator
+    public class ListingGenerator : IDisposable
     {
         private readonly ListingGeneratorOptions _options;
         private MethodBytesReader _bytesReader;
@@ -152,11 +152,13 @@ namespace Msiler.AssemblyParser
                 sb.AppendLine(InstructionToString(instruction, _longestOpCode));
             }
 
+            return sb.ToString();
+        }
+
+        public void Dispose() {
             if (this._bytesReader != null) {
                 this._bytesReader.Dispose();
             }
-
-            return sb.ToString();
         }
     }
 }
