@@ -166,7 +166,7 @@ namespace Msiler.UI
                 sb.AppendLine($"Decimal: {v}");
                 sb.AppendLine($"HEX: 0x{Convert.ToString(v, 16)}");
                 sb.AppendLine($"Binary: 0b{Convert.ToString(v, 2).ToUpper()}");
-                sb.AppendLine($"Octal: 0{Convert.ToString(v, 8)}");
+                sb.Append($"Octal: 0{Convert.ToString(v, 8)}");
                 ShowToolTip(sb.ToString());
             }
 
