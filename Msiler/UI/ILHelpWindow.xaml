@@ -1,0 +1,36 @@
+﻿<Window x:Class="Msiler.UI.ILHelpWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Msiler.UI"
+        mc:Ignorable="d"
+        Title="IL Instructions Information"
+        WindowStartupLocation="CenterScreen"
+        Height="450"
+        Width="400">
+
+    <Window.Resources>
+        <ResourceDictionary Source="/Msiler;component/Resources/XamlResources.xaml" />
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="150" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <TextBox Grid.Row="0"
+                 Name="FilterMethodsTextBox"
+                 BorderThickness="0,0,0,1"
+                 Style="{StaticResource FilterHintTextBox}"
+                 TextChanged="FilterMethodsTextBox_TextChanged" />
+        <ListBox Grid.Row="1"
+                 Name="InstructionList"
+                 SelectionChanged="InstructionList_SelectionChanged" />
+        <TextBlock Grid.Row="2"
+                   TextWrapping="Wrap"
+                   Name="SelectedInstuctionInfo"
+                   Padding="4" />
+    </Grid>
+</Window>

@@ -243,6 +243,9 @@
     <Compile Include="Converters\IsGreaterThenConverter.cs" />
     <Compile Include="Lib\VsixManifest.cs" />
     <Compile Include="Lib\VSThemeDetector.cs" />
+    <Compile Include="UI\ILHelpWindow.xaml.cs">
+      <DependentUpon>ILHelpWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\UserControls\WelcomeUserControl.xaml.cs">
       <DependentUpon>WelcomeUserControl.xaml</DependentUpon>
     </Compile>
@@ -293,6 +296,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="UI\AboutWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\ILHelpWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

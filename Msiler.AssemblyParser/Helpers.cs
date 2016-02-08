@@ -23,6 +23,10 @@ namespace Msiler.AssemblyParser
         private static readonly Dictionary<string, OpCodeInfo> OpCodesInfoCache
             = ReadOpCodeInfoResource();
 
+        public static List<string> GetOpCodesList() {
+            return OpCodesInfoCache.Select(i => i.Key).ToList();
+        }
+
         public static OpCodeInfo GetInstructionInformation(string s) {
             var instruction = s.ToLower();
             if (OpCodesInfoCache.ContainsKey(instruction)) {

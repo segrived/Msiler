@@ -85,7 +85,7 @@
                          AlignmentY="Center"
                          Stretch="None">
                 <VisualBrush.Visual>
-                    <Label Content="Filter methods..."
+                    <Label Content="Filter..."
                            FontStyle="Italic"
                            Foreground="{DynamicResource {x:Static vs:EnvironmentColors.SystemGrayTextBrushKey}}" />
                 </VisualBrush.Visual>

@@ -18,8 +18,11 @@ namespace Msiler.UI.UserControls
         }
 
         private void HyperlinkAbout_Click(object sender, System.Windows.RoutedEventArgs e) {
-            var win = new AboutWindow();
-            win.ShowDialog();
+            new AboutWindow().ShowDialog();
+        }
+
+        private void HyperlinkInstructions_Click(object sender, System.Windows.RoutedEventArgs e) {
+            new ILHelpWindow().ShowDialog();
         }
     }
 }
