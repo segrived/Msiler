@@ -76,8 +76,8 @@ namespace Msiler.AssemblyParser
 
         private string InstructionToString(Instruction i, int longestOpcode) {
             var result = $"{GetOffset(i)} ";
-            if (this._options.ReadInstructionBytes) {
-                var bytesSeq = $"{_bytesReader.ReadInstrution(i)} ";
+            if (this._options.ReadInstructionBytes && this._bytesReader != null) {
+                var bytesSeq = $"{this._bytesReader.ReadInstrution(i)} ";
                 if (this._options.AlignListing) {
                     bytesSeq = bytesSeq.PadRight(_longestByteSeq + 1);
                 }

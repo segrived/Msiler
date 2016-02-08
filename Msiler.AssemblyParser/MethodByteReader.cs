@@ -17,7 +17,7 @@ namespace Msiler.AssemblyParser
 
         private IImageStream GetImageStream(ModuleDef module, uint rva) {
             var m = module as ModuleDefMD;
-            if (m == null)
+            if (m == null || m.MetaData == null)
                 return null;
             return m.MetaData.PEImage.CreateStream((RVA)rva);
         }
