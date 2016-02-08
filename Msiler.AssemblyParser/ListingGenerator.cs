@@ -52,11 +52,16 @@ namespace Msiler.AssemblyParser
 
             if (i.Operand is MethodDef) {
                 var m = (MethodDef)i.Operand;
-                var assemblyMethod = new AssemblyMethod(m);
-                if (this._options.SimplifyFunctionNames) {
-                    return assemblyMethod.Signature.MethodName;
-                }
-                return assemblyMethod.Signature.ToString();
+                return (this._options.SimplifyFunctionNames)
+                    ? $"{m.DeclaringType.FullName}.{m.Name}"
+                    : m.FullName;
+            }
+
+            if (i.Operand is MemberRef) {
+                var m = (MemberRef)i.Operand;
+                return (this._options.SimplifyFunctionNames)
+                   ? $"{m.DeclaringType.FullName}.{m.Name}"
+                   : m.FullName;
             }
 
             if (this._options.NumbersAsHex) {
