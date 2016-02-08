@@ -64,7 +64,6 @@ namespace Msiler.Lib
                     }
                 }
             }
-
             return VisualStudioTheme.Unknown;
         }
 

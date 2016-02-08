@@ -14,6 +14,8 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Windows.Input;
 using System.Windows.Documents;
+using System.Text.RegularExpressions;
+using System.Text;
 
 namespace Msiler.UI
 {
@@ -148,7 +150,7 @@ namespace Msiler.UI
         #region Instruction Hint Tooltip
         ToolTip toolTip = new ToolTip();
 
-        void BytecodeListing_MouseHover(object sender, System.Windows.Input.MouseEventArgs e) {
+        void BytecodeListing_MouseHover(object sender, MouseEventArgs e) {
             var pos = BytecodeListing.GetPositionFromPoint(e.GetPosition(BytecodeListing));
 
             if (pos == null)
@@ -157,23 +159,36 @@ namespace Msiler.UI
             int off = BytecodeListing.Document.GetOffset(pos.Value.Line, pos.Value.Column);
             var wordUnderCursor = AvalonEditHelpers.GetWordOnOffset(BytecodeListing.Document, off);
 
-            var info = AssemblyParser.Helpers.GetInstructionInformation(wordUnderCursor);
-            if (info == null) {
-                return;
+            var numberUnderCursor = StringHelpers.ParseNumber(wordUnderCursor);
+            if (numberUnderCursor != null) {
+                var v = numberUnderCursor.Value;
+                var sb = new StringBuilder();
+                sb.AppendLine($"Decimal: {v}");
+                sb.AppendLine($"HEX: 0x{Convert.ToString(v, 16)}");
+                sb.AppendLine($"Binary: 0b{Convert.ToString(v, 2).ToUpper()}");
+                sb.AppendLine($"Octal: 0{Convert.ToString(v, 8)}");
+                ShowToolTip(sb.ToString());
             }
 
+            var info = AssemblyParser.Helpers.GetInstructionInformation(wordUnderCursor);
+            if (info != null) {
+                ShowToolTip($"{info.Name}: {info.Description}");
+            }
+            e.Handled = true;
+        }
+
+        public void ShowToolTip(string content) {
             toolTip.PlacementTarget = this;
             toolTip.Content = new TextEditor {
-                Text = $"{info.Name}: {info.Description}",
+                Text = content,
                 Opacity = 0.6,
                 HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden,
                 VerticalScrollBarVisibility = ScrollBarVisibility.Hidden
             };
             toolTip.IsOpen = true;
-            e.Handled = true;
         }
 
-        void BytecodeListing_MouseHoverStopped(object sender, System.Windows.Input.MouseEventArgs e) {
+        void BytecodeListing_MouseHoverStopped(object sender, MouseEventArgs e) {
             toolTip.IsOpen = false;
         }
         #endregion
@@ -198,7 +213,6 @@ namespace Msiler.UI
         void IsFollowModeEnabled_CheckedChange(object sender, System.Windows.RoutedEventArgs e) {
             FunctionFollower.IsFollowingEnabled = ((CheckBox)sender).IsChecked.Value;
         }
-        #endregion UI handlers
 
         private void MenuItemGeneralOptions_Click(object sender, System.Windows.RoutedEventArgs e) {
             Common.Instance.Package.ShowOptionPage(typeof(ExtensionGeneralOptions));
@@ -225,5 +239,6 @@ namespace Msiler.UI
                 e.Handled = true;
             }
         }
+        #endregion UI handlers
     }
 }

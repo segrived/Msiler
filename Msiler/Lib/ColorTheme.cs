@@ -2,6 +2,7 @@
 using ICSharpCode.AvalonEdit.Highlighting.Xshd;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Windows;
 using System.Windows.Media;
 
 namespace Msiler.Lib
@@ -9,23 +10,23 @@ namespace Msiler.Lib
     public static class ColorTheme
     {
         public static Dictionary<string, Color> DarkTheme = new Dictionary<string, Color> {
-            ["Comment"] = Color.FromRgb(93, 130, 221),
-            ["String"] = Color.FromRgb(177, 233, 98),
-            ["Offset"] = Color.FromRgb(242, 248, 104),
-            ["Instruction"] = Color.FromRgb(93, 181, 222),
-            ["Number"] = Color.FromRgb(232, 97, 153),
+            ["Comment"]      = Color.FromRgb(93, 130, 221),
+            ["String"]       = Color.FromRgb(177, 233, 98),
+            ["Offset"]       = Color.FromRgb(242, 248, 104),
+            ["Instruction"]  = Color.FromRgb(93, 181, 222),
+            ["Number"]       = Color.FromRgb(232, 97, 153),
             ["BuiltInTypes"] = Color.FromRgb(150, 150, 150),
-            ["Header"] = Color.FromRgb(110, 110, 110)
+            ["Header"]       = Color.FromRgb(110, 110, 110)
         };
 
         public static Dictionary<string, Color> LightTheme = new Dictionary<string, Color> {
-            ["Comment"] = Color.FromRgb(114, 128, 158),
-            ["String"] = Color.FromRgb(35, 145, 63),
-            ["Offset"] = Color.FromRgb(128, 35, 145),
-            ["Instruction"] = Color.FromRgb(171, 124, 41),
-            ["Number"] = Color.FromRgb(163, 168, 41),
+            ["Comment"]      = Color.FromRgb(114, 128, 158),
+            ["String"]       = Color.FromRgb(35, 145, 63),
+            ["Offset"]       = Color.FromRgb(128, 35, 145),
+            ["Instruction"]  = Color.FromRgb(171, 124, 41),
+            ["Number"]       = Color.FromRgb(163, 168, 41),
             ["BuiltInTypes"] = Color.FromRgb(90, 90, 90),
-            ["Header"] = Color.FromRgb(130, 130, 130)
+            ["Header"]       = Color.FromRgb(130, 130, 130)
         };
 
         public static IHighlightingDefinition GetColorTheme(MsilerColorTheme mt) {
