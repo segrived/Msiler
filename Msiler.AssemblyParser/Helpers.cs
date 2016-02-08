@@ -24,8 +24,9 @@ namespace Msiler.AssemblyParser
             = ReadOpCodeInfoResource();
 
         public static OpCodeInfo GetInstructionInformation(string s) {
-            if (OpCodesInfoCache.ContainsKey(s)) {
-                return OpCodesInfoCache[s];
+            var instruction = s.ToLower();
+            if (OpCodesInfoCache.ContainsKey(instruction)) {
+                return OpCodesInfoCache[instruction];
             }
             return null;
         }
