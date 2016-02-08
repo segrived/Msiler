@@ -12,14 +12,14 @@ namespace Msiler.Helpers
             return source.IndexOf(toCheck, comp) >= 0;
         }
 
-        public static int? ParseNumber(string s) {
+        public static long? ParseNumber(string s) {
             try {
                 int numberBase = 10;
                 if (s.StartsWith("0x", StringComparison.Ordinal)) {
                     s = s.Replace("0x", "");
                     numberBase = 16;
                 }
-                var number = Convert.ToInt32(s, numberBase);
+                var number = Convert.ToInt64(s, numberBase);
                 return number;
             } catch (Exception) {
                 return null;

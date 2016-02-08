@@ -165,7 +165,7 @@ namespace Msiler.UI
             int off = BytecodeListing.Document.GetOffset(pos.Value.Line, pos.Value.Column);
             var wordUnderCursor = AvalonEditHelpers.GetWordOnOffset(BytecodeListing.Document, off);
 
-            var numberUnderCursor = StringHelpers.ParseNumber(wordUnderCursor);
+            long? numberUnderCursor = StringHelpers.ParseNumber(wordUnderCursor);
             if (numberUnderCursor != null) {
                 var v = numberUnderCursor.Value;
                 var sb = new StringBuilder();
