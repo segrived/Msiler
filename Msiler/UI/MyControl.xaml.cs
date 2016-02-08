@@ -106,10 +106,8 @@ namespace Msiler.UI
                 return;
             }
             // find metyhod with same signature
-            var selMethod = this._assemblyMethods.FirstOrDefault(m => m.Signature.Equals(e.MethodSignature));
-            if (selMethod != null) {
-                ProcessMethod(selMethod);
-            }
+            var method = this._assemblyMethods.FirstOrDefault(m => m.Signature.Equals(e.MethodSignature));
+            ProcessMethod(method, false);
         }
 
 
@@ -136,7 +134,7 @@ namespace Msiler.UI
         public ListingGeneratorOptions GetGeneratorOptions()
             => Common.Instance.ListingGenerationOptions.ToListingGeneratorOptions();
 
-        private void ProcessMethod(AssemblyMethod method) {
+        private void ProcessMethod(AssemblyMethod method, bool clearIfNull = true) {
             if (method != null) {
                 try {
                     this.CurrentMethod = method;
@@ -146,9 +144,16 @@ namespace Msiler.UI
                     this._listingCache[method] = listingText;
                     this.BytecodeListing.Text = listingText;
                 } catch (Exception ex) {
-                    this.BytecodeListing.Text = $"ERROR: {ex.Message}."
-                        + Environment.NewLine
-                        + $"STACKTRACE: {ex.StackTrace}";
+                    var errorBuilder = new StringBuilder();
+                    errorBuilder.AppendLine($"ERROR: {ex.Message}");
+                    errorBuilder.AppendLine($"Source: {ex.Source}");
+                    errorBuilder.Append($"Stacktrace: {ex.StackTrace}");
+                    this.BytecodeListing.Text = errorBuilder.ToString();
+                }
+            } else {
+                if (clearIfNull) {
+                    this.CurrentMethod = null;
+                    this.BytecodeListing.Text = String.Empty;
                 }
             }
         }
@@ -207,32 +212,32 @@ namespace Msiler.UI
         void FilterMethodsTextBox_TextChanged(object sender, TextChangedEventArgs e) =>
             CollectionViewSource.GetDefaultView(MethodsList.ItemsSource).Refresh();
 
-        void HyperlinkOptions_Click(object sender, System.Windows.RoutedEventArgs e) =>
+        void HyperlinkOptions_Click(object sender, RoutedEventArgs e) =>
             Common.Instance.Package.ShowOptionPage(typeof(ExtensionGeneralOptions));
 
-        void HyperlinkGithub_Click(object sender, System.Windows.RoutedEventArgs e) =>
+        void HyperlinkGithub_Click(object sender, RoutedEventArgs e) =>
             Process.Start(Common.RepoUrl);
 
-        void HyperlinkAbout_Click(object sender, System.Windows.RoutedEventArgs e) =>
+        void HyperlinkAbout_Click(object sender, RoutedEventArgs e) =>
             new AboutWindow().ShowDialog();
 
-        void IsFollowModeEnabled_CheckedChange(object sender, System.Windows.RoutedEventArgs e) {
+        void IsFollowModeEnabled_CheckedChange(object sender, RoutedEventArgs e) {
             FunctionFollower.IsFollowingEnabled = ((CheckBox)sender).IsChecked.Value;
         }
 
-        private void MenuItemGeneralOptions_Click(object sender, System.Windows.RoutedEventArgs e) {
+        private void MenuItemGeneralOptions_Click(object sender, RoutedEventArgs e) {
             Common.Instance.Package.ShowOptionPage(typeof(ExtensionGeneralOptions));
         }
 
-        private void MenuItemListingGenearationOptions_Click(object sender, System.Windows.RoutedEventArgs e) {
+        private void MenuItemListingGenearationOptions_Click(object sender, RoutedEventArgs e) {
             Common.Instance.Package.ShowOptionPage(typeof(ExtensionListingGenerationOptions));
         }
 
-        private void MenuItemMethodFilteringOptions_Click(object sender, System.Windows.RoutedEventArgs e) {
+        private void MenuItemMethodFilteringOptions_Click(object sender, RoutedEventArgs e) {
             Common.Instance.Package.ShowOptionPage(typeof(ExtensionExcludeOptions));
         }
 
-        private void MenuItemDisplayOptions_Click(object sender, System.Windows.RoutedEventArgs e) {
+        private void MenuItemDisplayOptions_Click(object sender, RoutedEventArgs e) {
             Common.Instance.Package.ShowOptionPage(typeof(ExtensionDisplayOptions));
         }
 
