@@ -1,6 +1,6 @@
 # Msiler: CIL (MSIL) Code Viewer
 
-CIL (MSIL) code viewer extension for Visual Studio 2012/2013/2015. Standard are supported.
+CIL (MSIL) code viewer extension for Visual Studio 2012/2013/2015.
 
 [![Build status](https://ci.appveyor.com/api/projects/status/aj46np0rwam5sf4e?svg=true)](https://ci.appveyor.com/project/segrived/msiler)
 
