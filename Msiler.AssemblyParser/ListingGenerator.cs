@@ -50,18 +50,14 @@ namespace Msiler.AssemblyParser
                 return $"[ {joined} ]";
             }
 
-            if (i.Operand is MethodDef) {
-                var m = (MethodDef)i.Operand;
-                return (this._options.SimplifyFunctionNames)
-                    ? $"{m.DeclaringType.FullName}.{m.Name}"
-                    : m.FullName;
-            }
 
-            if (i.Operand is MemberRef) {
-                var m = (MemberRef)i.Operand;
-                return (this._options.SimplifyFunctionNames)
-                   ? $"{m.DeclaringType.FullName}.{m.Name}"
-                   : m.FullName;
+            // TODO: rewrite this part of code
+            if (i.Operand is IMemberRef) {
+                var op = (IMemberRef)i.Operand;
+                var simpleName = (op is ITypeDefOrRef)
+                    ? op.FullName
+                    : $"{op.DeclaringType.FullName}.{op.Name}";
+                return (this._options.SimplifyFunctionNames) ? simpleName : op.FullName;
             }
 
             if (this._options.NumbersAsHex) {
