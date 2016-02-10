@@ -74,7 +74,7 @@ namespace Msiler
         protected override void Dispose(bool disposing) {
             base.Dispose(disposing);
             if (_buildManager != null && Common.Instance.SolutionUpdateCookie != 0) {
-                _buildManager.UnadviseUpdateSolutionEvents(Common.Instance.SolutionCookie);
+                _buildManager.UnadviseUpdateSolutionEvents(Common.Instance.SolutionUpdateCookie);
             }
             if (this._solution != null && Common.Instance.SolutionCookie != 0) {
                 _solution.UnadviseSolutionEvents(Common.Instance.SolutionCookie);
