@@ -41,6 +41,11 @@ namespace Msiler
             if (!IsFollowingEnabled) {
                 return;
             }
+            // do not use follow mode if "update listing on if visible" option
+            // is enabled and toolbox isn't visible
+            if (Common.Instance.GeneralOptions.UpdateListingOnlyIfVisible && !MsilerToolWindow.IsVisible) {
+                return;
+            }
 
             var doc = _dte.ActiveDocument;
             if (doc == null) {
