@@ -127,7 +127,7 @@ namespace Msiler.AssemblyParser
         public string GenerateListing(AssemblyMethod method) {
             var sb = new StringBuilder();
 
-            if (this._options.DisplayMethodNames) {
+            if (this._options.IncludeMethodName) {
                 sb.AppendLine($"// Selected method: {method.Signature.MethodName}");
                 sb.AppendLine();
             }

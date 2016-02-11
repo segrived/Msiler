@@ -36,9 +36,9 @@ namespace Msiler.DialogPages
         public bool DecimalOffsets { get; set; } = false;
 
         [Category("Listing generation")]
-        [DisplayName("Display method names in listing")]
+        [DisplayName("Display method names before listing")]
         [Description("")]
-        public bool DisplayMethodNames { get; set; } = true;
+        public bool IncludeMethodName { get; set; } = true;
 
         [Category("Listing generation")]
         [DisplayName("Read instruction bytes")]
@@ -54,7 +54,7 @@ namespace Msiler.DialogPages
             return new ListingGeneratorOptions {
                 AlignListing = this.AlignListing,
                 DecimalOffsets = this.DecimalOffsets,
-                DisplayMethodNames = this.DisplayMethodNames,
+                IncludeMethodName = this.IncludeMethodName,
                 IgnoreNops = this.IgnoreNops,
                 NumbersAsHex = this.NumbersAsHex,
                 ProcessPDBFiles = this.ProcessPDBFiles,
