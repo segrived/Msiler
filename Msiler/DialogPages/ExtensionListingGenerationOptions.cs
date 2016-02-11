@@ -36,7 +36,7 @@ namespace Msiler.DialogPages
         public bool DecimalOffsets { get; set; } = false;
 
         [Category("Listing generation")]
-        [DisplayName("Display method names before listing")]
+        [DisplayName("Display method name before listing")]
         [Description("")]
         public bool IncludeMethodName { get; set; } = true;
 
