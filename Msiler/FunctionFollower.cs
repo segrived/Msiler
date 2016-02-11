@@ -55,6 +55,7 @@ namespace Msiler
             if (doc.Language != "CSharp") {
                 return;
             }
+
             var sel = (TextSelection)doc.Selection;
             if (sel == null) {
                 return;

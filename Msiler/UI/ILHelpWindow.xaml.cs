@@ -17,7 +17,11 @@ namespace Msiler.UI
         }
 
         void InstructionList_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-            string selectedInstruction = (string)((ListBox)sender).SelectedItem;
+            var item = ((ListBox)sender).SelectedItem;
+            if (item == null) {
+                return;
+            }
+            string selectedInstruction = (string)item;
             var instructionInfo = AssemblyParser.Helpers.GetInstructionInformation(selectedInstruction);
             this.SelectedInstuctionInfo.Text = instructionInfo.Description;
         }

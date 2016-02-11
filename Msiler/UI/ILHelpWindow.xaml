@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="IL Instructions Information"
         WindowStartupLocation="CenterScreen"
-        Height="450"
+        Height="300"
         Width="400">
 
     <Window.Resources>
@@ -17,7 +17,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="150" />
+            <RowDefinition Height="200" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <TextBox Grid.Row="0"
