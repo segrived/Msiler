@@ -3,11 +3,13 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vs="clr-namespace:Microsoft.VisualStudio.PlatformUI;assembly=Microsoft.VisualStudio.Shell.11.0"
         xmlns:local="clr-namespace:Msiler.UI"
         mc:Ignorable="d"
         Title="IL Instructions Information"
         WindowStartupLocation="CenterScreen"
-        Height="300"
+        Background="{DynamicResource {x:Static vs:EnvironmentColors.ToolWindowBackgroundBrushKey}}"
+        Height="330"
         Width="400">
 
     <Window.Resources>
@@ -27,6 +29,7 @@
                  TextChanged="FilterMethodsTextBox_TextChanged" />
         <ListBox Grid.Row="1"
                  Name="InstructionList"
+                 BorderThickness="1,0,1,1"
                  SelectionChanged="InstructionList_SelectionChanged" />
         <TextBlock Grid.Row="2"
                    TextWrapping="Wrap"

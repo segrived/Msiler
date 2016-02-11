@@ -39,7 +39,7 @@
                 Value="{DynamicResource {x:Static vs:EnvironmentColors.ToolWindowBackgroundBrushKey}}" />
     </Style>
 
-    <Style TargetType="ctrl:ListBoxScroll">
+    <Style TargetType="ListBox">
         <Setter Property="Background"
                 Value="{DynamicResource {x:Static vs:EnvironmentColors.ToolWindowBackgroundBrushKey}}" />
         <Setter Property="Foreground"
@@ -47,6 +47,9 @@
         <Setter Property="BorderBrush"
                 Value="{DynamicResource {x:Static vs:EnvironmentColors.ToolWindowBorderBrushKey}}" />
     </Style>
+
+    <Style TargetType="ctrl:ListBoxScroll"
+           BasedOn="{StaticResource {x:Type ListBox}}" />
 
     <Style TargetType="ctrl:MvvmTextEditor">
         <Setter Property="Foreground"
