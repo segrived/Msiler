@@ -43,12 +43,12 @@ namespace Msiler.DialogPages
         [Category("Listing generation")]
         [DisplayName("Read instruction bytes")]
         [Description("Can decrease performance")]
-        public bool ReadInstructionBytes { get; set; } = true;
+        public bool ReadInstructionBytes { get; set; } = false;
 
         [Category("Listing generation")]
         [DisplayName("Process PDB files")]
         [Description("NOTE: rebuilding required")]
-        public bool ProcessPDBFiles { get; set; } = false;
+        public bool ProcessPDBFiles { get; set; } = true;
 
         public ListingGeneratorOptions ToListingGeneratorOptions() {
             return new ListingGeneratorOptions {
