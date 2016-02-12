@@ -24,5 +24,9 @@ namespace Msiler.UI.UserControls
         private void HyperlinkInstructions_Click(object sender, System.Windows.RoutedEventArgs e) {
             new ILHelpWindow().ShowDialog();
         }
+
+        private void HyperlinkMsilerWhatsNew_Click(object sender, System.Windows.RoutedEventArgs e) {
+            System.Diagnostics.Process.Start(Common.ReleaseNotesUrl);
+        }
     }
 }

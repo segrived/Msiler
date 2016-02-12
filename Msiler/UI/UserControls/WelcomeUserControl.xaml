@@ -62,6 +62,10 @@
                     <Hyperlink Click="HyperlinkAbout_Click"
                                TextDecorations="None">About</Hyperlink>
             </TextBlock>
+            <TextBlock HorizontalAlignment="Center">
+                    <Hyperlink Click="HyperlinkMsilerWhatsNew_Click"
+                               TextDecorations="None">Msiler 2.1: What's new</Hyperlink>
+            </TextBlock>
         </StackPanel>
     </Grid>
 </UserControl>

@@ -19,6 +19,7 @@ namespace Msiler
         }
 
         public const string RepoUrl = @"https://github.com/segrived/Msiler";
+        public const string ReleaseNotesUrl = @"https://github.com/segrived/Msiler/wiki/Version-2.1-New-Features";
 
         public IVsSolutionBuildManager BuildManager { get; set; }
         public IVsSolution Solution { get; set; }
