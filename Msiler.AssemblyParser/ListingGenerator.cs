@@ -117,8 +117,11 @@ namespace Msiler.AssemblyParser
             }
             var sb = new StringBuilder();
             for (int i = sp.StartLine - 1; i <= sp.EndLine - 1; i++) {
-                if (i < _pdbCache[docUrl].Count && !String.IsNullOrWhiteSpace(_pdbCache[docUrl][i])) {
-                    sb.AppendLine($"// {_pdbCache[docUrl][i]}");
+                var sourceLine = _pdbCache[docUrl][i];
+                if (i < _pdbCache[docUrl].Count
+                  && !String.IsNullOrWhiteSpace(sourceLine)
+                  && !sourceLine.StartsWith("//", StringComparison.Ordinal)) {
+                    sb.AppendLine($"// {sourceLine}");
                 }
             }
             return sb.ToString();
