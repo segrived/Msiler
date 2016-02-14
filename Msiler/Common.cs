@@ -1,5 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using Microsoft.VisualStudio.Shell.Interop;
+﻿using Microsoft.VisualStudio.Shell.Interop;
 using Msiler.DialogPages;
 
 namespace Msiler

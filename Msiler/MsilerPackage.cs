@@ -49,12 +49,14 @@ namespace Msiler
             menuCommandService.AddCommand(menuToolWin);
 
             this._buildManager = GetService(typeof(SVsSolutionBuildManager)) as IVsSolutionBuildManager;
-            if (_buildManager == null)
+            if (_buildManager == null) {
                 return;
+            }
 
             this._solution = GetService(typeof(SVsSolution)) as IVsSolution;
-            if (_solution == null)
+            if (_solution == null) {
                 return;
+            }
 
             Common.Instance.Package = this;
             Common.Instance.BuildManager = this._buildManager;
@@ -73,7 +75,7 @@ namespace Msiler
 
         protected override void Dispose(bool disposing) {
             base.Dispose(disposing);
-            if (_buildManager != null && Common.Instance.SolutionUpdateCookie != 0) {
+            if (this._buildManager != null && Common.Instance.SolutionUpdateCookie != 0) {
                 _buildManager.UnadviseUpdateSolutionEvents(Common.Instance.SolutionUpdateCookie);
             }
             if (this._solution != null && Common.Instance.SolutionCookie != 0) {

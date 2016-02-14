@@ -5,11 +5,15 @@ using EnvDTE;
 using EnvDTE80;
 using Msiler.AssemblyParser;
 using Microsoft.VisualStudio.Shell;
+using System.Text.RegularExpressions;
 
 namespace Msiler.Helpers
 {
     public static class DTEHelpers
     {
+        private static readonly Regex GenericPartRegex
+            = new Regex("<.*>", RegexOptions.Compiled);
+
         public static DTE2 GetDTE() {
             var provider = ServiceProvider.GlobalProvider;
             var vs = (DTE2)provider.GetService(typeof(DTE));
@@ -47,14 +51,20 @@ namespace Msiler.Helpers
 
         public static AssemblyMethodSignature GetSignature(VirtualPoint point, FileCodeModel2 fcm) {
             try {
-                var ne = fcm.CodeElementFromPoint(point, vsCMElement.vsCMElementNamespace);
-                var ce = fcm.CodeElementFromPoint(point, vsCMElement.vsCMElementClass);
                 var me = fcm.CodeElementFromPoint(point, vsCMElement.vsCMElementFunction);
 
-                // should be compitable with Mono.Cecil method names
-                string fnName = (ce.Name == me.Name) ? ".ctor" : me.Name;
+                var func = (CodeFunction)me;
+                var funcName = func.FullName;
+                // remove generic part
+                funcName = GenericPartRegex.Replace(funcName, String.Empty);
 
-                var cfParams = ((CodeFunction)me).Parameters;
+                // make dnlib-compatible signature for constructors
+                if (func.FunctionKind == vsCMFunction.vsCMFunctionConstructor) {
+                    var lastIndex = funcName.LastIndexOf(func.Name, StringComparison.Ordinal);
+                    funcName = funcName.Substring(0, lastIndex) + ".ctor";
+                }
+                var cfParams = func.Parameters;
+
                 var parameterList = new List<string>();
                 foreach (CodeParameter param in cfParams) {
                     if (param.Type.TypeKind == vsCMTypeRef.vsCMTypeRefArray) {
@@ -65,7 +75,7 @@ namespace Msiler.Helpers
                         parameterList.Add(param.Type.AsFullName);
                     }
                 }
-                return new AssemblyMethodSignature($"{ne.Name}.{ce.Name}.{fnName}", parameterList);
+                return new AssemblyMethodSignature(funcName, parameterList);
             } catch {
                 return null;
             }
