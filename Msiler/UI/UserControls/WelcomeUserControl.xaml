@@ -43,7 +43,7 @@
             <TextBlock TextWrapping="Wrap"
                        Text="2. Select start-up project (if needed)" />
             <TextBlock TextWrapping="Wrap"
-                       Text="3. Build/rebuild project (you can use Ctrl+Shift+B shortcut by default)" />
+                       Text="3. Build/rebuild project" />
             <Rectangle HorizontalAlignment="Stretch"
                        Fill="{DynamicResource {x:Static vs:EnvironmentColors.DropDownBorderBrushKey}}"
                        Height="1"
