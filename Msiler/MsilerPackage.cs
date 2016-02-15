@@ -20,10 +20,10 @@ namespace Msiler
     [InstalledProductRegistration("#110", "#112", "2.1-rc2", IconResourceID = 400)]
     [ProvideMenuResource("Menus.ctmenu", 1)]
     [ProvideToolWindow(typeof(MsilerToolWindow), MultiInstances = false)]
-    [ProvideOptionPage(typeof(ExtensionGeneralOptions), "Msiler", "General", 0, 0, true)]
-    [ProvideOptionPage(typeof(ExtensionDisplayOptions), "Msiler", "Display", 0, 0, true)]
-    [ProvideOptionPage(typeof(ExtensionListingGenerationOptions), "Msiler", "Listing Generation", 0, 0, true)]
-    [ProvideOptionPage(typeof(ExtensionExcludeOptions), "Msiler", "Exclude Methods Options", 0, 0, true)]
+    [ProvideOptionPage(typeof(ExtensionGeneralOptions), Common.OptionsGroupTitle, "General", 0, 0, true)]
+    [ProvideOptionPage(typeof(ExtensionDisplayOptions), Common.OptionsGroupTitle, "Display", 0, 0, true)]
+    [ProvideOptionPage(typeof(ExtensionListingGenerationOptions), Common.OptionsGroupTitle, "Listing Generation", 0, 0, true)]
+    [ProvideOptionPage(typeof(ExtensionExcludeOptions), Common.OptionsGroupTitle, "Exclude Methods Options", 0, 0, true)]
     [Guid(GuidList.guidMsilerPkgString)]
     public sealed class MsilerPackage : Package
     {
