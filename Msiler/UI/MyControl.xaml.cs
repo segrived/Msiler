@@ -15,11 +15,24 @@ using System.Diagnostics;
 using System.Windows.Input;
 using System.Text;
 using System.Windows;
+using System.IO;
+using System.Text.RegularExpressions;
+using ICSharpCode.AvalonEdit.Highlighting;
 
 namespace Msiler.UI
 {
     public partial class MyControl : UserControl
     {
+        const int MaxCodeLinesInHint = 5;
+
+        static readonly Regex offsetRegex =
+            new Regex(@"^(IL_[\dA-F]+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+        Dictionary<string, int> offsetLinesCache
+            = new Dictionary<string, int>();
+
+        IHighlightingDefinition currentHighlightDefinition;
+
         AssemblyManager _assemblyManager = new AssemblyManager();
 
         AssemblyMethod _currentMethod;
@@ -69,6 +82,9 @@ namespace Msiler.UI
 
         void UpdateDisplayOptions() {
             var displayOptions = Common.Instance.DisplayOptions;
+
+            this.currentHighlightDefinition = ColorTheme.GetColorTheme(displayOptions.ColorTheme);
+
             string fontFamily = "Consolas";
             if (FontHelpers.IsFontFamilyExist(displayOptions.FontName)) {
                 fontFamily = displayOptions.FontName;
@@ -76,7 +92,7 @@ namespace Msiler.UI
             BytecodeListing.FontFamily = new FontFamily(fontFamily);
             BytecodeListing.FontSize = displayOptions.FontSize;
             BytecodeListing.ShowLineNumbers = displayOptions.LineNumbers;
-            BytecodeListing.SyntaxHighlighting = ColorTheme.GetColorTheme(displayOptions.ColorTheme);
+            BytecodeListing.SyntaxHighlighting = this.currentHighlightDefinition;
         }
 
         public void InitEventHandlers() {
@@ -143,6 +159,15 @@ namespace Msiler.UI
                         : this.CurrentMethod.GenerateListing(this.GetGeneratorOptions());
                     this._listingCache[method] = listingText;
                     this.BytecodeListing.Text = listingText;
+
+                    this.offsetLinesCache.Clear();
+                    var lines = listingText.Lines();
+                    for (int i = 0; i < lines.Length; i++) {
+                        var match = offsetRegex.Match(lines[i]);
+                        if (match.Success) {
+                            this.offsetLinesCache.Add(match.Value, i + 1);
+                        }
+                    }
                 } catch (Exception ex) {
                     var errorBuilder = new StringBuilder();
                     errorBuilder.AppendLine($"ERROR: {ex.Message}");
@@ -154,6 +179,7 @@ namespace Msiler.UI
                 if (clearIfNull) {
                     this.CurrentMethod = null;
                     this.BytecodeListing.Text = String.Empty;
+                    this.offsetLinesCache.Clear();
                 }
             }
         }
@@ -161,14 +187,35 @@ namespace Msiler.UI
         #region Instruction Hint Tooltip
         ToolTip toolTip = new ToolTip();
 
+        string GetWordUnderCursor(Point p) {
+            return AvalonEditHelpers.GetWordOnOffset(BytecodeListing, p);
+        }
+
         void BytecodeListing_MouseHover(object sender, MouseEventArgs e) {
-            var pos = BytecodeListing.GetPositionFromPoint(e.GetPosition(BytecodeListing));
+            var wordUnderCursor = this.GetWordUnderCursor(e.GetPosition(BytecodeListing));
 
-            if (pos == null)
-                return;
+            var offsetMatch = offsetRegex.Match(wordUnderCursor);
+            if (offsetMatch.Success) {
+                var offsetStr = offsetMatch.Value;
+                if (!this.offsetLinesCache.ContainsKey(offsetStr)) {
+                    e.Handled = true;
+                    return;
+                }
+                var lineNumber = this.offsetLinesCache[offsetStr];
+                var lineCount = BytecodeListing.LineCount;
+                var sb = new StringBuilder();
 
-            int off = BytecodeListing.Document.GetOffset(pos.Value.Line, pos.Value.Column);
-            var wordUnderCursor = AvalonEditHelpers.GetWordOnOffset(BytecodeListing.Document, off);
+                var docLine = BytecodeListing.Document.GetLineByNumber(lineNumber);
+                for (int i = 0; i < MaxCodeLinesInHint; i++) {
+                    if (docLine.LineNumber >= lineCount) {
+                        break;
+                    }
+                    var lineContent = BytecodeListing.Document.GetText(docLine.Offset, docLine.Length);
+                    sb.AppendLine(lineContent);
+                    docLine = docLine.NextLine;
+                }
+                ShowToolTip(sb.ToString().TrimEnd('\r', '\n'), this.currentHighlightDefinition);
+            }
 
             long? numberUnderCursor = StringHelpers.ParseNumber(wordUnderCursor);
             if (numberUnderCursor != null) {
@@ -188,20 +235,39 @@ namespace Msiler.UI
             e.Handled = true;
         }
 
-        public void ShowToolTip(string content) {
+        void BytecodeListing_MouseHoverStopped(object sender, MouseEventArgs e) {
+            toolTip.IsOpen = false;
+        }
+
+        private void BytecodeListing_PreviewMouseDoubleClick(object sender, MouseButtonEventArgs e) {
+            var wordUnderCursor = this.GetWordUnderCursor(e.GetPosition(BytecodeListing));
+
+            var match = offsetRegex.Match(wordUnderCursor);
+            if (match.Success) {
+                var line = this.offsetLinesCache[match.Value];
+                var offset = BytecodeListing.Document.GetOffset(line, 0);
+                BytecodeListing.CaretOffset = offset;
+                BytecodeListing.ScrollToLine(line);
+                e.Handled = true;
+            }
+        }
+
+
+        public void ShowToolTip(string content, IHighlightingDefinition highlight = null) {
+            var displayOptions = Common.Instance.DisplayOptions;
             toolTip.PlacementTarget = this;
             toolTip.Content = new TextEditor {
                 Text = content,
-                Opacity = 0.6,
                 HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden,
-                VerticalScrollBarVisibility = ScrollBarVisibility.Hidden
+                VerticalScrollBarVisibility = ScrollBarVisibility.Hidden,
+                SyntaxHighlighting = highlight,
+                Background = Brushes.Transparent,
+                FontFamily = new FontFamily(displayOptions.FontName),
+                FontSize = displayOptions.FontSize
             };
             toolTip.IsOpen = true;
         }
 
-        void BytecodeListing_MouseHoverStopped(object sender, MouseEventArgs e) {
-            toolTip.IsOpen = false;
-        }
         #endregion
 
         #region UI handlers

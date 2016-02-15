@@ -12,6 +12,10 @@ namespace Msiler.Helpers
             return source.IndexOf(toCheck, comp) >= 0;
         }
 
+        public static string[] Lines(this string source) {
+            return source.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.None);
+        }
+
         public static long? ParseNumber(string s) {
             try {
                 int numberBase = 10;
