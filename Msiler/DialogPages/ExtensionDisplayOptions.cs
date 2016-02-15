@@ -17,7 +17,7 @@ namespace Msiler.DialogPages
         [Category("Display")]
         [DisplayName("Show line numbers")]
         [Description("")]
-        public bool LineNumbers { get; set; } = true;
+        public bool LineNumbers { get; set; } = false;
 
         [Category("Display")]
         [DisplayName("VS Color theme")]
