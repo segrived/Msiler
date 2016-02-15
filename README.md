@@ -1,4 +1,4 @@
-# Msiler: CIL (MSIL) Code Viewer
+﻿# Msiler: CIL (MSIL) Code Viewer
 
 CIL (MSIL) code viewer extension for Visual Studio 2012/2013/2015.
 
@@ -14,7 +14,7 @@ You can install extension from [Visual Studio Gallery](https://visualstudiogalle
 [Get latest dev version](https://ci.appveyor.com/project/segrived/msiler/build/artifacts) (can be unstable)
 
 ## Usage
-Open tool window using menu item "View -> Other Windows -> Msiler" and build/rebuild project.
+Open tool window using menu item "Tools ▶ Msiler: MSIL Code Viewer" and build/rebuild project.
 
 ## Options
 ### Global options
@@ -70,16 +70,6 @@ Feel free to send pull requests.
 [Version history](https://github.com/segrived/Msiler/wiki/Version-History)
 
 ## Roadmap
-### Version 2.0 (Jan 2016)
-* Switching to AvalonEdit
-* Additional listing highlighting (numbers, strings, built-in types)
-* Proper VS theme detection
-* Options to hide some types of methods (constructors, getters, setters and anonymous)
-* Display options (font size and font name)
-* Method parameter types
-
-### Version 2.0.x
-* Bug fixing releases
 
 ### Version 2.1 (Feb 2016)
 * PDB files support
@@ -102,4 +92,5 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 ## Credits
-**Extension icon**: [Puzzle by SooAnne](https://thenounproject.com/term/puzzle/23932/) from the [Noun Project](https://thenounproject.com/)
+* Extension icon: [Puzzle by SooAnne](https://thenounproject.com/term/puzzle/23932/) from the [Noun Project](https://thenounproject.com/)
+* [dnlib](https://github.com/0xd4d/dnlib) by [0xd4d](https://github.com/0xd4d)
