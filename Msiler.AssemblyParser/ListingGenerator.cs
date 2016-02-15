@@ -50,7 +50,6 @@ namespace Msiler.AssemblyParser
                 return $"[ {joined} ]";
             }
 
-
             // TODO: rewrite this part of code
             if (i.Operand is IMemberRef) {
                 var op = (IMemberRef)i.Operand;

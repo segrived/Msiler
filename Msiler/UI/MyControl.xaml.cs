@@ -242,6 +242,7 @@ namespace Msiler.UI
         private void BytecodeListing_PreviewMouseDoubleClick(object sender, MouseButtonEventArgs e) {
             var wordUnderCursor = this.GetWordUnderCursor(e.GetPosition(BytecodeListing));
 
+            // detect offset under cursor
             var match = offsetRegex.Match(wordUnderCursor);
             if (match.Success) {
                 var line = this.offsetLinesCache[match.Value];
@@ -249,6 +250,16 @@ namespace Msiler.UI
                 BytecodeListing.CaretOffset = offset;
                 BytecodeListing.ScrollToLine(line);
                 e.Handled = true;
+                return;
+            }
+
+            // detect method name under cursor
+            var fMethod = this._assemblyMethods
+                .FirstOrDefault(m => m.Signature.MethodName == wordUnderCursor);
+            if (fMethod != null) {
+                this.CurrentMethod = fMethod;
+                e.Handled = true;
+                return;
             }
         }
 
