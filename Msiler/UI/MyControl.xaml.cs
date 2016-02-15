@@ -196,7 +196,12 @@ namespace Msiler.UI
 
             var offsetMatch = offsetRegex.Match(wordUnderCursor);
             if (offsetMatch.Success) {
-                var lineNumber = this.offsetLinesCache[offsetMatch.Value];
+                var offsetStr = offsetMatch.Value;
+                if (!this.offsetLinesCache.ContainsKey(offsetStr)) {
+                    e.Handled = true;
+                    return;
+                }
+                var lineNumber = this.offsetLinesCache[offsetStr];
                 var lineCount = BytecodeListing.LineCount;
                 var sb = new StringBuilder();
 
