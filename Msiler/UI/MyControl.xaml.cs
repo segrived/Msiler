@@ -23,8 +23,10 @@ namespace Msiler.UI
 {
     public partial class MyControl : UserControl
     {
-        static readonly Regex offsetRegex = new Regex(@"^(IL_\d+)", RegexOptions.Compiled);
         const int MaxCodeLinesInHint = 5;
+
+        static readonly Regex offsetRegex =
+            new Regex(@"^(IL_[\dA-F]+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         Dictionary<string, int> offsetLinesCache
             = new Dictionary<string, int>();
