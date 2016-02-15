@@ -247,14 +247,16 @@ namespace Msiler.UI
 
 
         public void ShowToolTip(string content, IHighlightingDefinition highlight = null) {
+            var displayOptions = Common.Instance.DisplayOptions;
             toolTip.PlacementTarget = this;
             toolTip.Content = new TextEditor {
                 Text = content,
                 HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden,
                 VerticalScrollBarVisibility = ScrollBarVisibility.Hidden,
                 SyntaxHighlighting = highlight,
-                Background = Brushes.Transparent
-
+                Background = Brushes.Transparent,
+                FontFamily = new FontFamily(displayOptions.FontName),
+                FontSize = displayOptions.FontSize
             };
             toolTip.IsOpen = true;
         }
