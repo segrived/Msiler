@@ -17,15 +17,19 @@ using System.Text;
 using System.Windows;
 using System.IO;
 using System.Text.RegularExpressions;
+using ICSharpCode.AvalonEdit.Highlighting;
 
 namespace Msiler.UI
 {
     public partial class MyControl : UserControl
     {
         static readonly Regex offsetRegex = new Regex(@"^(IL_\d+)", RegexOptions.Compiled);
+        const int MaxCodeLinesInHint = 5;
 
-        Dictionary<string, int> OffsetLinesCache
+        Dictionary<string, int> offsetLinesCache
             = new Dictionary<string, int>();
+
+        IHighlightingDefinition currentHighlightDefinition;
 
         AssemblyManager _assemblyManager = new AssemblyManager();
 
@@ -76,6 +80,9 @@ namespace Msiler.UI
 
         void UpdateDisplayOptions() {
             var displayOptions = Common.Instance.DisplayOptions;
+
+            this.currentHighlightDefinition = ColorTheme.GetColorTheme(displayOptions.ColorTheme);
+
             string fontFamily = "Consolas";
             if (FontHelpers.IsFontFamilyExist(displayOptions.FontName)) {
                 fontFamily = displayOptions.FontName;
@@ -83,7 +90,7 @@ namespace Msiler.UI
             BytecodeListing.FontFamily = new FontFamily(fontFamily);
             BytecodeListing.FontSize = displayOptions.FontSize;
             BytecodeListing.ShowLineNumbers = displayOptions.LineNumbers;
-            BytecodeListing.SyntaxHighlighting = ColorTheme.GetColorTheme(displayOptions.ColorTheme);
+            BytecodeListing.SyntaxHighlighting = this.currentHighlightDefinition;
         }
 
         public void InitEventHandlers() {
@@ -151,12 +158,12 @@ namespace Msiler.UI
                     this._listingCache[method] = listingText;
                     this.BytecodeListing.Text = listingText;
 
-                    this.OffsetLinesCache.Clear();
+                    this.offsetLinesCache.Clear();
                     var lines = listingText.Lines();
                     for (int i = 0; i < lines.Length; i++) {
                         var match = offsetRegex.Match(lines[i]);
                         if (match.Success) {
-                            this.OffsetLinesCache.Add(match.Value, i + 1);
+                            this.offsetLinesCache.Add(match.Value, i + 1);
                         }
                     }
                 } catch (Exception ex) {
@@ -170,7 +177,7 @@ namespace Msiler.UI
                 if (clearIfNull) {
                     this.CurrentMethod = null;
                     this.BytecodeListing.Text = String.Empty;
-                    this.OffsetLinesCache.Clear();
+                    this.offsetLinesCache.Clear();
                 }
             }
         }
@@ -184,6 +191,24 @@ namespace Msiler.UI
 
         void BytecodeListing_MouseHover(object sender, MouseEventArgs e) {
             var wordUnderCursor = this.GetWordUnderCursor(e.GetPosition(BytecodeListing));
+
+            var offsetMatch = offsetRegex.Match(wordUnderCursor);
+            if (offsetMatch.Success) {
+                var lineNumber = this.offsetLinesCache[offsetMatch.Value];
+                var lineCount = BytecodeListing.LineCount;
+                var sb = new StringBuilder();
+
+                var docLine = BytecodeListing.Document.GetLineByNumber(lineNumber);
+                for (int i = 0; i < MaxCodeLinesInHint; i++) {
+                    if (docLine.LineNumber >= lineCount) {
+                        break;
+                    }
+                    var lineContent = BytecodeListing.Document.GetText(docLine.Offset, docLine.Length);
+                    sb.AppendLine(lineContent);
+                    docLine = docLine.NextLine;
+                }
+                ShowToolTip(sb.ToString(), this.currentHighlightDefinition);
+            }
 
             long? numberUnderCursor = StringHelpers.ParseNumber(wordUnderCursor);
             if (numberUnderCursor != null) {
@@ -212,7 +237,7 @@ namespace Msiler.UI
 
             var match = offsetRegex.Match(wordUnderCursor);
             if (match.Success) {
-                var line = this.OffsetLinesCache[match.Value];
+                var line = this.offsetLinesCache[match.Value];
                 var offset = BytecodeListing.Document.GetOffset(line, 0);
                 BytecodeListing.CaretOffset = offset;
                 BytecodeListing.ScrollToLine(line);
@@ -221,13 +246,15 @@ namespace Msiler.UI
         }
 
 
-        public void ShowToolTip(string content) {
+        public void ShowToolTip(string content, IHighlightingDefinition highlight = null) {
             toolTip.PlacementTarget = this;
             toolTip.Content = new TextEditor {
                 Text = content,
-                Opacity = 0.6,
                 HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden,
-                VerticalScrollBarVisibility = ScrollBarVisibility.Hidden
+                VerticalScrollBarVisibility = ScrollBarVisibility.Hidden,
+                SyntaxHighlighting = highlight,
+                Background = Brushes.Transparent
+
             };
             toolTip.IsOpen = true;
         }
