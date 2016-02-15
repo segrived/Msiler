@@ -1,10 +1,20 @@
-﻿using ICSharpCode.AvalonEdit.Document;
+﻿using ICSharpCode.AvalonEdit;
+using ICSharpCode.AvalonEdit.Document;
 using System;
+using System.Windows;
 
 namespace Msiler.Helpers
 {
     public static class AvalonEditHelpers
     {
+        public static string GetWordOnOffset(TextEditor editor, Point position) {
+            var pos = editor.GetPositionFromPoint(position);
+            if (pos == null)
+                return String.Empty;
+            int off = editor.Document.GetOffset(pos.Value.Line, pos.Value.Column);
+            return AvalonEditHelpers.GetWordOnOffset(editor.Document, off);
+        }
+
         public static string GetWordOnOffset(ITextSource textSource, int offset) {
             int startOffset, endOffset;
 

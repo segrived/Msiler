@@ -16,11 +16,14 @@ using System.Windows.Input;
 using System.Text;
 using System.Windows;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace Msiler.UI
 {
     public partial class MyControl : UserControl
     {
+        static readonly Regex offsetRegex = new Regex(@"^(IL_\d+)", RegexOptions.Compiled);
+
         Dictionary<string, int> OffsetLinesCache
             = new Dictionary<string, int>();
 
@@ -151,13 +154,11 @@ namespace Msiler.UI
                     this.OffsetLinesCache.Clear();
                     var lines = listingText.Lines();
                     for (int i = 0; i < lines.Length; i++) {
-                        if (lines[i].StartsWith("IL_")) {
-                            var offset = lines[i].Substring(0, 7);
-                            this.OffsetLinesCache.Add(offset, i);
+                        var match = offsetRegex.Match(lines[i]);
+                        if (match.Success) {
+                            this.OffsetLinesCache.Add(match.Value, i + 1);
                         }
                     }
-
-
                 } catch (Exception ex) {
                     var errorBuilder = new StringBuilder();
                     errorBuilder.AppendLine($"ERROR: {ex.Message}");
@@ -177,14 +178,12 @@ namespace Msiler.UI
         #region Instruction Hint Tooltip
         ToolTip toolTip = new ToolTip();
 
+        string GetWordUnderCursor(Point p) {
+            return AvalonEditHelpers.GetWordOnOffset(BytecodeListing, p);
+        }
+
         void BytecodeListing_MouseHover(object sender, MouseEventArgs e) {
-            var pos = BytecodeListing.GetPositionFromPoint(e.GetPosition(BytecodeListing));
-
-            if (pos == null)
-                return;
-
-            int off = BytecodeListing.Document.GetOffset(pos.Value.Line, pos.Value.Column);
-            var wordUnderCursor = AvalonEditHelpers.GetWordOnOffset(BytecodeListing.Document, off);
+            var wordUnderCursor = this.GetWordUnderCursor(e.GetPosition(BytecodeListing));
 
             long? numberUnderCursor = StringHelpers.ParseNumber(wordUnderCursor);
             if (numberUnderCursor != null) {
@@ -209,16 +208,11 @@ namespace Msiler.UI
         }
 
         private void BytecodeListing_PreviewMouseDoubleClick(object sender, MouseButtonEventArgs e) {
-            var pos = BytecodeListing.GetPositionFromPoint(e.GetPosition(BytecodeListing));
+            var wordUnderCursor = this.GetWordUnderCursor(e.GetPosition(BytecodeListing));
 
-            if (pos == null)
-                return;
-
-            int off = BytecodeListing.Document.GetOffset(pos.Value.Line, pos.Value.Column);
-            var wordUnderCursor = AvalonEditHelpers.GetWordOnOffset(BytecodeListing.Document, off);
-            if (wordUnderCursor.StartsWith("IL_", StringComparison.Ordinal)) {
-                var offsetStr = wordUnderCursor.Substring(0, 7);
-                var line = this.OffsetLinesCache[offsetStr] + 1;
+            var match = offsetRegex.Match(wordUnderCursor);
+            if (match.Success) {
+                var line = this.OffsetLinesCache[match.Value];
                 var offset = BytecodeListing.Document.GetOffset(line, 0);
                 BytecodeListing.CaretOffset = offset;
                 BytecodeListing.ScrollToLine(line);
