@@ -15,11 +15,15 @@ using System.Diagnostics;
 using System.Windows.Input;
 using System.Text;
 using System.Windows;
+using System.IO;
 
 namespace Msiler.UI
 {
     public partial class MyControl : UserControl
     {
+        Dictionary<string, int> OffsetLinesCache
+            = new Dictionary<string, int>();
+
         AssemblyManager _assemblyManager = new AssemblyManager();
 
         AssemblyMethod _currentMethod;
@@ -143,6 +147,17 @@ namespace Msiler.UI
                         : this.CurrentMethod.GenerateListing(this.GetGeneratorOptions());
                     this._listingCache[method] = listingText;
                     this.BytecodeListing.Text = listingText;
+
+                    this.OffsetLinesCache.Clear();
+                    var lines = listingText.Lines();
+                    for (int i = 0; i < lines.Length; i++) {
+                        if (lines[i].StartsWith("IL_")) {
+                            var offset = lines[i].Substring(0, 7);
+                            this.OffsetLinesCache.Add(offset, i);
+                        }
+                    }
+
+
                 } catch (Exception ex) {
                     var errorBuilder = new StringBuilder();
                     errorBuilder.AppendLine($"ERROR: {ex.Message}");
@@ -154,6 +169,7 @@ namespace Msiler.UI
                 if (clearIfNull) {
                     this.CurrentMethod = null;
                     this.BytecodeListing.Text = String.Empty;
+                    this.OffsetLinesCache.Clear();
                 }
             }
         }
@@ -188,6 +204,29 @@ namespace Msiler.UI
             e.Handled = true;
         }
 
+        void BytecodeListing_MouseHoverStopped(object sender, MouseEventArgs e) {
+            toolTip.IsOpen = false;
+        }
+
+        private void BytecodeListing_PreviewMouseDoubleClick(object sender, MouseButtonEventArgs e) {
+            var pos = BytecodeListing.GetPositionFromPoint(e.GetPosition(BytecodeListing));
+
+            if (pos == null)
+                return;
+
+            int off = BytecodeListing.Document.GetOffset(pos.Value.Line, pos.Value.Column);
+            var wordUnderCursor = AvalonEditHelpers.GetWordOnOffset(BytecodeListing.Document, off);
+            if (wordUnderCursor.StartsWith("IL_", StringComparison.Ordinal)) {
+                var offsetStr = wordUnderCursor.Substring(0, 7);
+                var line = this.OffsetLinesCache[offsetStr] + 1;
+                var offset = BytecodeListing.Document.GetOffset(line, 0);
+                BytecodeListing.CaretOffset = offset;
+                BytecodeListing.ScrollToLine(line);
+                e.Handled = true;
+            }
+        }
+
+
         public void ShowToolTip(string content) {
             toolTip.PlacementTarget = this;
             toolTip.Content = new TextEditor {
@@ -199,9 +238,6 @@ namespace Msiler.UI
             toolTip.IsOpen = true;
         }
 
-        void BytecodeListing_MouseHoverStopped(object sender, MouseEventArgs e) {
-            toolTip.IsOpen = false;
-        }
         #endregion
 
         #region UI handlers

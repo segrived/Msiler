@@ -64,7 +64,8 @@
                                      Grid.Row="1"
                                      MouseHover="BytecodeListing_MouseHover"
                                      IsReadOnly="True"
-                                     MouseHoverStopped="BytecodeListing_MouseHoverStopped">
+                                     MouseHoverStopped="BytecodeListing_MouseHoverStopped"
+                                     PreviewMouseDoubleClick="BytecodeListing_PreviewMouseDoubleClick">
                     <ctrl:MvvmTextEditor.ContextMenu>
                         <ContextMenu>
                             <MenuItem Command="Copy" />
