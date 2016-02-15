@@ -207,7 +207,7 @@ namespace Msiler.UI
                     sb.AppendLine(lineContent);
                     docLine = docLine.NextLine;
                 }
-                ShowToolTip(sb.ToString(), this.currentHighlightDefinition);
+                ShowToolTip(sb.ToString().TrimEnd('\r', '\n'), this.currentHighlightDefinition);
             }
 
             long? numberUnderCursor = StringHelpers.ParseNumber(wordUnderCursor);
