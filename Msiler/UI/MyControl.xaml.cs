@@ -1,12 +1,6 @@
 ﻿using System.Windows.Controls;
-using ICSharpCode.AvalonEdit;
-using Msiler.DialogPages;
-using Msiler.Lib;
 using System.Windows.Media;
-using Microsoft.VisualStudio.PlatformUI;
 using System.Collections.Generic;
-using Msiler.AssemblyParser;
-using Msiler.Helpers;
 using System.Linq;
 using System;
 using System.Windows.Data;
@@ -15,9 +9,14 @@ using System.Diagnostics;
 using System.Windows.Input;
 using System.Text;
 using System.Windows;
-using System.IO;
 using System.Text.RegularExpressions;
+using Microsoft.VisualStudio.PlatformUI;
+using Msiler.AssemblyParser;
+using Msiler.Helpers;
+using Msiler.DialogPages;
+using Msiler.Lib;
 using ICSharpCode.AvalonEdit.Highlighting;
+using ICSharpCode.AvalonEdit;
 
 namespace Msiler.UI
 {
