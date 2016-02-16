@@ -4,24 +4,24 @@ using System.Collections.Generic;
 
 namespace Msiler.Lib
 {
-    public enum VisualStudioTheme { Blue, Light, Dark, Unknown }
+    public enum VSTheme { Blue, Light, Dark, Unknown }
 
     public class VSThemeDetector
     {
-        static readonly IDictionary<string, VisualStudioTheme> Themes = new Dictionary<string, VisualStudioTheme>{
-            { "de3dbbcd-f642-433c-8353-8f1df4370aba", VisualStudioTheme.Light },
-            { "1ded0138-47ce-435e-84ef-9ec1f439b749", VisualStudioTheme.Dark },
-            { "a4d6a176-b948-4b29-8c66-53c97a1ed7d0", VisualStudioTheme.Blue }
+        static readonly IDictionary<string, VSTheme> Themes = new Dictionary<string, VSTheme>{
+            { "de3dbbcd-f642-433c-8353-8f1df4370aba", VSTheme.Light },
+            { "1ded0138-47ce-435e-84ef-9ec1f439b749", VSTheme.Dark },
+            { "a4d6a176-b948-4b29-8c66-53c97a1ed7d0", VSTheme.Blue }
         };
 
-        VisualStudioTheme GuidToThemeName(string guid) {
+        VSTheme GuidToThemeName(string guid) {
             if (!Themes.ContainsKey(guid)) {
-                return VisualStudioTheme.Unknown;
+                return VSTheme.Unknown;
             }
             return Themes[guid];
         }
 
-        VisualStudioTheme VisualStudio2012Theme() {
+        VSTheme VisualStudio2012Theme() {
             var rKey = @"Software\Microsoft\VisualStudio\11.0\General";
 
             using (var key = Registry.CurrentUser.OpenSubKey(rKey)) {
@@ -32,10 +32,10 @@ namespace Msiler.Lib
                     }
                 }
             }
-            return VisualStudioTheme.Unknown;
+            return VSTheme.Unknown;
         }
 
-        VisualStudioTheme VisualStudio2013Theme() {
+        VSTheme VisualStudio2013Theme() {
             var rKey = @"Software\Microsoft\VisualStudio\12.0\General";
 
             using (var key = Registry.CurrentUser.OpenSubKey(rKey)) {
@@ -46,10 +46,10 @@ namespace Msiler.Lib
                     }
                 }
             }
-            return VisualStudioTheme.Unknown;
+            return VSTheme.Unknown;
         }
 
-        VisualStudioTheme VisualStudio2015Theme() {
+        VSTheme VisualStudio2015Theme() {
             var rKey = @"Software\Microsoft\VisualStudio\14.0\ApplicationPrivateSettings\Microsoft\VisualStudio";
 
             using (var key = Registry.CurrentUser.OpenSubKey(rKey)) {
@@ -64,10 +64,10 @@ namespace Msiler.Lib
                     }
                 }
             }
-            return VisualStudioTheme.Unknown;
+            return VSTheme.Unknown;
         }
 
-        public static VisualStudioTheme GetTheme() {
+        public static VSTheme GetTheme() {
             var version = DTEHelpers.GetDTE().Application.Version;
             switch (version) {
                 case "14.0":
@@ -77,7 +77,7 @@ namespace Msiler.Lib
                 case "11.0":
                     return new VSThemeDetector().VisualStudio2012Theme();
                 default:
-                    return VisualStudioTheme.Unknown;
+                    return VSTheme.Unknown;
             }
         }
     }

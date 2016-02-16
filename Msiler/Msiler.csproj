@@ -235,6 +235,10 @@
     <Compile Include="Helpers\DTEHelpers.cs" />
     <Compile Include="Helpers\FontHelpers.cs" />
     <Compile Include="Helpers\StringHelpers.cs" />
+    <Compile Include="HighlightSchemes\DefaultAutoScheme.cs" />
+    <Compile Include="HighlightSchemes\DefaultDarkScheme.cs" />
+    <Compile Include="HighlightSchemes\DefaultLightScheme.cs" />
+    <Compile Include="HighlightSchemes\IHighlightScheme.cs" />
     <Compile Include="TextViewCreationListener.cs" />
     <Compile Include="UI\AboutWindow.xaml.cs">
       <DependentUpon>AboutWindow.xaml</DependentUpon>

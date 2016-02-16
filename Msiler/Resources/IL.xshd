@@ -9,7 +9,6 @@
   <Color name="Bytes" foreground="Gray" />
   
   <RuleSet ignoreCase="true">
-    <Span color="Header" begin="Method: " />
     <Span color="Comment" begin="//" />
 
     <Span color="String">

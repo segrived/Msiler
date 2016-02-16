@@ -1,60 +1,53 @@
 ﻿using ICSharpCode.AvalonEdit.Highlighting;
 using ICSharpCode.AvalonEdit.Highlighting.Xshd;
+using Msiler.HighlightSchemes;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Text.RegularExpressions;
+using System.Windows;
 using System.Windows.Media;
 
 namespace Msiler.Lib
 {
     public static class ColorTheme
     {
-        public static Dictionary<string, Color> DarkTheme = new Dictionary<string, Color> {
-            ["Comment"]      = Color.FromRgb(93, 130, 221),
-            ["String"]       = Color.FromRgb(177, 233, 98),
-            ["Offset"]       = Color.FromRgb(242, 248, 104),
-            ["Instruction"]  = Color.FromRgb(93, 181, 222),
-            ["Number"]       = Color.FromRgb(232, 97, 153),
-            ["BuiltInTypes"] = Color.FromRgb(150, 150, 150),
-            ["Header"]       = Color.FromRgb(110, 110, 110)
-        };
+        private static readonly Regex highlightingColorRegex =
+            new Regex(@"(?<Color>#[\da-f]{6})($|;(?<Flags>[BUI]*))", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
-        public static Dictionary<string, Color> LightTheme = new Dictionary<string, Color> {
-            ["Comment"]      = Color.FromRgb(114, 128, 158),
-            ["String"]       = Color.FromRgb(35, 145, 63),
-            ["Offset"]       = Color.FromRgb(128, 35, 145),
-            ["Instruction"]  = Color.FromRgb(171, 124, 41),
-            ["Number"]       = Color.FromRgb(163, 168, 41),
-            ["BuiltInTypes"] = Color.FromRgb(90, 90, 90),
-            ["Header"]       = Color.FromRgb(130, 130, 130)
-        };
+        public static void GetColorTheme(IListingHighlightingScheme scheme) {
+            var defaultTheme = GetDefaultHighlightingDefinition();
+            var schemeDef = scheme.GetScheme();
 
-        public static IHighlightingDefinition GetColorTheme(MsilerColorTheme mt) {
-            VisualStudioTheme theme;
-            var high = GetDefaultHighlightingDefinition();
-            if (mt != MsilerColorTheme.Auto) {
-                theme = mt == MsilerColorTheme.Dark ? VisualStudioTheme.Dark : VisualStudioTheme.Light;
-            } else {
-
-                theme = VSThemeDetector.GetTheme();
-                if (theme == VisualStudioTheme.Unknown) {
-                    theme = VisualStudioTheme.Light; // if unknown
-                }
-            }
-            if (theme == VisualStudioTheme.Light || theme == VisualStudioTheme.Blue) {
-                ApplyColorTheme(high, LightTheme);
-            } else {
-                ApplyColorTheme(high, DarkTheme);
-            }
-            return high;
+            defaultTheme.GetNamedColor("Comment").MergeWith(StringToHighlightingColor(schemeDef.CommentHighlight));
+            defaultTheme.GetNamedColor("String").MergeWith(StringToHighlightingColor(schemeDef.StringHighlight));
+            defaultTheme.GetNamedColor("Offset").MergeWith(StringToHighlightingColor(schemeDef.OffsetHighlight));
+            defaultTheme.GetNamedColor("Instruction").MergeWith(StringToHighlightingColor(schemeDef.OpCodeHighlight));
+            defaultTheme.GetNamedColor("Number").MergeWith(StringToHighlightingColor(schemeDef.NumericHighlight));
+            defaultTheme.GetNamedColor("BuiltInTypes").MergeWith(StringToHighlightingColor(schemeDef.BuiltinTypeHighlight));
         }
 
-        static void ApplyColorTheme(IHighlightingDefinition def, Dictionary<string, Color> theme) {
-            foreach (var kv in theme) {
-                def.GetNamedColor(kv.Key).Foreground = new SimpleHighlightingBrush(kv.Value);
+        private static HighlightingColor StringToHighlightingColor(string s) {
+            var match = highlightingColorRegex.Match(s);
+            if (!match.Success) {
+                return null;
             }
+            var colorStr = match.Groups["Color"].Value;
+            var flagsStr = match.Groups["Flags"].Value;
+            var color = (Color)ColorConverter.ConvertFromString(colorStr);
+
+            bool isBold = flagsStr.Contains("B");
+            bool isItalic = flagsStr.Contains("I");
+            bool isUnderline = flagsStr.Contains("U");
+
+            return new HighlightingColor {
+                Foreground = new SimpleHighlightingBrush(color),
+                FontWeight = isBold ? FontWeights.Bold : FontWeights.Normal,
+                FontStyle = isItalic ? FontStyles.Italic : FontStyles.Normal,
+                Underline = isUnderline
+            };
         }
 
-        public static IHighlightingDefinition GetDefaultHighlightingDefinition() {
+        private static IHighlightingDefinition GetDefaultHighlightingDefinition() {
             var ilRes = "Msiler.Resources.IL.xshd";
             using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(ilRes)) {
                 using (var reader = new System.Xml.XmlTextReader(stream)) {
