@@ -83,9 +83,4 @@ namespace Msiler
             }
         }
     }
-
-    public enum MsilerColorTheme
-    {
-        Light, Dark, Auto
-    }
 }

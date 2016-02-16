@@ -82,7 +82,8 @@ namespace Msiler.UI
         void UpdateDisplayOptions() {
             var displayOptions = Common.Instance.DisplayOptions;
 
-            this.currentHighlightDefinition = ColorTheme.GetColorTheme(displayOptions.ColorTheme);
+            var scheme = ColorTheme.GetHighlightingScheme(displayOptions.ColorTheme);
+            this.currentHighlightDefinition = ColorTheme.GetDefinition(scheme);
 
             string fontFamily = "Consolas";
             if (FontHelpers.IsFontFamilyExist(displayOptions.FontName)) {

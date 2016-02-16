@@ -1,7 +1,6 @@
 ﻿using ICSharpCode.AvalonEdit.Highlighting;
 using ICSharpCode.AvalonEdit.Highlighting.Xshd;
 using Msiler.HighlightSchemes;
-using System.Collections.Generic;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -9,12 +8,29 @@ using System.Windows.Media;
 
 namespace Msiler.Lib
 {
+    public enum MsilerColorTheme
+    {
+        DefaultLight, DefaultDark, Auto
+    }
+
     public static class ColorTheme
     {
         private static readonly Regex highlightingColorRegex =
             new Regex(@"(?<Color>#[\da-f]{6})($|;(?<Flags>[BUI]*))", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
-        public static void GetColorTheme(IListingHighlightingScheme scheme) {
+        public static IListingHighlightingScheme GetHighlightingScheme(MsilerColorTheme theme) {
+            switch (theme) {
+                case MsilerColorTheme.Auto:
+                    return new DefaultAutoScheme();
+                case MsilerColorTheme.DefaultDark:
+                    return new DefaultDarkScheme();
+                case MsilerColorTheme.DefaultLight:
+                    return new DefaultLightScheme();
+            }
+            return new DefaultAutoScheme(); // will not executed
+        }
+
+        public static IHighlightingDefinition GetDefinition(IListingHighlightingScheme scheme) {
             var defaultTheme = GetDefaultHighlightingDefinition();
             var schemeDef = scheme.GetScheme();
 
@@ -24,6 +40,7 @@ namespace Msiler.Lib
             defaultTheme.GetNamedColor("Instruction").MergeWith(StringToHighlightingColor(schemeDef.OpCodeHighlight));
             defaultTheme.GetNamedColor("Number").MergeWith(StringToHighlightingColor(schemeDef.NumericHighlight));
             defaultTheme.GetNamedColor("BuiltInTypes").MergeWith(StringToHighlightingColor(schemeDef.BuiltinTypeHighlight));
+            return defaultTheme;
         }
 
         private static HighlightingColor StringToHighlightingColor(string s) {

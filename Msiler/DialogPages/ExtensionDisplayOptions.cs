@@ -1,5 +1,4 @@
-﻿using Msiler.HighlightSchemes;
-using System.Collections.Generic;
+﻿using Msiler.Lib;
 using System.ComponentModel;
 
 namespace Msiler.DialogPages
