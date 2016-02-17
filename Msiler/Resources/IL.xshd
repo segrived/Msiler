@@ -28,6 +28,10 @@
     </Rule>
     
     <Rule color="Number">
+      (?&lt;=\s)0b[01]+(\s|$)
+    </Rule>
+    
+    <Rule color="Number">
       (?&lt;=\s)\-?[\d]+(\s|$)
     </Rule>
 

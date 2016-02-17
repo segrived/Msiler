@@ -225,7 +225,7 @@ namespace Msiler.UI
                 sb.AppendLine($"HEX:     0x{Convert.ToString(v, 16)}");
                 sb.AppendLine($"Binary:  0b{Convert.ToString(v, 2).ToUpper()}");
                 sb.Append($"Octal:   0{Convert.ToString(v, 8)}");
-                ShowToolTip(sb.ToString());
+                ShowToolTip(sb.ToString(), this.currentHighlightDefinition);
             }
 
             var info = AssemblyParser.Helpers.GetInstructionInformation(wordUnderCursor);
