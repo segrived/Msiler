@@ -10,7 +10,7 @@ namespace Msiler.Lib
 {
     public enum MsilerColorTheme
     {
-        DefaultLight, DefaultDark, Auto
+        DefaultLight, DefaultDark, Auto, Monokai, Gray
     }
 
     public static class ColorTheme
@@ -26,6 +26,10 @@ namespace Msiler.Lib
                     return new DefaultDarkScheme();
                 case MsilerColorTheme.DefaultLight:
                     return new DefaultLightScheme();
+                case MsilerColorTheme.Monokai:
+                    return new MonokaiScheme();
+                case MsilerColorTheme.Gray:
+                    return new GrayScheme();
             }
             return new DefaultAutoScheme(); // will not executed
         }
