@@ -185,7 +185,7 @@ namespace Msiler.UI
         }
 
         #region Instruction Hint Tooltip
-        ToolTip toolTip = new ToolTip();
+        readonly ToolTip toolTip = new ToolTip();
 
         string GetWordUnderCursor(Point p) {
             return AvalonEditHelpers.GetWordOnOffset(BytecodeListing, p);
@@ -267,6 +267,14 @@ namespace Msiler.UI
         public void ShowToolTip(string content, IHighlightingDefinition highlight = null) {
             var displayOptions = Common.Instance.DisplayOptions;
             toolTip.PlacementTarget = this;
+
+            var bgDColor = VSColorTheme.GetThemedColor(EnvironmentColors.ToolWindowBackgroundBrushKey);
+            var bgMColor = Color.FromRgb(bgDColor.R, bgDColor.G, bgDColor.B);
+            toolTip.Background = new SolidColorBrush(bgMColor);
+
+            var fgDColor = VSColorTheme.GetThemedColor(EnvironmentColors.ToolWindowTextBrushKey);
+            var fgMColor = Color.FromRgb(fgDColor.R, fgDColor.G, fgDColor.B);
+
             toolTip.Content = new TextEditor {
                 Text = content,
                 HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden,
@@ -274,7 +282,8 @@ namespace Msiler.UI
                 SyntaxHighlighting = highlight,
                 Background = Brushes.Transparent,
                 FontFamily = new FontFamily(displayOptions.FontName),
-                FontSize = displayOptions.FontSize
+                FontSize = displayOptions.FontSize,
+                Foreground = new SolidColorBrush(fgMColor)
             };
             toolTip.IsOpen = true;
         }
