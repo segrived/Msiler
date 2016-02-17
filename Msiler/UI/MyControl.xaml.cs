@@ -221,11 +221,12 @@ namespace Msiler.UI
             if (numberUnderCursor != null) {
                 var v = numberUnderCursor.Value;
                 var sb = new StringBuilder();
-                sb.AppendLine($"Decimal: {v}");
-                sb.AppendLine($"HEX:     0x{Convert.ToString(v, 16)}");
-                sb.AppendLine($"Binary:  0b{Convert.ToString(v, 2).ToUpper()}");
-                sb.Append($"Octal:   0{Convert.ToString(v, 8)}");
-                ShowToolTip(sb.ToString(), this.currentHighlightDefinition);
+                string hint = String.Empty;
+                hint += $"Decimal: {v}{Environment.NewLine}";
+                hint += $"HEX:     0x{Convert.ToString(v, 16).ToUpper()}{Environment.NewLine}";
+                hint += $"Binary:  0b{Convert.ToString(v, 2)}{Environment.NewLine}";
+                hint += $"Octal:   0{Convert.ToString(v, 8)}";
+                ShowToolTip(hint, this.currentHighlightDefinition);
             }
 
             var info = AssemblyParser.Helpers.GetInstructionInformation(wordUnderCursor);
