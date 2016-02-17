@@ -222,9 +222,9 @@ namespace Msiler.UI
                 var v = numberUnderCursor.Value;
                 var sb = new StringBuilder();
                 sb.AppendLine($"Decimal: {v}");
-                sb.AppendLine($"HEX: 0x{Convert.ToString(v, 16)}");
-                sb.AppendLine($"Binary: 0b{Convert.ToString(v, 2).ToUpper()}");
-                sb.Append($"Octal: 0{Convert.ToString(v, 8)}");
+                sb.AppendLine($"HEX:     0x{Convert.ToString(v, 16)}");
+                sb.AppendLine($"Binary:  0b{Convert.ToString(v, 2).ToUpper()}");
+                sb.Append($"Octal:   0{Convert.ToString(v, 8)}");
                 ShowToolTip(sb.ToString());
             }
 
