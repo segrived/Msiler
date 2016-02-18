@@ -37,6 +37,10 @@ namespace Msiler.AssemblyParser
             return this.Signature.GetHashCode();
         }
 
+        public override string ToString() {
+            return this.Signature.ToString();
+        }
+
         public string GenerateListing(ListingGeneratorOptions options) {
             using (var generator = new ListingGenerator(options)) {
                 return generator.GenerateListing(this);
