@@ -41,7 +41,14 @@ namespace Msiler.AssemblyParser
             if (definition.MethodSig.HasThis) {
                 paramList = paramList.Skip(1);
             }
-            var methodName = $"{type.FullName}.{definition.Name}";
+            var fullName = type.FullName;
+            if (type.IsNested) {
+                var lastS = fullName.LastIndexOf("/", StringComparison.Ordinal);
+                if (lastS != -1) {
+                    fullName = $"{fullName.Substring(0, lastS)}.{fullName.Substring(lastS + 1)}";
+                }
+            }
+            var methodName = $"{fullName}.{definition.Name}";
             var paramTypesList = paramList.Select(p => p.Type.FullName).ToList();
             return new AssemblyMethodSignature(methodName, paramTypesList);
         }
