@@ -10,7 +10,7 @@ namespace Msiler.Lib
 {
     public enum MsilerColorTheme
     {
-        DefaultLight, DefaultDark, Auto, Monokai, Gray
+        Auto, DefaultLight, DefaultDark, Monokai, Gray
     }
 
     public static class ColorTheme
@@ -35,16 +35,20 @@ namespace Msiler.Lib
         }
 
         public static IHighlightingDefinition GetDefinition(IListingHighlightingScheme scheme) {
-            var defaultTheme = GetDefaultHighlightingDefinition();
+            var highDef = GetDefaultHighlightingDefinition();
             var schemeDef = scheme.GetScheme();
+            highDef.ApplySchemeEntry("Comment", schemeDef.CommentHighlight);
+            highDef.ApplySchemeEntry("String", schemeDef.StringHighlight);
+            highDef.ApplySchemeEntry("Offset", schemeDef.OffsetHighlight);
+            highDef.ApplySchemeEntry("OpCode", schemeDef.OpCodeHighlight);
+            highDef.ApplySchemeEntry("Numeric", schemeDef.NumericHighlight);
+            highDef.ApplySchemeEntry("BuiltInType", schemeDef.BuiltinTypeHighlight);
+            highDef.ApplySchemeEntry("Error", schemeDef.ErrorHighlight);
+            return highDef;
+        }
 
-            defaultTheme.GetNamedColor("Comment").MergeWith(StringToHighlightingColor(schemeDef.CommentHighlight));
-            defaultTheme.GetNamedColor("String").MergeWith(StringToHighlightingColor(schemeDef.StringHighlight));
-            defaultTheme.GetNamedColor("Offset").MergeWith(StringToHighlightingColor(schemeDef.OffsetHighlight));
-            defaultTheme.GetNamedColor("Instruction").MergeWith(StringToHighlightingColor(schemeDef.OpCodeHighlight));
-            defaultTheme.GetNamedColor("Number").MergeWith(StringToHighlightingColor(schemeDef.NumericHighlight));
-            defaultTheme.GetNamedColor("BuiltInTypes").MergeWith(StringToHighlightingColor(schemeDef.BuiltinTypeHighlight));
-            return defaultTheme;
+        private static void ApplySchemeEntry(this IHighlightingDefinition def, string rule, string entry) {
+            def.GetNamedColor(rule).MergeWith(StringToHighlightingColor(entry));
         }
 
         private static HighlightingColor StringToHighlightingColor(string s) {

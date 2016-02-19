@@ -239,7 +239,8 @@
     <Compile Include="HighlightSchemes\DefaultDarkScheme.cs" />
     <Compile Include="HighlightSchemes\DefaultLightScheme.cs" />
     <Compile Include="HighlightSchemes\GrayScheme.cs" />
-    <Compile Include="HighlightSchemes\IHighlightScheme.cs" />
+    <Compile Include="HighlightSchemes\IListingHighlightingScheme.cs" />
+    <Compile Include="HighlightSchemes\IListingHighlightingSchemeDef.cs" />
     <Compile Include="HighlightSchemes\MonokaiScheme.cs" />
     <Compile Include="TextViewCreationListener.cs" />
     <Compile Include="UI\AboutWindow.xaml.cs">

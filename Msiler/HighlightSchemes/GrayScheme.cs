@@ -16,6 +16,7 @@ namespace Msiler.HighlightSchemes
             public string OffsetHighlight { get; } = "#555555;B";
             public string OpCodeHighlight { get; } = "#888888;B";
             public string StringHighlight { get; } = "#666666";
+            public string ErrorHighlight { get; } = "#777777";
         }
 
 

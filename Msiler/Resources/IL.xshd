@@ -1,16 +1,19 @@
 ﻿<SyntaxDefinition name="IL" xmlns="http://icsharpcode.net/sharpdevelop/syntaxdefinition/2008">
-  <Color name="Comment" foreground="Gray" />
-  <Color name="String" foreground="Green" />
-  <Color name="Offset" foreground="Brown" />
-  <Color name="Instruction" fontWeight="bold" foreground="Blue" />
-  <Color name="Number" fontWeight="bold" foreground="Orange" />
-  <Color name="BuiltInTypes" foreground="Gray" />
-  <Color name="Header" foreground="Gray" />
-  <Color name="Bytes" foreground="Gray" />
+  <Color name="Comment" />
+  <Color name="String" />
+  <Color name="Offset"  />
+  <Color name="OpCode" />
+  <Color name="Numeric" />
+  <Color name="BuiltInType"  />
+  <Color name="Header" />
+  <Color name="Bytes" />
+  <Color name="Error" />
   
   <RuleSet ignoreCase="true">
     <Span color="Comment" begin="//" />
 
+    <Span color="Error" begin="ERROR:" />
+    
     <Span color="String">
       <Begin>"</Begin>
       <RuleSet>
@@ -23,15 +26,15 @@
       <End>\s+</End>
     </Span>
 
-    <Rule color="Number">
+    <Rule color="Numeric">
       (?&lt;=\s)0x[\dA-Fa-f]+(\s|$)
     </Rule>
     
-    <Rule color="Number">
+    <Rule color="Numeric">
       (?&lt;=\s)0b[01]+(\s|$)
     </Rule>
     
-    <Rule color="Number">
+    <Rule color="Numeric">
       (?&lt;=\s)\-?[\d]+(\s|$)
     </Rule>
 
@@ -39,7 +42,7 @@
       \|[\da-fA-F\s]+\|
     </Rule>
     
-    <Keywords color="BuiltInTypes">
+    <Keywords color="BuiltInType">
       <Word>System.Boolean</Word>
       <Word>System.Byte</Word>
       <Word>System.SByte</Word>
@@ -57,7 +60,7 @@
       <Word>System.String</Word>
     </Keywords>
       
-    <Keywords color="Instruction">
+    <Keywords color="OpCode">
       <Word>add </Word>
       <Word>add.ovf </Word>
       <Word>add.ovf.un </Word>

@@ -8,10 +8,6 @@
         string OpCodeHighlight { get; }
         string NumericHighlight { get; }
         string BuiltinTypeHighlight { get; }
-    }
-
-    public interface IListingHighlightingScheme
-    {
-        IListingHighlightingSchemeDef GetScheme();
+        string ErrorHighlight { get; }
     }
 }
