@@ -27,7 +27,7 @@
             <TextBlock FontWeight="Bold"
                        FontSize="22"
                        HorizontalAlignment="Center"
-                       Text="Msiler 2.1">
+                       Text="Msiler 2.1.1">
             </TextBlock>
             <Rectangle HorizontalAlignment="Center"
                        Fill="{DynamicResource {x:Static vs:EnvironmentColors.DropDownBorderBrushKey}}"
