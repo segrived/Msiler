@@ -41,15 +41,10 @@ namespace Msiler.AssemblyParser
             if (definition.MethodSig.HasThis) {
                 paramList = paramList.Skip(1);
             }
-            var fullName = type.FullName;
-            if (type.IsNested) {
-                var lastS = fullName.LastIndexOf("/", StringComparison.Ordinal);
-                if (lastS != -1) {
-                    fullName = $"{fullName.Substring(0, lastS)}.{fullName.Substring(lastS + 1)}";
-                }
-            }
-            var methodName = $"{fullName}.{definition.Name}";
-            var paramTypesList = paramList.Select(p => p.Type.FullName).ToList();
+            var methodName = $"{GetTypeFullNameFromType(type.ToTypeSig())}.{definition.Name}";
+
+            var paramTypesList = paramList.Select(p => GetTypeFullNameFromType(p.Type)).ToList();
+
             return new AssemblyMethodSignature(methodName, paramTypesList);
         }
 
@@ -65,6 +60,19 @@ namespace Msiler.AssemblyParser
 
         public override int GetHashCode() {
             return this._fullSignature.GetHashCode();
+        }
+
+        static string GetTypeFullNameFromType(TypeSig typeSig) {
+            string fullName = typeSig.FullName;
+            var typeDef = typeSig.TryGetTypeDef();
+            if (typeDef != null && typeDef.IsNested) {
+                fullName = fullName.ReplaceLastOccurrence("/", ".");
+            }
+
+            if (typeSig.IsSingleOrMultiDimensionalArray) {
+                fullName = typeSig.ReflectionFullName.ReplaceLastOccurrence("+", ".");
+            }
+            return fullName;
         }
     }
 }
