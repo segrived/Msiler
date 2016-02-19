@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Xml.Serialization;
 
 namespace Msiler.AssemblyParser
@@ -37,6 +39,18 @@ namespace Msiler.AssemblyParser
 
         public static string ReplaceNewLineCharacters(this string str) {
             return str.Replace("\n", @"\n").Replace("\r", @"\r");
+        }
+
+        public static string ReplaceLastOccurrence(this string input, string substr, string replacement) {
+            var lastSlash = input.LastIndexOf(substr, StringComparison.Ordinal);
+            if (lastSlash != -1) {
+                var sb = new StringBuilder();
+                sb.Append(input.Substring(0, lastSlash));
+                sb.Append(replacement);
+                sb.Append(input.Substring(lastSlash + 1));
+                return sb.ToString();
+            }
+            return input;
         }
     }
 }

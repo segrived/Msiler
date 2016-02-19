@@ -68,8 +68,9 @@ namespace Msiler.Helpers
                 var parameterList = new List<string>();
                 foreach (CodeParameter param in cfParams) {
                     if (param.Type.TypeKind == vsCMTypeRef.vsCMTypeRefArray) {
-                        var arrayType = param.Type.ElementType;
-                        var fullType = arrayType.AsFullName + "[]";
+                        var arrayType = param.Type;
+                        var rank = arrayType.Rank;
+                        var fullType = arrayType.ElementType.AsFullName + $"[{new String(',', rank - 1)}]";
                         parameterList.Add(fullType);
                     } else {
                         parameterList.Add(param.Type.AsFullName);
