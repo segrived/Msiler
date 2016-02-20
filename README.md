@@ -2,7 +2,7 @@
 
 CIL (MSIL) code viewer extension for Visual Studio 2012/2013/2015.
 
-[![Build status](https://ci.appveyor.com/api/projects/status/aj46np0rwam5sf4e?svg=true)](https://ci.appveyor.com/project/segrived/msiler)
+[![Build status](https://ci.appveyor.com/api/projects/status/aj46np0rwam5sf4e?svg=true)](https://ci.appveyor.com/project/segrived/msiler) [![segrived MyGet Build Status](https://www.myget.org/BuildSource/Badge/segrived?identifier=096d8b99-21b2-47b6-8d8a-62b7b7bf5fb9)](https://www.myget.org/)
 
 ## Screenshot
 
