@@ -268,6 +268,10 @@ namespace Msiler.UI
         public void ShowToolTip(string content, IHighlightingDefinition highlight = null) {
             var displayOptions = Common.Instance.DisplayOptions;
             toolTip.PlacementTarget = this;
+            int transpLevel = (displayOptions.TooltipTransparency < 0 || displayOptions.TooltipTransparency > 100)
+                ? 0
+                : displayOptions.TooltipTransparency;
+            toolTip.Opacity = 1.0 - (transpLevel / 100.0);
 
             var bgDColor = VSColorTheme.GetThemedColor(EnvironmentColors.ToolWindowBackgroundBrushKey);
             var bgMColor = Color.FromRgb(bgDColor.R, bgDColor.G, bgDColor.B);

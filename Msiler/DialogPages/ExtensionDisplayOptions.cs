@@ -23,6 +23,11 @@ namespace Msiler.DialogPages
         public bool LineNumbers { get; set; } = false;
 
         [Category(CategoryTitle)]
+        [DisplayName("Tooltip transparency")]
+        [Description("(In percent)")]
+        public int TooltipTransparency { get; set; } = 0;
+
+        [Category(CategoryTitle)]
         [DisplayName("VS Color theme")]
         [Description("Visual Studio color theme, Msiler highlighting will be adjusted based on this value")]
         public MsilerColorTheme ColorTheme { get; set; } = MsilerColorTheme.Auto;
