@@ -1,6 +1,4 @@
-﻿using ICSharpCode.AvalonEdit.Highlighting;
-
-namespace Msiler.HighlightSchemes
+﻿namespace Msiler.HighlightSchemes
 {
     public class DefaultDarkScheme : IListingHighlightingScheme
     {

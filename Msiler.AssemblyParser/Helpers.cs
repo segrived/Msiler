@@ -74,7 +74,6 @@ namespace Msiler.AssemblyParser
             }
         }
 
-
         public static bool IsByteArraysEqual(byte[] b1, byte[] b2) {
             return b1.Length == b2.Length && memcmp(b1, b2, b1.Length) == 0;
         }
