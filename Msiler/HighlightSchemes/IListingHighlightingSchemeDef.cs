@@ -9,5 +9,6 @@
         string NumericHighlight { get; }
         string BuiltinTypeHighlight { get; }
         string ErrorHighlight { get; }
+        string WarningHighlight { get; }
     }
 }

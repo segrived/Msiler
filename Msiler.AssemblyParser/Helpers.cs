@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
+using System.Security.Cryptography;
 using System.Text;
 using System.Xml.Serialization;
 
@@ -15,6 +17,9 @@ namespace Msiler.AssemblyParser
 
     public static class Helpers
     {
+        [DllImport("msvcrt.dll", CallingConvention = CallingConvention.Cdecl)]
+        static extern int memcmp(byte[] b1, byte[] b2, long count);
+
         private static Dictionary<string, OpCodeInfo> ReadOpCodeInfoResource() {
             var reader = new StringReader(Resources.Instructions);
             var serializer = new XmlSerializer(typeof(List<OpCodeInfo>));
@@ -51,6 +56,27 @@ namespace Msiler.AssemblyParser
                 return sb.ToString();
             }
             return input;
+        }
+
+        public static byte[] ComputeMD5FileHash(string fileName) {
+            using (var md5 = MD5.Create()) {
+                using (var stream = File.OpenRead(fileName)) {
+                    return md5.ComputeHash(stream);
+                }
+            }
+        }
+
+        public static byte[] ComputeSHA1FileHash(string fileName) {
+            using (var sha1 = SHA1.Create()) {
+                using (var stream = File.OpenRead(fileName)) {
+                    return sha1.ComputeHash(stream);
+                }
+            }
+        }
+
+
+        public static bool IsByteArraysEqual(byte[] b1, byte[] b2) {
+            return b1.Length == b2.Length && memcmp(b1, b2, b1.Length) == 0;
         }
     }
 }

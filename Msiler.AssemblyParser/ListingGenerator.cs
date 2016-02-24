@@ -9,8 +9,16 @@ using System.IO;
 
 namespace Msiler.AssemblyParser
 {
+    internal struct PDBCheckSumAlgorithms
+    {
+        public static Guid MD5Guid  = new Guid(0x406ea660, 0x64cf, 0x4c82, 0xb6, 0xf0, 0x42, 0xd4, 0x81, 0x72, 0xa7, 0x99);
+        public static Guid SHA1Guid = new Guid(0xff1816ec, 0xaa5e, 0x4d10, 0x87, 0xf7, 0x6f, 0x49, 0x63, 0x83, 0x34, 0x60);
+    }
+
     public class ListingGenerator : IDisposable
     {
+        private HashSet<string> _warnings = new HashSet<string>();
+
         private readonly ListingGeneratorOptions _options;
         private MethodBytesReader _bytesReader;
 
@@ -109,9 +117,22 @@ namespace Msiler.AssemblyParser
             var docUrl = sp.Document.Url;
             if (!_pdbCache.ContainsKey(sp.Document.Url)) {
                 // if file not exists
-                if (!File.Exists(sp.Document.Url)) {
+                if (!File.Exists(docUrl)) {
                     return String.Empty;
                 }
+
+                byte[] currentDocumentHash = new byte[0];
+                if (sp.Document.CheckSumAlgorithmId == PDBCheckSumAlgorithms.MD5Guid) {
+                    currentDocumentHash = Helpers.ComputeMD5FileHash(docUrl);
+                } else if (sp.Document.CheckSumAlgorithmId == PDBCheckSumAlgorithms.SHA1Guid) {
+                    currentDocumentHash = Helpers.ComputeSHA1FileHash(docUrl);
+                }
+
+                // display warning if source file weas changed
+                if (!Helpers.IsByteArraysEqual(currentDocumentHash, sp.Document.CheckSum)) {
+                    _warnings.Add($"WARNING: Document {Path.GetFileName(docUrl)} was changed, PDB information can be incorrect.");
+                }
+
                 _pdbCache[docUrl] = File.ReadAllLines(docUrl).Select(s => s.Trim()).ToList();
             }
             var sb = new StringBuilder();
@@ -155,7 +176,12 @@ namespace Msiler.AssemblyParser
                 sb.AppendLine(InstructionToString(instruction, _longestOpCode));
             }
 
-            return sb.ToString();
+            string resultListing = sb.ToString();
+            if (_warnings.Count > 0) {
+                var warnStr = String.Join(Environment.NewLine, this._warnings);
+                resultListing = warnStr + Environment.NewLine + sb.ToString();
+            }
+            return resultListing;
         }
 
         public void Dispose() {

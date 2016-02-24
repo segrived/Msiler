@@ -8,11 +8,13 @@
   <Color name="Header" />
   <Color name="Bytes" />
   <Color name="Error" />
+  <Color name="Warning" />
   
   <RuleSet ignoreCase="true">
     <Span color="Comment" begin="//" />
 
     <Span color="Error" begin="ERROR:" />
+    <Span color="Warning" begin="WARNING:" />
     
     <Span color="String">
       <Begin>"</Begin>

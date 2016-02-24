@@ -12,7 +12,8 @@
             public string OffsetHighlight { get; } = "#802391;B";
             public string OpCodeHighlight { get; } = "#AB7C29;B";
             public string StringHighlight { get; } = "#23913F";
-            public string ErrorHighlight { get; } = "#990000";
+            public string ErrorHighlight { get; } = "#990000;B";
+            public string WarningHighlight { get; } = "#CF7E04;B";
         }
     }
 }

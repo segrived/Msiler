@@ -17,7 +17,7 @@ namespace Msiler.HighlightSchemes
             public string OpCodeHighlight { get; } = "#66D9EF;B";
             public string StringHighlight { get; } = "#A6E22E";
             public string ErrorHighlight { get; } = "#F92672";
-
+            public string WarningHighlight { get; } = "#FD971F;B";
         }
 
 

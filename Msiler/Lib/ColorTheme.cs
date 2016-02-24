@@ -44,6 +44,7 @@ namespace Msiler.Lib
             highDef.ApplySchemeEntry("Numeric", schemeDef.NumericHighlight);
             highDef.ApplySchemeEntry("BuiltInType", schemeDef.BuiltinTypeHighlight);
             highDef.ApplySchemeEntry("Error", schemeDef.ErrorHighlight);
+            highDef.ApplySchemeEntry("Warning", schemeDef.WarningHighlight);
             return highDef;
         }
 
