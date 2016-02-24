@@ -16,6 +16,9 @@ namespace Msiler.AssemblyParser
 
         private readonly string _fullSignature;
 
+        public AssemblyMethodSignature(string methodName)
+            : this(methodName, new List<string>()) { }
+
         public AssemblyMethodSignature(string methodName, List<string> parameterTypes) {
             this.MethodName = this.ProcessMethodName(methodName);
             this.ParameterTypes = parameterTypes.Select(this.ProcessParameterType).ToList();

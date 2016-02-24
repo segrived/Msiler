@@ -6,6 +6,7 @@ using EnvDTE80;
 using Msiler.AssemblyParser;
 using Microsoft.VisualStudio.Shell;
 using System.Text.RegularExpressions;
+using System.Linq;
 
 namespace Msiler.Helpers
 {
@@ -50,33 +51,56 @@ namespace Msiler.Helpers
         }
 
         public static AssemblyMethodSignature GetSignature(VirtualPoint point, FileCodeModel2 fcm) {
-            try {
-                var me = fcm.CodeElementFromPoint(point, vsCMElement.vsCMElementFunction);
+            var codeFunction = GetCodeFunction(fcm, point);
 
-                var func = (CodeFunction)me;
-                var funcName = func.FullName;
-                // remove generic part
-                funcName = GenericPartRegex.Replace(funcName, String.Empty);
+            if (codeFunction == null) {
+                return null;
+            }
+            // init and remove generic part
+            string funcName = GenericPartRegex.Replace(codeFunction.FullName, String.Empty);
+            IEnumerable<CodeTypeRef> paramsList = Enumerable.Empty<CodeTypeRef>();
 
-                // make dnlib-compatible signature for constructors
-                if (func.FunctionKind == vsCMFunction.vsCMFunctionConstructor) {
-                    var lastIndex = funcName.LastIndexOf(func.Name, StringComparison.Ordinal);
-                    funcName = funcName.Substring(0, lastIndex) + ".ctor";
-                }
-                var cfParams = func.Parameters;
+            switch (codeFunction.FunctionKind) {
+                case vsCMFunction.vsCMFunctionPropertyGet:
+                case vsCMFunction.vsCMFunctionPropertySet:
 
-                var parameterList = new List<string>();
-                foreach (CodeParameter param in cfParams) {
-                    if (param.Type.TypeKind == vsCMTypeRef.vsCMTypeRefArray) {
-                        var arrayType = param.Type;
-                        var rank = arrayType.Rank;
-                        var fullType = arrayType.ElementType.AsFullName + $"[{new String(',', rank - 1)}]";
-                        parameterList.Add(fullType);
-                    } else {
-                        parameterList.Add(param.Type.AsFullName);
+                    var prefix = codeFunction.FunctionKind == vsCMFunction.vsCMFunctionPropertyGet
+                        ? "get_"
+                        : "set_";
+
+                    var lastDot = funcName.LastIndexOf(".");
+                    funcName = funcName.Substring(0, lastDot + 1) + prefix + funcName.Substring(lastDot + 1);
+
+                    var funcParams = codeFunction.Parameters;
+                    paramsList = codeFunction.FunctionKind == vsCMFunction.vsCMFunctionPropertyGet
+                        ? new List<CodeTypeRef>()
+                        : new List<CodeTypeRef> { codeFunction.Type }.OfType<CodeTypeRef>();
+                    break;
+                default:
+                    if (codeFunction.FunctionKind == vsCMFunction.vsCMFunctionConstructor) {
+                        var lastIndex = funcName.LastIndexOf(codeFunction.Name, StringComparison.Ordinal);
+                        funcName = funcName.Substring(0, lastIndex) + ".ctor";
                     }
-                }
-                return new AssemblyMethodSignature(funcName, parameterList);
+                    paramsList = codeFunction.Parameters.OfType<CodeParameter>().Select(p => p.Type);
+                    break;
+            }
+            return new AssemblyMethodSignature(funcName, paramsList.Select(ProcessTypeRef).ToList());
+        }
+
+        private static string ProcessTypeRef(CodeTypeRef typeRef) {
+            if (typeRef.TypeKind == vsCMTypeRef.vsCMTypeRefArray) {
+                var rank = typeRef.Rank;
+                var fullType = typeRef.ElementType.AsFullName + $"[{new String(',', rank - 1)}]";
+                return fullType;
+            } else {
+                return typeRef.AsFullName;
+            }
+        }
+
+        private static CodeFunction GetCodeFunction(FileCodeModel2 fcm, VirtualPoint point) {
+            try {
+                var element = fcm.CodeElementFromPoint(point, vsCMElement.vsCMElementFunction);
+                return element as CodeFunction;
             } catch {
                 return null;
             }
