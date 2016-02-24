@@ -154,10 +154,18 @@ namespace Msiler.UI
             if (method != null) {
                 try {
                     this.CurrentMethod = method;
-                    var listingText = (this._listingCache.ContainsKey(method))
-                        ? _listingCache[method]
-                        : this.CurrentMethod.GenerateListing(this.GetGeneratorOptions());
-                    this._listingCache[method] = listingText;
+                    string listingText = String.Empty;
+                    if (Common.Instance.GeneralOptions.EnableCaching) {
+                        if (this._listingCache.ContainsKey(method)) {
+                            listingText = _listingCache[method];
+                        } else {
+                            listingText = this.CurrentMethod.GenerateListing(this.GetGeneratorOptions());
+                            this._listingCache[method] = listingText;
+                        }
+                    } else {
+                        listingText = this.CurrentMethod.GenerateListing(this.GetGeneratorOptions());
+                    }
+
                     this.BytecodeListing.Text = listingText;
                     this.BytecodeListing.ScrollToHome();
                     this.BytecodeListing.CaretOffset = 0;
