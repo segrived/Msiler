@@ -159,6 +159,8 @@ namespace Msiler.UI
                         : this.CurrentMethod.GenerateListing(this.GetGeneratorOptions());
                     this._listingCache[method] = listingText;
                     this.BytecodeListing.Text = listingText;
+                    this.BytecodeListing.ScrollToHome();
+                    this.BytecodeListing.CaretOffset = 0;
 
                     this.offsetLinesCache.Clear();
                     var lines = listingText.Lines();
