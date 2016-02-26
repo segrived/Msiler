@@ -18,7 +18,7 @@ namespace Msiler.AssemblyParser
     public static class Helpers
     {
         [DllImport("msvcrt.dll", CallingConvention = CallingConvention.Cdecl)]
-        static extern int memcmp(byte[] b1, byte[] b2, long count);
+        private static extern int memcmp(byte[] b1, byte[] b2, long count);
 
         private static Dictionary<string, OpCodeInfo> ReadOpCodeInfoResource() {
             var reader = new StringReader(Resources.Instructions);

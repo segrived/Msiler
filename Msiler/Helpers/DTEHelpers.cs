@@ -13,7 +13,7 @@ namespace Msiler.Helpers
     public static class DTEHelpers
     {
         private static readonly Regex GenericPartRegex
-            = new Regex("<.*>", RegexOptions.Compiled);
+            = new Regex(@"(<.*>)|(\(Of .*\))", RegexOptions.Compiled);
 
         public static DTE2 GetDTE() {
             var provider = ServiceProvider.GlobalProvider;
@@ -68,13 +68,13 @@ namespace Msiler.Helpers
                         ? "get_"
                         : "set_";
 
-                    var lastDot = funcName.LastIndexOf(".");
+                    var lastDot = funcName.LastIndexOf(".", StringComparison.Ordinal);
                     funcName = funcName.Substring(0, lastDot + 1) + prefix + funcName.Substring(lastDot + 1);
 
                     var funcParams = codeFunction.Parameters;
                     paramsList = codeFunction.FunctionKind == vsCMFunction.vsCMFunctionPropertyGet
                         ? new List<CodeTypeRef>()
-                        : new List<CodeTypeRef> { codeFunction.Type }.OfType<CodeTypeRef>();
+                        : new List<CodeTypeRef> { codeFunction.Type };
                     break;
                 default:
                     if (codeFunction.FunctionKind == vsCMFunction.vsCMFunctionConstructor) {
@@ -92,15 +92,14 @@ namespace Msiler.Helpers
                 var rank = typeRef.Rank;
                 var fullType = typeRef.ElementType.AsFullName + $"[{new String(',', rank - 1)}]";
                 return fullType;
-            } else {
-                return typeRef.AsFullName;
             }
+            return typeRef.AsFullName;
         }
 
-        private static CodeFunction GetCodeFunction(FileCodeModel2 fcm, VirtualPoint point) {
+        private static CodeFunction GetCodeFunction(FileCodeModel2 fcm, TextPoint point) {
             try {
                 var element = fcm.CodeElementFromPoint(point, vsCMElement.vsCMElementFunction);
-                return element as CodeFunction;
+                return (CodeFunction)element;
             } catch {
                 return null;
             }

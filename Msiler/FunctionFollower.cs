@@ -52,7 +52,7 @@ namespace Msiler
                 return;
             }
             // only c# supported at this time
-            if (doc.Language != "CSharp") {
+            if (doc.Language != "CSharp" && doc.Language != "Basic") {
                 return;
             }
 
