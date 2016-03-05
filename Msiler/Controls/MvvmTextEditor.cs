@@ -2,6 +2,7 @@
 using System;
 using System.ComponentModel;
 using System.Windows;
+// ReSharper disable UnusedMember.Global
 
 namespace Msiler.Controls
 {
@@ -19,14 +20,12 @@ namespace Msiler.Controls
             }));
 
         protected override void OnTextChanged(EventArgs e) {
-            RaisePropertyChanged("Text");
+            this.RaisePropertyChanged("Text");
             base.OnTextChanged(e);
         }
 
         public void RaisePropertyChanged(string property) {
-            if (PropertyChanged != null) {
-                PropertyChanged(this, new PropertyChangedEventArgs(property));
-            }
+            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(property));
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

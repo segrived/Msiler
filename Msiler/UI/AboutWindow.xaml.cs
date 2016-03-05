@@ -4,10 +4,10 @@ using Msiler.Lib;
 
 namespace Msiler.UI
 {
-    public partial class AboutWindow : Window
+    public partial class AboutWindow
     {
         public AboutWindow() {
-            InitializeComponent();
+            this.InitializeComponent();
 
             var manifest = VsixManifest.GetManifest();
             this.VersionTextBlock.Text = $"Version {manifest.Version}";

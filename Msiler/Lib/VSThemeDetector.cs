@@ -4,80 +4,72 @@ using System.Collections.Generic;
 
 namespace Msiler.Lib
 {
-    public enum VSTheme { Blue, Light, Dark, Unknown }
+    public enum VsTheme { Blue, Light, Dark, Unknown }
 
-    public class VSThemeDetector
+    public class VsThemeDetector
     {
-        static readonly IDictionary<string, VSTheme> Themes = new Dictionary<string, VSTheme>{
-            { "de3dbbcd-f642-433c-8353-8f1df4370aba", VSTheme.Light },
-            { "1ded0138-47ce-435e-84ef-9ec1f439b749", VSTheme.Dark },
-            { "a4d6a176-b948-4b29-8c66-53c97a1ed7d0", VSTheme.Blue }
+        static readonly IDictionary<string, VsTheme> Themes = new Dictionary<string, VsTheme>{
+            { "de3dbbcd-f642-433c-8353-8f1df4370aba", VsTheme.Light },
+            { "1ded0138-47ce-435e-84ef-9ec1f439b749", VsTheme.Dark },
+            { "a4d6a176-b948-4b29-8c66-53c97a1ed7d0", VsTheme.Blue }
         };
 
-        VSTheme GuidToThemeName(string guid) {
-            if (!Themes.ContainsKey(guid)) {
-                return VSTheme.Unknown;
-            }
-            return Themes[guid];
+        static VsTheme GuidToThemeName(string guid) {
+            return !Themes.ContainsKey(guid) ? VsTheme.Unknown : Themes[guid];
         }
 
-        VSTheme VisualStudio2012Theme() {
-            var rKey = @"Software\Microsoft\VisualStudio\11.0\General";
+        VsTheme VisualStudio2012Theme() {
+            const string rKey = @"Software\Microsoft\VisualStudio\11.0\General";
 
             using (var key = Registry.CurrentUser.OpenSubKey(rKey)) {
-                if (key != null) {
-                    var keyText = (string)key.GetValue("CurrentTheme", string.Empty);
-                    if (!string.IsNullOrEmpty(keyText)) {
-                        return this.GuidToThemeName(keyText);
-                    }
+                string keyText = (string)key?.GetValue("CurrentTheme", string.Empty);
+                if (!string.IsNullOrEmpty(keyText)) {
+                    return GuidToThemeName(keyText);
                 }
             }
-            return VSTheme.Unknown;
+            return VsTheme.Unknown;
         }
 
-        VSTheme VisualStudio2013Theme() {
-            var rKey = @"Software\Microsoft\VisualStudio\12.0\General";
+        VsTheme VisualStudio2013Theme() {
+            const string rKey = @"Software\Microsoft\VisualStudio\12.0\General";
 
             using (var key = Registry.CurrentUser.OpenSubKey(rKey)) {
-                if (key != null) {
-                    var keyText = (string)key.GetValue("CurrentTheme", string.Empty);
-                    if (!string.IsNullOrEmpty(keyText)) {
-                        return this.GuidToThemeName(keyText.Replace("{", "").Replace("}", ""));
-                    }
+                string keyText = (string)key?.GetValue("CurrentTheme", string.Empty);
+                if (!string.IsNullOrEmpty(keyText)) {
+                    return GuidToThemeName(keyText.Replace("{", "").Replace("}", ""));
                 }
             }
-            return VSTheme.Unknown;
+            return VsTheme.Unknown;
         }
 
-        VSTheme VisualStudio2015Theme() {
-            var rKey = @"Software\Microsoft\VisualStudio\14.0\ApplicationPrivateSettings\Microsoft\VisualStudio";
+        VsTheme VisualStudio2015Theme() {
+            const string rKey = @"Software\Microsoft\VisualStudio\14.0\ApplicationPrivateSettings\Microsoft\VisualStudio";
 
             using (var key = Registry.CurrentUser.OpenSubKey(rKey)) {
-                if (key != null) {
-                    var keyText = (string)key.GetValue("ColorTheme", string.Empty);
+                string keyText = (string)key?.GetValue("ColorTheme", string.Empty);
 
-                    if (!string.IsNullOrEmpty(keyText)) {
-                        var keyTextValues = keyText.Split('*');
-                        if (keyTextValues.Length > 2) {
-                            return this.GuidToThemeName(keyTextValues[2]);
-                        }
-                    }
+                if (string.IsNullOrEmpty(keyText)) {
+                    return VsTheme.Unknown;
+                }
+                var keyTextValues = keyText.Split('*');
+                if (keyTextValues.Length > 2) {
+                    return GuidToThemeName(keyTextValues[2]);
                 }
             }
-            return VSTheme.Unknown;
+            return VsTheme.Unknown;
         }
 
-        public static VSTheme GetTheme() {
-            var version = DTEHelpers.GetDTE().Application.Version;
+        public static VsTheme GetTheme() {
+            string version = DteHelpers.GetDte().Application.Version;
             switch (version) {
                 case "14.0":
-                    return new VSThemeDetector().VisualStudio2015Theme();
+                    return new VsThemeDetector().VisualStudio2015Theme();
                 case "12.0":
-                    return new VSThemeDetector().VisualStudio2013Theme();
+                    return new VsThemeDetector().VisualStudio2013Theme();
                 case "11.0":
-                    return new VSThemeDetector().VisualStudio2012Theme();
+                    return new VsThemeDetector().VisualStudio2012Theme();
                 default:
-                    return VSTheme.Unknown;
+                    return VsTheme.Unknown;
             }
         }
     }

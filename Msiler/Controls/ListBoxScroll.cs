@@ -5,11 +5,11 @@ namespace Msiler.Controls
     class ListBoxScroll : ListBox
     {
         public ListBoxScroll() {
-            SelectionChanged += ListBoxScroll_SelectionChanged;
+            this.SelectionChanged += this.ListBoxScroll_SelectionChanged;
         }
 
         void ListBoxScroll_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-            ScrollIntoView(SelectedItem);
+            this.ScrollIntoView(this.SelectedItem);
         }
     }
 }

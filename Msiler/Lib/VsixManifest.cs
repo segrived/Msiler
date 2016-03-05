@@ -14,7 +14,7 @@ namespace Msiler.Lib
 
         VsixManifest() { }
 
-        VsixManifest(string manifestPath) {
+        private VsixManifest(string manifestPath) {
             var doc = new XmlDocument();
             doc.Load(manifestPath);
 
@@ -31,9 +31,9 @@ namespace Msiler.Lib
         public static VsixManifest GetManifest() {
             var assembly = Assembly.GetExecutingAssembly();
             var assemblyUri = new UriBuilder(assembly.CodeBase);
-            var assemblyPath = Uri.UnescapeDataString(assemblyUri.Path);
-            var assemblyDirectory = Path.GetDirectoryName(assemblyPath);
-            var vsixManifestPath = Path.Combine(assemblyDirectory, "extension.vsixmanifest");
+            string assemblyPath = Uri.UnescapeDataString(assemblyUri.Path);
+            string assemblyDirectory = Path.GetDirectoryName(assemblyPath);
+            string vsixManifestPath = Path.Combine(assemblyDirectory, "extension.vsixmanifest");
             return new VsixManifest(vsixManifestPath);
         }
     }

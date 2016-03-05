@@ -20,20 +20,20 @@ namespace Msiler
 
     public class FunctionFollower
     {
-        ITextView _view;
-        readonly DTE2 _dte;
+        readonly ITextView _view;
+        private readonly DTE2 _dte;
 
         public FunctionFollower(ITextView view) {
             this._view = view;
-            this._view.Caret.PositionChanged += Caret_PositionChanged;
-            this._dte = DTEHelpers.GetDTE();
+            this._view.Caret.PositionChanged += this.Caret_PositionChanged;
+            this._dte = DteHelpers.GetDte();
         }
 
-        public static bool IsFollowingEnabled { get; set; } = false;
+        public static bool IsFollowingEnabled { get; set; }
 
         public static event MethodSelectedHandler MethodSelected;
 
-        protected void OnMethodSelect(AssemblyMethodSignature methodInfo) {
+        private void OnMethodSelect(AssemblyMethodSignature methodInfo) {
             MethodSelected?.Invoke(this, new MethodSignatureEventArgs(methodInfo));
         }
 
@@ -47,7 +47,7 @@ namespace Msiler
                 return;
             }
 
-            var doc = _dte.ActiveDocument;
+            var doc = this._dte.ActiveDocument;
             if (doc == null) {
                 return;
             }
@@ -62,9 +62,9 @@ namespace Msiler
             }
 
             var fcm = (FileCodeModel2)doc.ProjectItem.FileCodeModel;
-            var signature = DTEHelpers.GetSignature(sel.ActivePoint, fcm);
+            var signature = DteHelpers.GetSignature(sel.ActivePoint, fcm);
             if (signature != null) {
-                OnMethodSelect(signature);
+                this.OnMethodSelect(signature);
             }
         }
     }

@@ -6,7 +6,7 @@ namespace Msiler.UI.UserControls
     public partial class WelcomeUserControl : UserControl
     {
         public WelcomeUserControl() {
-            InitializeComponent();
+            this.InitializeComponent();
         }
 
         private void HyperlinkOptions_Click(object sender, System.Windows.RoutedEventArgs e) {

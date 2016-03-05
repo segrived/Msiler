@@ -12,12 +12,10 @@ namespace Msiler.Helpers
             if (pos == null)
                 return String.Empty;
             int off = editor.Document.GetOffset(pos.Value.Line, pos.Value.Column);
-            return AvalonEditHelpers.GetWordOnOffset(editor.Document, off);
+            return GetWordOnOffset(editor.Document, off);
         }
 
         public static string GetWordOnOffset(ITextSource textSource, int offset) {
-            int startOffset, endOffset;
-
             if (offset < 0 || offset >= textSource.TextLength) {
                 return String.Empty;
             }
@@ -34,7 +32,7 @@ namespace Msiler.Helpers
                 }
                 processingOffset--;
             }
-            startOffset = processingOffset + 1;
+            int startOffset = processingOffset + 1;
 
             processingOffset = offset;
             while (processingOffset < textSource.TextLength) {
@@ -44,7 +42,7 @@ namespace Msiler.Helpers
                 }
                 processingOffset++;
             }
-            endOffset = processingOffset;
+            int endOffset = processingOffset;
 
             return textSource.GetText(startOffset, endOffset - startOffset);
         }

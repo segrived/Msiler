@@ -15,7 +15,7 @@ namespace Msiler.Helpers
         }
 
         public static string[] Lines(this string source) {
-            return source.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.None);
+            return source.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
         }
 
         public static long? ParseNumber(string s) {
@@ -25,7 +25,7 @@ namespace Msiler.Helpers
                     s = s.Replace("0x", "");
                     numberBase = 16;
                 }
-                var number = Convert.ToInt64(s, numberBase);
+                long number = Convert.ToInt64(s, numberBase);
                 return number;
             } catch (Exception) {
                 return null;

@@ -5,8 +5,8 @@ namespace Msiler.HighlightSchemes
     class DefaultAutoScheme : IListingHighlightingScheme
     {
         public IListingHighlightingSchemeDef GetScheme() {
-            var theme = VSThemeDetector.GetTheme();
-            if (theme == VSTheme.Light || theme == VSTheme.Blue || theme == VSTheme.Unknown) {
+            var theme = VsThemeDetector.GetTheme();
+            if (theme == VsTheme.Light || theme == VsTheme.Blue || theme == VsTheme.Unknown) {
                 return new DefaultLightScheme().GetScheme();
             }
             return new DefaultDarkScheme().GetScheme();

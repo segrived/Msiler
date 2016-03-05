@@ -10,12 +10,12 @@ using System.Linq;
 
 namespace Msiler.Helpers
 {
-    public static class DTEHelpers
+    public static class DteHelpers
     {
         private static readonly Regex GenericPartRegex
             = new Regex(@"(<.*>)|(\(Of .*\))", RegexOptions.Compiled);
 
-        public static DTE2 GetDTE() {
+        public static DTE2 GetDte() {
             var provider = ServiceProvider.GlobalProvider;
             var vs = (DTE2)provider.GetService(typeof(DTE));
 
@@ -40,9 +40,12 @@ namespace Msiler.Helpers
         }
 
         public static string GetOutputAssemblyFileName() {
-            var dte = GetDTE();
+            var dte = GetDte();
             var sb = (SolutionBuild2)dte.Solution.SolutionBuild;
             var projects = sb.StartupProjects as Array;
+            if (projects == null) {
+                return null;
+            }
             var activeProject = dte.Solution.Item(projects.GetValue(0));
             var activeConf = activeProject.ConfigurationManager.ActiveConfiguration;
             string outFn = activeConf.Properties.Item("OutputPath").Value.ToString();
@@ -58,7 +61,7 @@ namespace Msiler.Helpers
             }
             // init and remove generic part
             string funcName = GenericPartRegex.Replace(codeFunction.FullName, String.Empty);
-            IEnumerable<CodeTypeRef> paramsList = Enumerable.Empty<CodeTypeRef>();
+            IEnumerable<CodeTypeRef> paramsList;
 
             switch (codeFunction.FunctionKind) {
                 case vsCMFunction.vsCMFunctionPropertyGet:
@@ -71,7 +74,6 @@ namespace Msiler.Helpers
                     var lastDot = funcName.LastIndexOf(".", StringComparison.Ordinal);
                     funcName = funcName.Substring(0, lastDot + 1) + prefix + funcName.Substring(lastDot + 1);
 
-                    var funcParams = codeFunction.Parameters;
                     paramsList = codeFunction.FunctionKind == vsCMFunction.vsCMFunctionPropertyGet
                         ? new List<CodeTypeRef>()
                         : new List<CodeTypeRef> { codeFunction.Type };
@@ -89,8 +91,8 @@ namespace Msiler.Helpers
 
         private static string ProcessTypeRef(CodeTypeRef typeRef) {
             if (typeRef.TypeKind == vsCMTypeRef.vsCMTypeRefArray) {
-                var rank = typeRef.Rank;
-                var fullType = typeRef.ElementType.AsFullName + $"[{new String(',', rank - 1)}]";
+                int rank = typeRef.Rank;
+                string fullType = typeRef.ElementType.AsFullName + $"[{new String(',', rank - 1)}]";
                 return fullType;
             }
             return typeRef.AsFullName;

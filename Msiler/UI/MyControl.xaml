@@ -44,7 +44,7 @@
                         <StackPanel Orientation="Horizontal"
                                     ToolTip="{Binding Signature.MethodName}">
                             <TextBlock Text="{Binding Signature.MethodName}" />
-                            <TextBlock Text="{Binding Signature.ParameterTypes, Converter={StaticResource listToStringConv}, ConverterParameter=', ', StringFormat=({0})}"
+                            <TextBlock Text="{Binding Signature.ParameterTypes, Converter={StaticResource ListToStringConv}, ConverterParameter=', ', StringFormat=({0})}"
                                        Foreground="{DynamicResource {x:Static vs:EnvironmentColors.SystemGrayTextBrushKey}}" />
                         </StackPanel>
                     </DataTemplate>

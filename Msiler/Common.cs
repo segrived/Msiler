@@ -5,17 +5,9 @@ namespace Msiler
 {
     public class Common
     {
-        static Common instance;
+        private static Common _instance;
 
-        public static Common Instance {
-            get
-            {
-                if (instance == null) {
-                    instance = new Common();
-                }
-                return instance;
-            }
-        }
+        public static Common Instance => _instance ?? (_instance = new Common());
 
         public const string OptionsGroupTitle = @"Msiler: MSIL Code Viewer";
         public const string RepoUrl = @"https://github.com/segrived/Msiler";
@@ -23,7 +15,6 @@ namespace Msiler
 
         public IVsSolutionBuildManager BuildManager { get; set; }
         public IVsSolution Solution { get; set; }
-        public IVsWindowFrame Frame { get; set; }
         public MsilerPackage Package { get; set; }
         public uint SolutionUpdateCookie { get; set; }
         public uint SolutionCookie { get; set; }

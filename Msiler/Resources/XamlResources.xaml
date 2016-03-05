@@ -4,7 +4,7 @@
                     xmlns:conv="clr-namespace:Msiler.Converters"
                     xmlns:ctrl="clr-namespace:Msiler.Controls">
 
-    <conv:ListToStringConverter x:Key="listToStringConv" />
+    <conv:ListToStringConverter x:Key="ListToStringConv" />
 
     <Style TargetType="ListBoxItem">
         <Setter Property="BorderThickness"

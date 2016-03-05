@@ -1,19 +1,18 @@
 ﻿using Msiler.Helpers;
 using System;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 
 namespace Msiler.UI
 {
-    public partial class ILHelpWindow : Window
+    public partial class ILHelpWindow
     {
         public ILHelpWindow() {
-            InitializeComponent();
+            this.InitializeComponent();
             this.InstructionList.ItemsSource = AssemblyParser.Helpers.GetOpCodesList();
-            var view = CollectionViewSource.GetDefaultView(InstructionList.ItemsSource);
-            view.Filter = FilterInstructionsList;
+            var view = CollectionViewSource.GetDefaultView(this.InstructionList.ItemsSource);
+            view.Filter = this.FilterInstructionsList;
         }
 
         void InstructionList_SelectionChanged(object sender, SelectionChangedEventArgs e) {
@@ -27,16 +26,14 @@ namespace Msiler.UI
         }
 
         bool FilterInstructionsList(object o) {
-            var methodName = o as string;
-            var filterQuery = FilterMethodsTextBox.Text;
-            if (String.IsNullOrEmpty(filterQuery))
-                return true;
-
-            return methodName.Contains(filterQuery, StringComparison.OrdinalIgnoreCase);
+            string methodName = o as string;
+            string filterQuery = this.FilterMethodsTextBox.Text;
+            return String.IsNullOrEmpty(filterQuery) 
+                || methodName.Contains(filterQuery, StringComparison.OrdinalIgnoreCase);
         }
 
         private void FilterMethodsTextBox_TextChanged(object sender, TextChangedEventArgs e) {
-            CollectionViewSource.GetDefaultView(InstructionList.ItemsSource).Refresh();
+            CollectionViewSource.GetDefaultView(this.InstructionList.ItemsSource).Refresh();
         }
     }
 }

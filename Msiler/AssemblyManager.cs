@@ -21,8 +21,6 @@ namespace Msiler
 
     public class AssemblyManager : IVsUpdateSolutionEvents, IVsSolutionEvents
     {
-        public IEnumerable<AssemblyMethod> Methods { get; private set; }
-
         AssemblyReader _assemblyReader;
         DateTime _previousAssemblyWriteTime;
 
@@ -37,20 +35,18 @@ namespace Msiler
             Common.Instance.SolutionCookie = solutionCookie;
 
             Common.Instance.ListingGenerationOptions.Applied += (s, e) => {
-                _previousAssemblyWriteTime = default(DateTime);
+                this._previousAssemblyWriteTime = default(DateTime);
             };
         }
 
         public int OnAfterCloseSolution(object pUnkReserved) {
-            OnMethodListChanged(new List<AssemblyMethod>());
+            this.OnMethodListChanged(new List<AssemblyMethod>());
             this._previousAssemblyWriteTime = default(DateTime);
             return VSConstants.S_OK;
         }
 
         public int UpdateSolution_Begin(ref int pfCancelUpdate) {
-            if (this._assemblyReader != null) {
-                this._assemblyReader.Dispose();
-            }
+            this._assemblyReader?.Dispose();
             return VSConstants.S_OK;
         }
 
@@ -61,22 +57,21 @@ namespace Msiler
             if (fSucceeded != 1) {
                 return VSConstants.S_OK;
             }
-            string assemblyFile = DTEHelpers.GetOutputAssemblyFileName();
+            string assemblyFile = DteHelpers.GetOutputAssemblyFileName();
             try {
                 var assemblyWriteTime = new FileInfo(assemblyFile).LastWriteTime;
                 // if assembly was not changed
-                if (_previousAssemblyWriteTime == assemblyWriteTime) {
+                if (this._previousAssemblyWriteTime == assemblyWriteTime) {
                     return VSConstants.S_OK;
                 }
                 var options = new AssemblyParserOptions {
-                    ProcessPDB = Common.Instance.ListingGenerationOptions.ProcessPDBFiles
+                    ProcessPDB = Common.Instance.ListingGenerationOptions.ProcessPdbFiles
                 };
                 this._assemblyReader = new AssemblyReader(assemblyFile, options);
-                _previousAssemblyWriteTime = assemblyWriteTime;
-                var genOpt = Common.Instance.GeneralOptions;
-                OnMethodListChanged(this._assemblyReader.Methods);
+                this._previousAssemblyWriteTime = assemblyWriteTime;
+                this.OnMethodListChanged(this._assemblyReader.Methods);
             } catch (Exception) {
-                OnMethodListChanged(new List<AssemblyMethod>());
+                this.OnMethodListChanged(new List<AssemblyMethod>());
             }
             return VSConstants.S_OK;
         }
@@ -110,8 +105,8 @@ namespace Msiler
 
         public event MethodListChangedHandler MethodListChanged;
 
-        public void OnMethodListChanged(List<AssemblyMethod> methodList) {
-            MethodListChanged?.Invoke(this, new MethodsListEventArgs(methodList));
+        private void OnMethodListChanged(List<AssemblyMethod> methodList) {
+            this.MethodListChanged?.Invoke(this, new MethodsListEventArgs(methodList));
         }
     }
 }

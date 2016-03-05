@@ -15,7 +15,7 @@ namespace Msiler
             this.Caption = Resources.ToolWindowTitle;
             this.BitmapResourceID = 301;
             this.BitmapIndex = 1;
-            Content = new MyControl();
+            this.Content = new MyControl();
             IsVisible = false;
         }
 

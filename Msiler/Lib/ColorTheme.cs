@@ -15,7 +15,7 @@ namespace Msiler.Lib
 
     public static class ColorTheme
     {
-        private static readonly Regex highlightingColorRegex =
+        private static readonly Regex HighlightingColorRegex =
             new Regex(@"(?<Color>#[\da-f]{6})($|;(?<Flags>[BUI]*))", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         public static IListingHighlightingScheme GetHighlightingScheme(MsilerColorTheme theme) {
@@ -53,13 +53,19 @@ namespace Msiler.Lib
         }
 
         private static HighlightingColor StringToHighlightingColor(string s) {
-            var match = highlightingColorRegex.Match(s);
+            var match = HighlightingColorRegex.Match(s);
             if (!match.Success) {
                 return null;
             }
-            var colorStr = match.Groups["Color"].Value;
-            var flagsStr = match.Groups["Flags"].Value;
-            var color = (Color)ColorConverter.ConvertFromString(colorStr);
+            string colorStr = match.Groups["Color"].Value;
+            string flagsStr = match.Groups["Flags"].Value;
+
+            var convertFromString = ColorConverter.ConvertFromString(colorStr);
+
+            if (convertFromString == null) {
+                return new HighlightingColor();
+            }
+            var color = (Color)convertFromString;
 
             bool isBold = flagsStr.Contains("B");
             bool isItalic = flagsStr.Contains("I");
@@ -74,7 +80,7 @@ namespace Msiler.Lib
         }
 
         private static IHighlightingDefinition GetDefaultHighlightingDefinition() {
-            var ilRes = "Msiler.Resources.IL.xshd";
+            const string ilRes = "Msiler.Resources.IL.xshd";
             using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(ilRes)) {
                 using (var reader = new System.Xml.XmlTextReader(stream)) {
                     return HighlightingLoader.Load(reader, HighlightingManager.Instance);

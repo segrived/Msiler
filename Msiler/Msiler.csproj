@@ -232,7 +232,7 @@
     <Compile Include="Controls\ListBoxScroll.cs" />
     <Compile Include="AssemblyManager.cs" />
     <Compile Include="Helpers\AvalonEditHelpers.cs" />
-    <Compile Include="Helpers\DTEHelpers.cs" />
+    <Compile Include="Helpers\DteHelpers.cs" />
     <Compile Include="Helpers\FontHelpers.cs" />
     <Compile Include="Helpers\StringHelpers.cs" />
     <Compile Include="HighlightSchemes\DefaultAutoScheme.cs" />

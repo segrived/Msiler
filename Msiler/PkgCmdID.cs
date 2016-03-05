@@ -2,6 +2,6 @@
 {
     internal static class PkgCmdIDList
     {
-        public const uint cmdidMyTool = 0x101;
+        public const uint CmdidMyTool = 0x101;
     };
 }

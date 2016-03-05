@@ -50,7 +50,7 @@ namespace Msiler.DialogPages
         [Category(CategoryTitle)]
         [DisplayName("Process PDB files")]
         [Description("NOTE: rebuilding required")]
-        public bool ProcessPDBFiles { get; set; } = true;
+        public bool ProcessPdbFiles { get; set; } = true;
 
         public ListingGeneratorOptions ToListingGeneratorOptions() {
             return new ListingGeneratorOptions {
@@ -59,7 +59,7 @@ namespace Msiler.DialogPages
                 IncludeMethodName = this.IncludeMethodName,
                 IgnoreNops = this.IgnoreNops,
                 NumbersAsHex = this.NumbersAsHex,
-                ProcessPDBFiles = this.ProcessPDBFiles,
+                ProcessPDBFiles = this.ProcessPdbFiles,
                 SimplifyFunctionNames = this.SimplifyFunctionNames,
                 UpcaseOpCodes = this.UpcaseOpCodes,
                 ReadInstructionBytes = this.ReadInstructionBytes

@@ -10,10 +10,10 @@ namespace Msiler
 {
     internal static class GuidList
     {
-        public const string guidMsilerPkgString = "2e50f4f0-18d1-419e-a204-f1156c910f2b";
-        public const string guidMsilerCmdSetString = "04d989fc-bbaa-4e42-aef8-c93d8727da2b";
-        public const string guidToolWindowPersistanceString = "0c127690-de92-4d02-a743-634bb922145c";
-        public static readonly Guid guidMsilerCmdSet = new Guid(guidMsilerCmdSetString);
+        public const string GuidMsilerPkgString = "2e50f4f0-18d1-419e-a204-f1156c910f2b";
+        public const string GuidMsilerCmdSetString = "04d989fc-bbaa-4e42-aef8-c93d8727da2b";
+        public const string GuidToolWindowPersistanceString = "0c127690-de92-4d02-a743-634bb922145c";
+        public static readonly Guid GuidMsilerCmdSet = new Guid(GuidMsilerCmdSetString);
     };
 
     [PackageRegistration(UseManagedResourcesOnly = true)]
@@ -24,15 +24,15 @@ namespace Msiler
     [ProvideOptionPage(typeof(ExtensionDisplayOptions), Common.OptionsGroupTitle, "Display", 0, 0, true)]
     [ProvideOptionPage(typeof(ExtensionListingGenerationOptions), Common.OptionsGroupTitle, "Listing Generation", 0, 0, true)]
     [ProvideOptionPage(typeof(ExtensionExcludeOptions), Common.OptionsGroupTitle, "Exclude Methods Options", 0, 0, true)]
-    [Guid(GuidList.guidMsilerPkgString)]
+    [Guid(GuidList.GuidMsilerPkgString)]
     public sealed class MsilerPackage : Package
     {
-        IVsSolutionBuildManager _buildManager;
-        IVsSolution _solution;
+        private IVsSolutionBuildManager _buildManager;
+        private IVsSolution _solution;
 
         void ShowToolWindow(object sender, EventArgs e) {
             var window = this.FindToolWindow(typeof(MsilerToolWindow), 0, true);
-            if ((null == window) || (null == window.Frame)) {
+            if (window?.Frame == null) {
                 throw new NotSupportedException(Resources.CanNotCreateWindow);
             }
             var windowFrame = (IVsWindowFrame)window.Frame;
@@ -40,21 +40,21 @@ namespace Msiler
         }
 
         protected override void Initialize() {
-            var menuCommandService = GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
+            var menuCommandService = this.GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
             if (null == menuCommandService)
                 return;
 
-            var toolwndCommandId = new CommandID(GuidList.guidMsilerCmdSet, (int)PkgCmdIDList.cmdidMyTool);
-            var menuToolWin = new MenuCommand(ShowToolWindow, toolwndCommandId);
+            var toolwndCommandId = new CommandID(GuidList.GuidMsilerCmdSet, (int)PkgCmdIDList.CmdidMyTool);
+            var menuToolWin = new MenuCommand(this.ShowToolWindow, toolwndCommandId);
             menuCommandService.AddCommand(menuToolWin);
 
-            this._buildManager = GetService(typeof(SVsSolutionBuildManager)) as IVsSolutionBuildManager;
-            if (_buildManager == null) {
+            this._buildManager = this.GetService(typeof(SVsSolutionBuildManager)) as IVsSolutionBuildManager;
+            if (this._buildManager == null) {
                 return;
             }
 
-            this._solution = GetService(typeof(SVsSolution)) as IVsSolution;
-            if (_solution == null) {
+            this._solution = this.GetService(typeof(SVsSolution)) as IVsSolution;
+            if (this._solution == null) {
                 return;
             }
 
@@ -63,23 +63,23 @@ namespace Msiler
             Common.Instance.Solution = this._solution;
 
             Common.Instance.GeneralOptions
-                = (ExtensionGeneralOptions)GetDialogPage(typeof(ExtensionGeneralOptions));
+                = (ExtensionGeneralOptions)this.GetDialogPage(typeof(ExtensionGeneralOptions));
             Common.Instance.DisplayOptions
-                = (ExtensionDisplayOptions)GetDialogPage(typeof(ExtensionDisplayOptions));
+                = (ExtensionDisplayOptions)this.GetDialogPage(typeof(ExtensionDisplayOptions));
             Common.Instance.ListingGenerationOptions
-                = (ExtensionListingGenerationOptions)GetDialogPage(typeof(ExtensionListingGenerationOptions));
+                = (ExtensionListingGenerationOptions)this.GetDialogPage(typeof(ExtensionListingGenerationOptions));
             Common.Instance.ExcludeOptions
-                = (ExtensionExcludeOptions)GetDialogPage(typeof(ExtensionExcludeOptions));
+                = (ExtensionExcludeOptions)this.GetDialogPage(typeof(ExtensionExcludeOptions));
             base.Initialize();
         }
 
         protected override void Dispose(bool disposing) {
             base.Dispose(disposing);
             if (this._buildManager != null && Common.Instance.SolutionUpdateCookie != 0) {
-                _buildManager.UnadviseUpdateSolutionEvents(Common.Instance.SolutionUpdateCookie);
+                this._buildManager.UnadviseUpdateSolutionEvents(Common.Instance.SolutionUpdateCookie);
             }
             if (this._solution != null && Common.Instance.SolutionCookie != 0) {
-                _solution.UnadviseSolutionEvents(Common.Instance.SolutionCookie);
+                this._solution.UnadviseSolutionEvents(Common.Instance.SolutionCookie);
             }
         }
     }
