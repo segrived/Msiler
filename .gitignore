@@ -198,3 +198,4 @@ FakesAssemblies/
 BuildData/
 *.csdat
 *.orig
+*.tss
