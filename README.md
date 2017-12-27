@@ -1,6 +1,6 @@
 # Msiler: CIL (MSIL) Code Viewer
 
-CIL (MSIL) code viewer extension for Visual Studio 2012/2013/2015.
+CIL (MSIL) code viewer extension for Visual Studio 2017.
 
 [![Build status](https://ci.appveyor.com/api/projects/status/aj46np0rwam5sf4e?svg=true)](https://ci.appveyor.com/project/segrived/msiler) [![segrived MyGet Build Status](https://www.myget.org/BuildSource/Badge/segrived?identifier=096d8b99-21b2-47b6-8d8a-62b7b7bf5fb9)](https://www.myget.org/)
 
@@ -10,6 +10,8 @@ CIL (MSIL) code viewer extension for Visual Studio 2012/2013/2015.
 
 ## Installation
 You can install extension from [Visual Studio Gallery](https://visualstudiogallery.msdn.microsoft.com/60fc53d4-e414-461b-a27c-3d5d2a53f637) or download from [releases section](https://github.com/segrived/Msiler/releases) and install manually.
+
+[**Last build with Visual Studio 2012/2013/2015 support**](https://ci.appveyor.com/project/segrived/msiler/build/1.0.213/artifacts)
 
 [Get latest dev version](https://ci.appveyor.com/project/segrived/msiler/build/artifacts) (can be unstable)
 
@@ -69,21 +71,10 @@ Feel free to send pull requests.
 ## Changelog
 [Version history](https://github.com/segrived/Msiler/wiki/Version-History)
 
-## Roadmap
-
-### Version 2.1 (Feb 2016)
-* PDB files support
-* Follow methods under cursor (optional)
-* Additional method information window
-
-### Version 2.2 (Mar 2016)
-* Clickable offsets
-* Show anonymous function with a method that invoked it (optional)
-
 ## License
 The MIT License (MIT)
 
-Copyright (c) 2015-2016 segrived
+Copyright (c) 2015-2018 segrived
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 

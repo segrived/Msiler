@@ -28,7 +28,7 @@
                            FontSize="22"
                            Name="VersionTextBlock" />
                 <TextBlock FontSize="14"
-                           Text="by segrived, 2015-2016" />
+                           Text="by segrived, 2015-2018" />
                 <TextBlock FontSize="14">
                 <Hyperlink Click="Hyperlink_Click">https://github.com/segrived/Msiler</Hyperlink>
                 </TextBlock>
