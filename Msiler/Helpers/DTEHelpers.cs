@@ -12,8 +12,7 @@ namespace Msiler.Helpers
 {
     public static class DteHelpers
     {
-        private static readonly Regex GenericPartRegex
-            = new Regex(@"(<.*>)|(\(Of .*\))", RegexOptions.Compiled);
+        private static readonly Regex GenericPartRegex = new Regex(@"(<.*>)|(\(Of .*\))", RegexOptions.Compiled);
 
         public static DTE2 GetDte() {
             var provider = ServiceProvider.GlobalProvider;
