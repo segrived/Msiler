@@ -1,6 +1,6 @@
 ﻿# Msiler: CIL (MSIL) Code Viewer
 
-CIL (MSIL) code viewer extension for Visual Studio 2012/2013/2015.
+CIL (MSIL) code viewer extension for Visual Studio 2017.
 
 [![Build status](https://ci.appveyor.com/api/projects/status/aj46np0rwam5sf4e?svg=true)](https://ci.appveyor.com/project/segrived/msiler) [![segrived MyGet Build Status](https://www.myget.org/BuildSource/Badge/segrived?identifier=096d8b99-21b2-47b6-8d8a-62b7b7bf5fb9)](https://www.myget.org/)
 
@@ -10,6 +10,8 @@ CIL (MSIL) code viewer extension for Visual Studio 2012/2013/2015.
 
 ## Installation
 You can install extension from [Visual Studio Gallery](https://visualstudiogallery.msdn.microsoft.com/60fc53d4-e414-461b-a27c-3d5d2a53f637) or download from [releases section](https://github.com/segrived/Msiler/releases) and install manually.
+
+[**Last build with Visual Studio 2012/2013/2015 support**](https://ci.appveyor.com/project/segrived/msiler/build/1.0.213/artifacts)
 
 [Get latest dev version](https://ci.appveyor.com/project/segrived/msiler/build/artifacts) (can be unstable)
 
