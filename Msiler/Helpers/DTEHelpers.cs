@@ -24,7 +24,7 @@ namespace Msiler.Helpers
             return vs;
         }
 
-        public static string GetFullPath(string path, string basePath) {
+        private static string GetFullPath(string path, string basePath) {
             bool isAbsolute = Path.IsPathRooted(path);
             if (isAbsolute) {
                 return path;
@@ -41,8 +41,7 @@ namespace Msiler.Helpers
         public static string GetOutputAssemblyFileName() {
             var dte = GetDte();
             var sb = (SolutionBuild2)dte.Solution.SolutionBuild;
-            var projects = sb.StartupProjects as Array;
-            if (projects == null) {
+            if (!(sb.StartupProjects is Array projects)) {
                 return null;
             }
             var activeProject = dte.Solution.Item(projects.GetValue(0));
@@ -89,12 +88,12 @@ namespace Msiler.Helpers
         }
 
         private static string ProcessTypeRef(CodeTypeRef typeRef) {
-            if (typeRef.TypeKind == vsCMTypeRef.vsCMTypeRefArray) {
-                int rank = typeRef.Rank;
-                string fullType = typeRef.ElementType.AsFullName + $"[{new String(',', rank - 1)}]";
-                return fullType;
-            }
-            return typeRef.AsFullName;
+            if (typeRef.TypeKind != vsCMTypeRef.vsCMTypeRefArray)
+                return typeRef.AsFullName;
+
+            int rank = typeRef.Rank;
+            string fullType = typeRef.ElementType.AsFullName + $"[{new String(',', rank - 1)}]";
+            return fullType;
         }
 
         private static CodeFunction GetCodeFunction(FileCodeModel2 fcm, TextPoint point) {
