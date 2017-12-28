@@ -7,6 +7,8 @@ using Msiler.AssemblyParser;
 using Microsoft.VisualStudio.Shell;
 using System.Text.RegularExpressions;
 using System.Linq;
+using Microsoft.Build.Evaluation;
+using Project = Microsoft.Build.Evaluation.Project;
 
 namespace Msiler.Helpers
 {
@@ -38,17 +40,27 @@ namespace Msiler.Helpers
             }
         }
 
-        public static string GetOutputAssemblyFileName() {
+        private static string GetPropertyValueFrom(string projectFile, string propertyName, string configurationName)
+        {
+            using (var projectCollection = new ProjectCollection())
+            {
+                var p = new Project(projectFile, null, null,  projectCollection, ProjectLoadSettings.Default);
+                p.SetProperty("Configuration", configurationName);
+                p.ReevaluateIfNecessary();
+                return p.Properties.Where(x => x.Name == propertyName).Select(x => x.EvaluatedValue).SingleOrDefault();
+            }
+        }
+
+        public static string GetOutputAssemblyFileName()
+        {
             var dte = GetDte();
             var sb = (SolutionBuild2)dte.Solution.SolutionBuild;
-            if (!(sb.StartupProjects is Array projects)) {
+
+            if (!(sb.StartupProjects is Array projects))
                 return null;
-            }
             var activeProject = dte.Solution.Item(projects.GetValue(0));
             var activeConf = activeProject.ConfigurationManager.ActiveConfiguration;
-            string outFn = activeConf.Properties.Item("OutputPath").Value.ToString();
-            string fullPath = GetFullPath(outFn, Path.GetDirectoryName(activeProject.FileName));
-            return Path.Combine(fullPath, activeProject.Properties.Item("OutputFileName").Value.ToString());
+            return GetPropertyValueFrom(activeProject.FileName, "TargetPath", activeConf.ConfigurationName);
         }
 
         public static AssemblyMethodSignature GetSignature(VirtualPoint point, FileCodeModel2 fcm) {
@@ -61,15 +73,14 @@ namespace Msiler.Helpers
             string funcName = GenericPartRegex.Replace(codeFunction.FullName, String.Empty);
             IEnumerable<CodeTypeRef> paramsList;
 
-            switch (codeFunction.FunctionKind) {
+            switch (codeFunction.FunctionKind)
+            {
                 case vsCMFunction.vsCMFunctionPropertyGet:
                 case vsCMFunction.vsCMFunctionPropertySet:
 
-                    var prefix = codeFunction.FunctionKind == vsCMFunction.vsCMFunctionPropertyGet
-                        ? "get_"
-                        : "set_";
+                    string prefix = codeFunction.FunctionKind == vsCMFunction.vsCMFunctionPropertyGet ? "get_" : "set_";
 
-                    var lastDot = funcName.LastIndexOf(".", StringComparison.Ordinal);
+                    int lastDot = funcName.LastIndexOf(".", StringComparison.Ordinal);
                     funcName = funcName.Substring(0, lastDot + 1) + prefix + funcName.Substring(lastDot + 1);
 
                     paramsList = codeFunction.FunctionKind == vsCMFunction.vsCMFunctionPropertyGet
@@ -77,8 +88,9 @@ namespace Msiler.Helpers
                         : new List<CodeTypeRef> { codeFunction.Type };
                     break;
                 default:
-                    if (codeFunction.FunctionKind == vsCMFunction.vsCMFunctionConstructor) {
-                        var lastIndex = funcName.LastIndexOf(codeFunction.Name, StringComparison.Ordinal);
+                    if (codeFunction.FunctionKind == vsCMFunction.vsCMFunctionConstructor)
+                    {
+                        int lastIndex = funcName.LastIndexOf(codeFunction.Name, StringComparison.Ordinal);
                         funcName = funcName.Substring(0, lastIndex) + ".ctor";
                     }
                     paramsList = codeFunction.Parameters.OfType<CodeParameter>().Select(p => p.Type);
