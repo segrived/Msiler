@@ -65,7 +65,7 @@ namespace Msiler
                     return VSConstants.S_OK;
                 }
                 var options = new AssemblyParserOptions {
-                    ProcessPDB = Common.Instance.ListingGenerationOptions.ProcessPdbFiles
+                    ProcessPdb = Common.Instance.ListingGenerationOptions.ProcessPdbFiles
                 };
                 this._assemblyReader = new AssemblyReader(assemblyFile, options);
                 this._previousAssemblyWriteTime = assemblyWriteTime;
