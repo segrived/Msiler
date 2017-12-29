@@ -2,7 +2,10 @@
 
 CIL (MSIL) code viewer extension for Visual Studio 2017.
 
-[![Build status](https://ci.appveyor.com/api/projects/status/aj46np0rwam5sf4e?svg=true)](https://ci.appveyor.com/project/segrived/msiler) [![segrived MyGet Build Status](https://www.myget.org/BuildSource/Badge/segrived?identifier=096d8b99-21b2-47b6-8d8a-62b7b7bf5fb9)](https://www.myget.org/)
+[![AppVeyor](https://img.shields.io/appveyor/ci/segrived/msiler.svg)](https://ci.appveyor.com/project/segrived/msiler)
+[![MyGet](https://img.shields.io/myget/segrived/v/msiler.svg)](https://www.myget.org/feed/segrived/package/vsix/2e50f4f0-18d1-419e-a204-f1156c910f2b)
+[![License](https://img.shields.io/github/license/segrived/msiler.svg)](https://github.com/segrived/Msiler/blob/master/LICENSE)
+[![Issues](https://img.shields.io/github/issues/badges/shields.svg)](https://github.com/segrived/Msiler/issues)
 
 ## Screenshot
 
