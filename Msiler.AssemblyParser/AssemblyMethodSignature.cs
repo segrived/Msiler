@@ -8,74 +8,71 @@ namespace Msiler.AssemblyParser
 {
     public class AssemblyMethodSignature
     {
-        private static readonly Regex GenericFlagRegex =
-            new Regex(@"`\d+", RegexOptions.Compiled);
+        private static readonly Regex GenericFlagRegex = new Regex(@"`\d+", RegexOptions.Compiled);
+        private List<string> ParameterTypes { get; }
 
-        public string MethodName { get; private set; }
-        public List<string> ParameterTypes { get; private set; }
+        private readonly string fullSignature;
 
-        private readonly string _fullSignature;
+        public string MethodName { get; }
 
-        public AssemblyMethodSignature(string methodName)
-            : this(methodName, new List<string>()) { }
-
-        public AssemblyMethodSignature(string methodName, List<string> parameterTypes) {
-            this.MethodName = this.ProcessMethodName(methodName);
-            this.ParameterTypes = parameterTypes.Select(this.ProcessParameterType).ToList();
-            this._fullSignature = $"{this.MethodName}({String.Join(",", this.ParameterTypes)})";
+        public AssemblyMethodSignature(string methodName, List<string> parameterTypes)
+        {
+            this.MethodName = ProcessMethodName(methodName);
+            this.ParameterTypes = parameterTypes.Select(ProcessParameterType).ToList();
+            this.fullSignature = $"{this.MethodName}({String.Join(",", this.ParameterTypes)})";
         }
 
-        private string ProcessMethodName(string methodName) {
-            methodName = GenericFlagRegex.Replace(methodName, String.Empty);
-            return methodName;
-        }
+        private static string ProcessMethodName(string methodName) => GenericFlagRegex.Replace(methodName, String.Empty);
 
-        private string ProcessParameterType(string parameterType) {
+        private static string ProcessParameterType(string parameterType)
+        {
             // remove spaces from type name (ex. Func`1<T, U> -> Func`1<T,U>)
-            var t = parameterType.Replace(" ", String.Empty);
+            string t = parameterType.Replace(" ", String.Empty);
             // remove generic flags (ex. Func`1<T,U> -> Func<T,U>)
             return GenericFlagRegex.Replace(t, String.Empty);
         }
 
-        public static AssemblyMethodSignature FromMethodDef(MethodDef definition) {
+        public static AssemblyMethodSignature FromMethodDef(MethodDef definition)
+        {
             var type = definition.DeclaringType;
             IEnumerable<Parameter> paramList = definition.Parameters;
+
             // skip implicit this
-            if (definition.MethodSig.HasThis) {
+            if (definition.MethodSig.HasThis)
                 paramList = paramList.Skip(1);
-            }
-            var methodName = $"{GetTypeFullNameFromType(type.ToTypeSig())}.{definition.Name}";
 
+            string methodName = $"{GetTypeFullNameFromType(type.ToTypeSig())}.{definition.Name}";
             var paramTypesList = paramList.Select(p => GetTypeFullNameFromType(p.Type)).ToList();
-
             return new AssemblyMethodSignature(methodName, paramTypesList);
         }
 
-        public override string ToString() => this._fullSignature;
-
-        public override bool Equals(object obj) {
-            if (obj == null || GetType() != obj.GetType()) {
-                return false;
-            }
-            var other = (AssemblyMethodSignature)obj;
-            return this._fullSignature == other._fullSignature;
-        }
-
-        public override int GetHashCode() {
-            return this._fullSignature.GetHashCode();
-        }
-
-        static string GetTypeFullNameFromType(TypeSig typeSig) {
+        private static string GetTypeFullNameFromType(TypeSig typeSig)
+        {
             string fullName = typeSig.FullName;
             var typeDef = typeSig.TryGetTypeDef();
-            if (typeDef != null && typeDef.IsNested) {
+            if (typeDef != null && typeDef.IsNested)
                 fullName = fullName.ReplaceLastOccurrence("/", ".");
-            }
-
-            if (typeSig.IsSingleOrMultiDimensionalArray) {
+  
+            if (typeSig.IsSingleOrMultiDimensionalArray)
                 fullName = typeSig.ReflectionFullName.ReplaceLastOccurrence("+", ".");
-            }
+  
             return fullName;
         }
+
+        #region Object overrides
+
+        public override string ToString() => this.fullSignature;
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null || this.GetType() != obj.GetType())
+                return false;
+            var other = (AssemblyMethodSignature)obj;
+            return this.fullSignature == other.fullSignature;
+        }
+
+        public override int GetHashCode() => this.fullSignature.GetHashCode();
+
+        #endregion
     }
 }

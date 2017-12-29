@@ -5,41 +5,34 @@ using System.Linq;
 
 namespace Msiler.AssemblyParser
 {
-    public class AssemblyParserOptions
-    {
-        public bool ProcessPDB { get; set; }
-    }
-
     public class AssemblyReader : IDisposable
     {
-        public string FileName { get; private set; }
-        public List<AssemblyMethod> Methods { get; private set; }
+        public List<AssemblyMethod> Methods { get; }
 
-        private readonly ModuleDefMD _module;
+        private readonly ModuleDefMD module;
 
-        public AssemblyReader(string assemblyFileName, AssemblyParserOptions options) {
-            this.FileName = assemblyFileName;
-            var creationOptions = new ModuleCreationOptions {
-                TryToLoadPdbFromDisk = options.ProcessPDB
+        public AssemblyReader(string assemblyFileName, AssemblyParserOptions options)
+        {
+            var creationOptions = new ModuleCreationOptions
+            {
+                TryToLoadPdbFromDisk = options.ProcessPdb
             };
-            this._module = ModuleDefMD.Load(assemblyFileName, creationOptions);
+            this.module = ModuleDefMD.Load(assemblyFileName, creationOptions);
             this.Methods = this.ParseMethodsList();
         }
 
-        public AssemblyReader(string assemblyFileName) :
-            this(assemblyFileName, new AssemblyParserOptions()) { }
+        private List<AssemblyMethod> ParseMethodsList()
+        {
+            var moduleTypes = this.module.GetTypes();
 
-        private List<AssemblyMethod> ParseMethodsList() {
-            var moduleTypes = this._module.GetTypes();
             var assemblyMethodList = moduleTypes
                 .SelectMany(t => t.Methods)
                 .Where(m => m.HasBody)
                 .Select(m => new AssemblyMethod(m));
+
             return assemblyMethodList.ToList();
         }
 
-        public void Dispose() {
-            this._module.Dispose();
-        }
+        public void Dispose() => this.module.Dispose();
     }
 }

@@ -9,7 +9,7 @@
         public bool AlignListing { get; set; } = true;
         public bool DecimalOffsets { get; set; } = false;
         public bool IncludeMethodName { get; set; } = false;
-        public bool ProcessPDBFiles { get; set; } = false;
+        public bool ProcessPdbFiles { get; set; } = false;
         public bool ReadInstructionBytes { get; set; } = false;
     }
 }

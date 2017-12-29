@@ -8,43 +8,44 @@ namespace Msiler.AssemblyParser
 {
     public class AssemblyMethod
     {
-        private readonly static char[] DisallowedMethodNameChars = { '<', '>' };
+        private static readonly char[] DisallowedMethodNameChars = { '<', '>' };
 
-        public AssemblyMethodSignature Signature { get; private set; }
-        public List<Instruction> Instructions { get; set; }
+        public AssemblyMethodSignature Signature { get; }
+        public List<Instruction> Instructions { get; }
+        public MethodDef MethodDefinition { get; }
 
-        public MethodDef MethodDefinition { get; set; }
-
-        internal AssemblyMethod(MethodDef definition) {
+        internal AssemblyMethod(MethodDef definition)
+        {
             this.MethodDefinition = definition;
             this.Signature = AssemblyMethodSignature.FromMethodDef(definition);
-            this.Instructions = MethodDefinition.Body.Instructions.ToList();
+            this.Instructions = this.MethodDefinition.Body.Instructions.ToList();
         }
 
-        public bool IsConstructor => MethodDefinition.IsConstructor;
-        public bool IsProperty => MethodDefinition.IsGetter || MethodDefinition.IsSetter;
+        public bool IsConstructor => this.MethodDefinition.IsConstructor;
+        public bool IsProperty => this.MethodDefinition.IsGetter || this.MethodDefinition.IsSetter;
         public bool IsAnonymous => this.Signature.MethodName.Any(DisallowedMethodNameChars.Contains);
 
-        public override bool Equals(object obj) {
-            if (obj == null || GetType() != obj.GetType()) {
+        public string GenerateListing(ListingGeneratorOptions options)
+        {
+            using (var generator = new ListingGenerator(options))
+                return generator.GenerateListing(this);
+        }
+
+        #region Object overrides
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null || this.GetType() != obj.GetType())
                 return false;
-            }
+
             var other = (AssemblyMethod)obj;
             return this.Signature.Equals(other.Signature);
         }
 
-        public override int GetHashCode() {
-            return this.Signature.GetHashCode();
-        }
+        public override int GetHashCode() => this.Signature.GetHashCode();
 
-        public override string ToString() {
-            return this.Signature.ToString();
-        }
+        public override string ToString() => this.Signature.ToString();
 
-        public string GenerateListing(ListingGeneratorOptions options) {
-            using (var generator = new ListingGenerator(options)) {
-                return generator.GenerateListing(this);
-            }
-        }
+        #endregion
     }
 }

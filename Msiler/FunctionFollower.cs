@@ -20,7 +20,7 @@ namespace Msiler
 
     public class FunctionFollower
     {
-        readonly ITextView _view;
+        private readonly ITextView _view;
         private readonly DTE2 _dte;
 
         public FunctionFollower(ITextView view) {

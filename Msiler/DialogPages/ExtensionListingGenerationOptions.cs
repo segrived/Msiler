@@ -59,7 +59,7 @@ namespace Msiler.DialogPages
                 IncludeMethodName = this.IncludeMethodName,
                 IgnoreNops = this.IgnoreNops,
                 NumbersAsHex = this.NumbersAsHex,
-                ProcessPDBFiles = this.ProcessPdbFiles,
+                ProcessPdbFiles = this.ProcessPdbFiles,
                 SimplifyFunctionNames = this.SimplifyFunctionNames,
                 UpcaseOpCodes = this.UpcaseOpCodes,
                 ReadInstructionBytes = this.ReadInstructionBytes
