@@ -7,10 +7,10 @@
         <DisplayName>Msiler</DisplayName>
         <Description xml:space="preserve">CIL (MSIL) Code Viewer Extension for Visual Studio 2017</Description>
         <MoreInfo>https://github.com/segrived/Msiler</MoreInfo>
-        <License>Resources\License.txt</License>
+        <License>Resources\VsixContent\License.txt</License>
         <ReleaseNotes>https://github.com/segrived/Msiler/wiki/Version-History</ReleaseNotes>
-        <Icon>Resources\Package.ico</Icon>
-        <PreviewImage>Resources\Preview.png</PreviewImage>
+        <Icon>Resources\VsixContent\Package.ico</Icon>
+        <PreviewImage>Resources\VsixContent\Preview.png</PreviewImage>
         <Tags>msil,il,cil,assembly,disassembler</Tags>
     </Metadata>
     <Installation>
