@@ -1,76 +1,39 @@
-﻿using Microsoft.Win32;
-using Msiler.Helpers;
-using System.Collections.Generic;
+﻿using System;
+using System.Windows.Media;
+using Microsoft.VisualStudio.PlatformUI;
 
 namespace Msiler.Lib
 {
-    public enum VsTheme { Blue, Light, Dark, Unknown }
-
-    public class VsThemeDetector
+    public static class VsThemeDetector
     {
-        static readonly IDictionary<string, VsTheme> Themes = new Dictionary<string, VsTheme>{
-            { "de3dbbcd-f642-433c-8353-8f1df4370aba", VsTheme.Light },
-            { "1ded0138-47ce-435e-84ef-9ec1f439b749", VsTheme.Dark },
-            { "a4d6a176-b948-4b29-8c66-53c97a1ed7d0", VsTheme.Blue }
-        };
+        private static readonly Color AccentMediumDarkTheme = Color.FromRgb(45, 45, 48);
+        private static readonly Color AccentMediumLightTheme = Color.FromRgb(238, 238, 242);
+        private static readonly Color AccentMediumBlueTheme = Color.FromRgb(255, 236, 181);
 
-        static VsTheme GuidToThemeName(string guid) {
-            return !Themes.ContainsKey(guid) ? VsTheme.Unknown : Themes[guid];
-        }
-
-        VsTheme VisualStudio2012Theme() {
-            const string rKey = @"Software\Microsoft\VisualStudio\11.0\General";
-
-            using (var key = Registry.CurrentUser.OpenSubKey(rKey)) {
-                string keyText = (string)key?.GetValue("CurrentTheme", string.Empty);
-                if (!string.IsNullOrEmpty(keyText)) {
-                    return GuidToThemeName(keyText);
-                }
+        public static VsThemeCode GetTheme()
+        {
+            try
+            {
+                var color = VSColorTheme.GetThemedColor(EnvironmentColors.AccentMediumColorKey);
+                var cc = ToColor(color);
+                if (cc == AccentMediumBlueTheme)
+                    return VsThemeCode.Blue;
+                if (cc == AccentMediumLightTheme)
+                    return VsThemeCode.Light;
+                if (cc == AccentMediumDarkTheme)
+                    return VsThemeCode.Dark;
+                float brightness = color.GetBrightness();
+                bool dark = brightness < 0.5f;
+                return dark ? VsThemeCode.Dark : VsThemeCode.Light;
             }
-            return VsTheme.Unknown;
-        }
 
-        VsTheme VisualStudio2013Theme() {
-            const string rKey = @"Software\Microsoft\VisualStudio\12.0\General";
-
-            using (var key = Registry.CurrentUser.OpenSubKey(rKey)) {
-                string keyText = (string)key?.GetValue("CurrentTheme", string.Empty);
-                if (!string.IsNullOrEmpty(keyText)) {
-                    return GuidToThemeName(keyText.Replace("{", "").Replace("}", ""));
-                }
-            }
-            return VsTheme.Unknown;
-        }
-
-        VsTheme VisualStudio2015Theme() {
-            const string rKey = @"Software\Microsoft\VisualStudio\14.0\ApplicationPrivateSettings\Microsoft\VisualStudio";
-
-            using (var key = Registry.CurrentUser.OpenSubKey(rKey)) {
-                string keyText = (string)key?.GetValue("ColorTheme", string.Empty);
-
-                if (string.IsNullOrEmpty(keyText)) {
-                    return VsTheme.Unknown;
-                }
-                var keyTextValues = keyText.Split('*');
-                if (keyTextValues.Length > 2) {
-                    return GuidToThemeName(keyTextValues[2]);
-                }
-            }
-            return VsTheme.Unknown;
-        }
-
-        public static VsTheme GetTheme() {
-            string version = DteHelpers.GetDte().Application.Version;
-            switch (version) {
-                case "14.0":
-                    return new VsThemeDetector().VisualStudio2015Theme();
-                case "12.0":
-                    return new VsThemeDetector().VisualStudio2013Theme();
-                case "11.0":
-                    return new VsThemeDetector().VisualStudio2012Theme();
-                default:
-                    return VsTheme.Unknown;
+            catch (ArgumentNullException)
+            {
+                return VsThemeCode.Unknown;
             }
         }
+
+        private static Color ToColor(System.Drawing.Color color) 
+            => Color.FromArgb(color.A, color.R, color.G, color.B);
     }
 }

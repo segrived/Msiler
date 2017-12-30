@@ -6,7 +6,7 @@ namespace Msiler.HighlightSchemes
     {
         public IListingHighlightingSchemeDef GetScheme() {
             var theme = VsThemeDetector.GetTheme();
-            if (theme == VsTheme.Light || theme == VsTheme.Blue || theme == VsTheme.Unknown) {
+            if (theme == VsThemeCode.Light || theme == VsThemeCode.Blue || theme == VsThemeCode.Unknown) {
                 return new DefaultLightScheme().GetScheme();
             }
             return new DefaultDarkScheme().GetScheme();
