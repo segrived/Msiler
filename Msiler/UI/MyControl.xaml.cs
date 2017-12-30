@@ -216,12 +216,13 @@ namespace Msiler.UI
 
         private readonly ToolTip toolTip = new ToolTip();
 
-        private string GetWordUnderCursor(Point p)
-            => AvalonEditHelpers.GetWordOnOffset(this.BytecodeListing, p);
-
         private void BytecodeListing_MouseHover(object sender, MouseEventArgs e)
         {
-            string wordUnderCursor = this.GetWordUnderCursor(e.GetPosition(this.BytecodeListing));
+            string wordUnderCursor = this.BytecodeListing.GetWordFromPoint(e.GetPosition(this.BytecodeListing));
+
+            if (wordUnderCursor == null)
+                return;
+
             var offsetMatch = OffsetRegex.Match(wordUnderCursor);
 
             if (offsetMatch.Success)
@@ -248,6 +249,11 @@ namespace Msiler.UI
                     sb.AppendLine(lineContent);
                     docLine = docLine.NextLine;
                 }
+
+                // use to naviage information
+                sb.AppendLine();
+                sb.AppendLine("// HINT: Double click to navigate");
+
                 this.ShowToolTip(sb.ToString().TrimEnd('\r', '\n'), this.currentHighlightDefinition);
             }
 
@@ -279,6 +285,9 @@ namespace Msiler.UI
 
         private bool TryNavigateToOffset(string offsetText)
         {
+            if (offsetText == null)
+                return false;
+
             var match = OffsetRegex.Match(offsetText);
             if (!match.Success)
                 return false;
@@ -293,7 +302,7 @@ namespace Msiler.UI
 
         private void BytecodeListing_PreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            string wordUnderCursor = this.GetWordUnderCursor(e.GetPosition(this.BytecodeListing));
+            string wordUnderCursor = this.BytecodeListing.GetWordFromPoint(e.GetPosition(this.BytecodeListing));
 
             if (this.TryNavigateToOffset(wordUnderCursor))
             {
@@ -353,7 +362,7 @@ namespace Msiler.UI
             if (!Keyboard.Modifiers.HasFlag(ModifierKeys.Control))
                 return;
 
-            if (this.TryNavigateToOffset(this.GetWordUnderCursor(e.GetPosition(this.BytecodeListing))))
+            if (this.TryNavigateToOffset(this.BytecodeListing.GetWordFromPoint(e.GetPosition(this.BytecodeListing))))
                 e.Handled = true;
         }
 

@@ -5,26 +5,40 @@ using System.Windows;
 
 namespace Msiler.Helpers
 {
+    public class WordBorder
+    {
+        public int StartOffset { get; }
+        public int EndOffset { get; }
+
+        public WordBorder(int startOffset, int endOffset)
+        {
+            this.StartOffset = startOffset;
+            this.EndOffset = endOffset;
+        }
+    }
+
     public static class AvalonEditHelpers
     {
-        public static string GetWordOnOffset(TextEditor editor, Point position)
+        public static string GetWordFromPoint(this TextEditor editor, Point position)
         {
             var pos = editor.GetPositionFromPoint(position);
 
             if (pos == null)
-                return String.Empty;
+                return null;
 
-            int off = editor.Document.GetOffset(pos.Value.Line, pos.Value.Column);
-            return GetWordOnOffset(editor.Document, off);
+            int offset = editor.Document.GetOffset(pos.Value.Line, pos.Value.Column);
+
+            var wb = GetWordBorders(editor.Document, offset);
+            return wb == null ? null : editor.Document.GetText(wb.StartOffset, wb.EndOffset - wb.StartOffset);
         }
 
-        private static string GetWordOnOffset(ITextSource textSource, int offset)
+        public static WordBorder GetWordBorders(this ITextSource textSource, int offset)
         {
             if (offset < 0 || offset >= textSource.TextLength)
-                return String.Empty;
+                return null;
 
             if (Char.IsWhiteSpace(textSource.GetCharAt(offset)))
-                return String.Empty;
+                return null;
 
             int processingOffset = offset;
             while (processingOffset >= 0)
@@ -48,7 +62,7 @@ namespace Msiler.Helpers
 
             int endOffset = processingOffset;
 
-            return textSource.GetText(startOffset, endOffset - startOffset);
+            return new WordBorder(startOffset, endOffset);
         }
     }
 }
