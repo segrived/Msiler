@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel;
 
+// ReSharper disable MemberCanBePrivate.Global
+
 namespace Msiler.DialogPages
 {
     public class ExtensionExcludeOptions : MsilerDialogPage

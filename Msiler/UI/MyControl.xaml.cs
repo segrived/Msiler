@@ -86,8 +86,8 @@ namespace Msiler.UI
         {
             var displayOptions = Common.Instance.DisplayOptions;
 
-            var scheme = ColorTheme.GetHighlightingScheme(displayOptions.ColorScheme);
-            this.currentHighlightDefinition = ColorTheme.GetDefinition(scheme);
+            var scheme = MsilerColorScheme.GetHighlightingScheme(displayOptions.ColorScheme);
+            this.currentHighlightDefinition = MsilerColorScheme.GetDefinition(scheme);
 
             string fontFamily = "Consolas";
             if (FontHelpers.IsFontFamilyExist(displayOptions.FontName))
@@ -222,8 +222,8 @@ namespace Msiler.UI
         private void BytecodeListing_MouseHover(object sender, MouseEventArgs e)
         {
             string wordUnderCursor = this.GetWordUnderCursor(e.GetPosition(this.BytecodeListing));
-
             var offsetMatch = OffsetRegex.Match(wordUnderCursor);
+
             if (offsetMatch.Success)
             {
                 string offsetStr = offsetMatch.Value;

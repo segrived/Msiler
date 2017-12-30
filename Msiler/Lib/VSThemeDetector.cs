@@ -16,18 +16,17 @@ namespace Msiler.Lib
             {
                 var color = VSColorTheme.GetThemedColor(EnvironmentColors.AccentMediumColorKey);
                 var cc = ToColor(color);
+
                 if (cc == AccentMediumBlueTheme)
                     return VsThemeCode.Blue;
                 if (cc == AccentMediumLightTheme)
                     return VsThemeCode.Light;
                 if (cc == AccentMediumDarkTheme)
                     return VsThemeCode.Dark;
-                float brightness = color.GetBrightness();
-                bool dark = brightness < 0.5f;
-                return dark ? VsThemeCode.Dark : VsThemeCode.Light;
-            }
 
-            catch (ArgumentNullException)
+                return color.GetBrightness() < 0.5f ? VsThemeCode.Dark : VsThemeCode.Light;
+            }
+            catch (Exception ex)
             {
                 return VsThemeCode.Unknown;
             }
@@ -36,4 +35,6 @@ namespace Msiler.Lib
         private static Color ToColor(System.Drawing.Color color) 
             => Color.FromArgb(color.A, color.R, color.G, color.B);
     }
+
+    public enum VsThemeCode { Blue, Light, Dark, Unknown }
 }

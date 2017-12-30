@@ -8,15 +8,12 @@ namespace Msiler.DialogPages
     [System.ComponentModel.DesignerCategory("")]
     public class MsilerDialogPage : DialogPage
     {
-        protected override void OnApply(PageApplyEventArgs e) {
-            this.OnApplied(e);
+        protected override void OnApply(PageApplyEventArgs e)
+        {
+            this.Applied?.Invoke(this, e);
             base.OnApply(e);
         }
 
         public event ApplySettingsHandler Applied;
-
-        private void OnApplied(EventArgs e) {
-            this.Applied?.Invoke(this, e);
-        }
     }
 }

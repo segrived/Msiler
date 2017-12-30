@@ -8,27 +8,22 @@ using System.Windows.Media;
 
 namespace Msiler.Lib
 {
-    public enum MsilerColorTheme
-    {
-        Auto, DefaultLight, DefaultDark, Monokai, Gray
-    }
-
-    public static class ColorTheme
+    public static class MsilerColorScheme
     {
         private static readonly Regex HighlightingColorRegex =
             new Regex(@"(?<Color>#[\da-f]{6})($|;(?<Flags>[BUI]*))", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
-        public static IListingHighlightingScheme GetHighlightingScheme(MsilerColorTheme theme) {
+        public static IListingHighlightingScheme GetHighlightingScheme(MsilerColorSchemeCode theme) {
             switch (theme) {
-                case MsilerColorTheme.Auto:
+                case MsilerColorSchemeCode.Auto:
                     return new DefaultAutoScheme();
-                case MsilerColorTheme.DefaultDark:
+                case MsilerColorSchemeCode.DefaultDark:
                     return new DefaultDarkScheme();
-                case MsilerColorTheme.DefaultLight:
+                case MsilerColorSchemeCode.DefaultLight:
                     return new DefaultLightScheme();
-                case MsilerColorTheme.Monokai:
+                case MsilerColorSchemeCode.Monokai:
                     return new MonokaiScheme();
-                case MsilerColorTheme.Gray:
+                case MsilerColorSchemeCode.Gray:
                     return new GrayScheme();
             }
             return new DefaultAutoScheme(); // will not executed
@@ -88,4 +83,6 @@ namespace Msiler.Lib
             }
         }
     }
+
+    public enum MsilerColorSchemeCode { Auto, DefaultLight, DefaultDark, Monokai, Gray }
 }

@@ -8,13 +8,14 @@ namespace Msiler.Lib
 {
     public class VsixManifest
     {
-        public string Id { get; set; }
+        // ReSharper disable once MemberCanBePrivate.Global
+        // ReSharper disable once UnusedAutoPropertyAccessor.Global
+        public string Id { get; }
 
-        public string Version { get; set; }
+        public string Version { get; }
 
-        private VsixManifest() { }
-
-        private VsixManifest(string manifestPath) {
+        private VsixManifest(string manifestPath)
+        {
             var doc = new XmlDocument();
             doc.Load(manifestPath);
 
@@ -28,11 +29,17 @@ namespace Msiler.Lib
             this.Version = identity.GetAttribute("Version");
         }
 
-        public static VsixManifest GetManifest() {
+        public static VsixManifest GetManifest()
+        {
             var assembly = Assembly.GetExecutingAssembly();
             var assemblyUri = new UriBuilder(assembly.CodeBase);
+
             string assemblyPath = Uri.UnescapeDataString(assemblyUri.Path);
             string assemblyDirectory = Path.GetDirectoryName(assemblyPath);
+
+            if (assemblyDirectory == null)
+                throw new InvalidOperationException();
+
             string vsixManifestPath = Path.Combine(assemblyDirectory, "extension.vsixmanifest");
             return new VsixManifest(vsixManifestPath);
         }

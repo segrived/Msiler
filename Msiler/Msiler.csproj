@@ -195,12 +195,11 @@
     <Compile Include="HighlightSchemes\IListingHighlightingScheme.cs" />
     <Compile Include="HighlightSchemes\IListingHighlightingSchemeDef.cs" />
     <Compile Include="HighlightSchemes\MonokaiScheme.cs" />
-    <Compile Include="Lib\VsThemeCode.cs" />
     <Compile Include="TextViewCreationListener.cs" />
     <Compile Include="UI\AboutWindow.xaml.cs">
       <DependentUpon>AboutWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Lib\ColorTheme.cs" />
+    <Compile Include="Lib\MsilerColorScheme.cs" />
     <Compile Include="Common.cs" />
     <Compile Include="Converters\IsGreaterThenConverter.cs" />
     <Compile Include="Lib\VsixManifest.cs" />
