@@ -22,32 +22,31 @@ namespace Msiler.UI
 {
     public partial class MyControl
     {
-        const int MaxCodeLinesInHint = 5;
+        private const int MAX_CODE_LINES_IN_HINT = 5;
 
-        static readonly Regex OffsetRegex =
-            new Regex(@"^(IL_[\dA-F]+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly Regex OffsetRegex = new Regex(@"^(IL_[\dA-F]+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        readonly Dictionary<string, int> _offsetLinesCache
-            = new Dictionary<string, int>();
+        private readonly Dictionary<string, int> offsetLinesCache = new Dictionary<string, int>();
 
-        IHighlightingDefinition _currentHighlightDefinition;
+        private IHighlightingDefinition currentHighlightDefinition;
 
-        readonly AssemblyManager _assemblyManager = new AssemblyManager();
+        private readonly AssemblyManager assemblyManager = new AssemblyManager();
 
-        AssemblyMethod _currentMethod;
-        AssemblyMethod CurrentMethod {
-            get { return this._currentMethod; }
+        private AssemblyMethod currentMethod;
+
+        private AssemblyMethod CurrentMethod
+        {
+            get => this.currentMethod;
             set
             {
-                this._currentMethod = value;
+                this.currentMethod = value;
                 this.MethodsList.SelectedItem = value;
             }
         }
 
-        List<AssemblyMethod> _assemblyMethods;
+        private List<AssemblyMethod> assemblyMethods;
 
-        readonly Dictionary<AssemblyMethod, string> _listingCache =
-            new Dictionary<AssemblyMethod, string>();
+        private readonly Dictionary<AssemblyMethod, string> listingCache = new Dictionary<AssemblyMethod, string>();
 
         public MyControl() {
             this.InitializeComponent();
@@ -56,66 +55,75 @@ namespace Msiler.UI
             this.InitEventHandlers();
         }
 
-        void OnMethodListChanged(object sender, MethodsListEventArgs e) {
-            this._assemblyMethods = e.Methods;
-            this.MethodsList.ItemsSource = new ObservableCollection<AssemblyMethod>(this._assemblyMethods);
-            this._listingCache.Clear();
+        private void OnMethodListChanged(object sender, MethodsListEventArgs e)
+        {
+            this.assemblyMethods = e.Methods;
+            this.MethodsList.ItemsSource = new ObservableCollection<AssemblyMethod>(this.assemblyMethods);
+            this.listingCache.Clear();
 
-            if (this.CurrentMethod != null) {
+            if (this.CurrentMethod != null)
                 this.ProcessMethod(e.Methods.FirstOrDefault(m => m.Equals(this.CurrentMethod)));
-            }
+
             var view = CollectionViewSource.GetDefaultView(this.MethodsList.ItemsSource);
             view.Filter = this.FilterMethodsList;
 
-            bool isAnyMethods = this._assemblyMethods.Count > 0;
-            this.MainView.Visibility = this.ToVisibilityState(isAnyMethods);
-            this.WelcomeUserControl.Visibility = this.ToVisibilityState(!isAnyMethods);
+            bool isAnyMethods = this.assemblyMethods.Count > 0;
+            this.MainView.Visibility = ToVisibilityState(isAnyMethods);
+            this.WelcomeUserControl.Visibility = ToVisibilityState(!isAnyMethods);
         }
 
-        public void InitConfiguration() {
-            this.BytecodeListing.Options = new TextEditorOptions {
+        private void InitConfiguration()
+        {
+            this.BytecodeListing.Options = new TextEditorOptions
+            {
                 EnableEmailHyperlinks = false,
                 EnableHyperlinks = false
             };
             this.UpdateDisplayOptions();
         }
 
-        void UpdateDisplayOptions() {
+        private void UpdateDisplayOptions()
+        {
             var displayOptions = Common.Instance.DisplayOptions;
 
-            var scheme = ColorTheme.GetHighlightingScheme(displayOptions.ColorTheme);
-            this._currentHighlightDefinition = ColorTheme.GetDefinition(scheme);
+            var scheme = ColorTheme.GetHighlightingScheme(displayOptions.ColorScheme);
+            this.currentHighlightDefinition = ColorTheme.GetDefinition(scheme);
 
             string fontFamily = "Consolas";
-            if (FontHelpers.IsFontFamilyExist(displayOptions.FontName)) {
+            if (FontHelpers.IsFontFamilyExist(displayOptions.FontName))
                 fontFamily = displayOptions.FontName;
-            }
+
             this.BytecodeListing.FontFamily = new FontFamily(fontFamily);
             this.BytecodeListing.FontSize = displayOptions.FontSize;
             this.BytecodeListing.ShowLineNumbers = displayOptions.LineNumbers;
-            this.BytecodeListing.SyntaxHighlighting = this._currentHighlightDefinition;
+            this.BytecodeListing.SyntaxHighlighting = this.currentHighlightDefinition;
         }
 
-        public void InitEventHandlers() {
+        private void InitEventHandlers()
+        {
             Common.Instance.DisplayOptions.Applied += (s, e)
                 => this.UpdateDisplayOptions();
-            Common.Instance.ListingGenerationOptions.Applied += (s, e) => {
-                this._listingCache.Clear();
+
+            Common.Instance.ListingGenerationOptions.Applied += (s, e) =>
+            {
+                this.listingCache.Clear();
                 this.ProcessMethod(this.CurrentMethod);
             };
-            Common.Instance.ExcludeOptions.Applied += (s, e) => {
-                if (this.MethodsList.ItemsSource != null) {
+
+            Common.Instance.ExcludeOptions.Applied += (s, e) =>
+            {
+                if (this.MethodsList.ItemsSource != null)
                     CollectionViewSource.GetDefaultView(this.MethodsList.ItemsSource).Refresh();
-                }
             };
-            VSColorTheme.ThemeChanged += (e) => this.UpdateDisplayOptions();
+
+            VSColorTheme.ThemeChanged += e => this.UpdateDisplayOptions();
 
             FunctionFollower.MethodSelected += this.OnMethodSelected;
-            this._assemblyManager.MethodListChanged += this.OnMethodListChanged;
+            this.assemblyManager.MethodListChanged += this.OnMethodListChanged;
         }
 
-        void OnMethodSelected(object sender, MethodSignatureEventArgs e) {
-            if (this._assemblyMethods == null || this._assemblyMethods.Count == 0) {
+        private void OnMethodSelected(object sender, MethodSignatureEventArgs e) {
+            if (this.assemblyMethods == null || this.assemblyMethods.Count == 0) {
                 return;
             }
             // do not process if same method
@@ -123,12 +131,13 @@ namespace Msiler.UI
                 return;
             }
             // find metyhod with same signature
-            var method = this._assemblyMethods.FirstOrDefault(m => m.Signature.Equals(e.MethodSignature));
+            var method = this.assemblyMethods.FirstOrDefault(m => m.Signature.Equals(e.MethodSignature));
             this.ProcessMethod(method, false);
         }
 
 
-        bool FilterMethodsList(object o) {
+        private bool FilterMethodsList(object o)
+        {
             var method = (AssemblyMethod)o;
 
             // filter method types
@@ -146,118 +155,138 @@ namespace Msiler.UI
                 || method.Signature.MethodName.Contains(filterQuery, StringComparison.OrdinalIgnoreCase);
         }
 
-        public ListingGeneratorOptions GeneratorOptions 
+        private ListingGeneratorOptions GeneratorOptions 
             => Common.Instance.ListingGenerationOptions.ToListingGeneratorOptions();
 
-        private void ProcessMethod(AssemblyMethod method, bool clearIfNull = true) {
-            if (method != null) {
-                try {
+        private void ProcessMethod(AssemblyMethod method, bool clearIfNull = true)
+        {
+            if (method != null)
+            {
+                try
+                {
                     this.CurrentMethod = method;
                     string listingText;
-                    if (Common.Instance.GeneralOptions.EnableCaching) {
-                        if (this._listingCache.ContainsKey(method)) {
-                            listingText = this._listingCache[method];
-                        } else {
+                    if (Common.Instance.GeneralOptions.EnableCaching)
+                    {
+                        if (this.listingCache.ContainsKey(method))
+                            listingText = this.listingCache[method];
+                        else
+                        {
                             listingText = this.CurrentMethod.GenerateListing(this.GeneratorOptions);
-                            this._listingCache[method] = listingText;
+                            this.listingCache[method] = listingText;
                         }
-                    } else {
-                        listingText = this.CurrentMethod.GenerateListing(this.GeneratorOptions);
                     }
+                    else
+                        listingText = this.CurrentMethod.GenerateListing(this.GeneratorOptions);
 
                     this.BytecodeListing.Text = listingText;
                     this.BytecodeListing.ScrollToHome();
                     this.BytecodeListing.CaretOffset = 0;
 
-                    this._offsetLinesCache.Clear();
+                    this.offsetLinesCache.Clear();
                     var lines = listingText.Lines();
-                    for (int i = 0; i < lines.Length; i++) {
+                    for (int i = 0; i < lines.Length; i++)
+                    {
                         var match = OffsetRegex.Match(lines[i]);
-                        if (match.Success) {
-                            this._offsetLinesCache.Add(match.Value, i + 1);
-                        }
+                        if (match.Success)
+                            this.offsetLinesCache.Add(match.Value, i + 1);
                     }
-                } catch (Exception ex) {
+                }
+                catch (Exception ex)
+                {
                     var errorBuilder = new StringBuilder();
                     errorBuilder.AppendLine($"ERROR: {ex.Message}");
                     errorBuilder.AppendLine($"Source: {ex.Source}");
                     errorBuilder.Append($"Stacktrace: {ex.StackTrace}");
                     this.BytecodeListing.Text = errorBuilder.ToString();
                 }
-            } else {
-                if (!clearIfNull) {
+            }
+            else
+            {
+                if (!clearIfNull)
                     return;
-                }
+
                 this.CurrentMethod = null;
                 this.BytecodeListing.Text = String.Empty;
-                this._offsetLinesCache.Clear();
+                this.offsetLinesCache.Clear();
             }
         }
 
         #region Instruction Hint Tooltip
-        readonly ToolTip _toolTip = new ToolTip();
 
-        string GetWordUnderCursor(Point p) {
-            return AvalonEditHelpers.GetWordOnOffset(this.BytecodeListing, p);
-        }
+        private readonly ToolTip toolTip = new ToolTip();
 
-        void BytecodeListing_MouseHover(object sender, MouseEventArgs e) {
-            var wordUnderCursor = this.GetWordUnderCursor(e.GetPosition(this.BytecodeListing));
+        private string GetWordUnderCursor(Point p)
+            => AvalonEditHelpers.GetWordOnOffset(this.BytecodeListing, p);
+
+        private void BytecodeListing_MouseHover(object sender, MouseEventArgs e)
+        {
+            string wordUnderCursor = this.GetWordUnderCursor(e.GetPosition(this.BytecodeListing));
 
             var offsetMatch = OffsetRegex.Match(wordUnderCursor);
-            if (offsetMatch.Success) {
-                var offsetStr = offsetMatch.Value;
-                if (!this._offsetLinesCache.ContainsKey(offsetStr)) {
+            if (offsetMatch.Success)
+            {
+                string offsetStr = offsetMatch.Value;
+                if (!this.offsetLinesCache.ContainsKey(offsetStr))
+                {
                     e.Handled = true;
                     return;
                 }
-                var lineNumber = this._offsetLinesCache[offsetStr];
-                var lineCount = this.BytecodeListing.LineCount;
+
+                int lineNumber = this.offsetLinesCache[offsetStr];
+                int lineCount = this.BytecodeListing.LineCount;
+
                 var sb = new StringBuilder();
 
                 var docLine = this.BytecodeListing.Document.GetLineByNumber(lineNumber);
-                for (int i = 0; i < MaxCodeLinesInHint; i++) {
-                    if (docLine.LineNumber >= lineCount) {
+                for (int i = 0; i < MAX_CODE_LINES_IN_HINT; i++)
+                {
+                    if (docLine.LineNumber >= lineCount)
                         break;
-                    }
-                    var lineContent = this.BytecodeListing.Document.GetText(docLine.Offset, docLine.Length);
+
+                    string lineContent = this.BytecodeListing.Document.GetText(docLine.Offset, docLine.Length);
                     sb.AppendLine(lineContent);
                     docLine = docLine.NextLine;
                 }
-                this.ShowToolTip(sb.ToString().TrimEnd('\r', '\n'), this._currentHighlightDefinition);
+                this.ShowToolTip(sb.ToString().TrimEnd('\r', '\n'), this.currentHighlightDefinition);
             }
 
-            long? numberUnderCursor = StringHelpers.ParseNumber(wordUnderCursor);
-            if (numberUnderCursor != null) {
-                var v = numberUnderCursor.Value;
-                var sb = new StringBuilder();
+            var numberUnderCursor = StringHelpers.ParseNumber(wordUnderCursor);
+
+            if (numberUnderCursor != null)
+            {
+                long v = numberUnderCursor.Value;
+
                 string hint = String.Empty;
+
                 hint += $"Decimal: {v}{Environment.NewLine}";
                 hint += $"HEX:     0x{Convert.ToString(v, 16).ToUpper()}{Environment.NewLine}";
                 hint += $"Binary:  0b{Convert.ToString(v, 2)}{Environment.NewLine}";
                 hint += $"Octal:   0{Convert.ToString(v, 8)}";
-                this.ShowToolTip(hint, this._currentHighlightDefinition);
+
+                this.ShowToolTip(hint, this.currentHighlightDefinition);
             }
 
             var info = AssemblyParser.Helpers.GetInstructionInformation(wordUnderCursor);
-            if (info != null) {
+            if (info != null)
                 this.ShowToolTip($"{info.Name}: {info.Description}");
-            }
+
             e.Handled = true;
         }
 
-        void BytecodeListing_MouseHoverStopped(object sender, MouseEventArgs e) {
-            this._toolTip.IsOpen = false;
-        }
+        private void BytecodeListing_MouseHoverStopped(object sender, MouseEventArgs e) 
+            => this.toolTip.IsOpen = false;
 
-        private void BytecodeListing_PreviewMouseDoubleClick(object sender, MouseButtonEventArgs e) {
-            var wordUnderCursor = this.GetWordUnderCursor(e.GetPosition(this.BytecodeListing));
+        private void BytecodeListing_PreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            string wordUnderCursor = this.GetWordUnderCursor(e.GetPosition(this.BytecodeListing));
 
             // detect offset under cursor
             var match = OffsetRegex.Match(wordUnderCursor);
-            if (match.Success) {
-                var line = this._offsetLinesCache[match.Value];
-                var offset = this.BytecodeListing.Document.GetOffset(line, 0);
+            if (match.Success)
+            {
+                int line = this.offsetLinesCache[match.Value];
+                int offset = this.BytecodeListing.Document.GetOffset(line, 0);
                 this.BytecodeListing.CaretOffset = offset;
                 this.BytecodeListing.ScrollToLine(line);
                 e.Handled = true;
@@ -265,32 +294,35 @@ namespace Msiler.UI
             }
 
             // detect method name under cursor
-            var fMethod = this._assemblyMethods
-                .FirstOrDefault(m => m.Signature.MethodName == wordUnderCursor);
-            if (fMethod != null) {
-                this.CurrentMethod = fMethod;
-                e.Handled = true;
+            var fMethod = this.assemblyMethods.FirstOrDefault(m => m.Signature.MethodName == wordUnderCursor);
+            if (fMethod == null)
                 return;
-            }
+
+            this.CurrentMethod = fMethod;
+            e.Handled = true;
         }
 
 
-        public void ShowToolTip(string content, IHighlightingDefinition highlight = null) {
+        private void ShowToolTip(string content, IHighlightingDefinition highlight = null)
+        {
             var displayOptions = Common.Instance.DisplayOptions;
-            this._toolTip.PlacementTarget = this;
+            this.toolTip.PlacementTarget = this;
+
             int transpLevel = (displayOptions.TooltipTransparency < 0 || displayOptions.TooltipTransparency > 100)
                 ? 0
                 : displayOptions.TooltipTransparency;
-            this._toolTip.Opacity = 1.0 - (transpLevel / 100.0);
+
+            this.toolTip.Opacity = 1.0 - transpLevel / 100.0;
 
             var bgDColor = VSColorTheme.GetThemedColor(EnvironmentColors.ToolWindowBackgroundBrushKey);
             var bgMColor = Color.FromRgb(bgDColor.R, bgDColor.G, bgDColor.B);
-            this._toolTip.Background = new SolidColorBrush(bgMColor);
+            this.toolTip.Background = new SolidColorBrush(bgMColor);
 
             var fgDColor = VSColorTheme.GetThemedColor(EnvironmentColors.ToolWindowTextBrushKey);
             var fgMColor = Color.FromRgb(fgDColor.R, fgDColor.G, fgDColor.B);
 
-            this._toolTip.Content = new TextEditor {
+            this.toolTip.Content = new TextEditor
+            {
                 Text = content,
                 HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden,
                 VerticalScrollBarVisibility = ScrollBarVisibility.Hidden,
@@ -300,64 +332,68 @@ namespace Msiler.UI
                 FontSize = displayOptions.FontSize,
                 Foreground = new SolidColorBrush(fgMColor)
             };
-            this._toolTip.IsOpen = true;
+
+            this.toolTip.IsOpen = true;
         }
 
         #endregion
 
         #region UI handlers
-        void MethodsList_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-            this.ProcessMethod((AssemblyMethod)this.MethodsList.SelectedItem);
-        }
 
-        void FilterMethodsTextBox_TextChanged(object sender, TextChangedEventArgs e) =>
-            CollectionViewSource.GetDefaultView(this.MethodsList.ItemsSource).Refresh();
+        private void MethodsList_SelectionChanged(object sender, SelectionChangedEventArgs e) 
+            => this.ProcessMethod((AssemblyMethod)this.MethodsList.SelectedItem);
 
-        void HyperlinkOptions_Click(object sender, RoutedEventArgs e) =>
-            Common.Instance.Package.ShowOptionPage(typeof(ExtensionGeneralOptions));
+        private void FilterMethodsTextBox_TextChanged(object sender, TextChangedEventArgs e) 
+            => CollectionViewSource.GetDefaultView(this.MethodsList.ItemsSource).Refresh();
 
-        void HyperlinkGithub_Click(object sender, RoutedEventArgs e) =>
-            Process.Start(Common.RepoUrl);
+        private void HyperlinkOptions_Click(object sender, RoutedEventArgs e) 
+            => Common.Instance.Package.ShowOptionPage(typeof(ExtensionGeneralOptions));
 
-        void HyperlinkAbout_Click(object sender, RoutedEventArgs e) =>
-            new AboutWindow().ShowDialog();
+        private void HyperlinkGithub_Click(object sender, RoutedEventArgs e) 
+            => Process.Start(Common.RepoUrl);
 
-        void IsFollowModeEnabled_CheckedChange(object sender, RoutedEventArgs e) {
-            FunctionFollower.IsFollowingEnabled = ((CheckBox)sender).IsChecked.Value;
-        }
+        private void HyperlinkAbout_Click(object sender, RoutedEventArgs e) 
+            => new AboutWindow().ShowDialog();
 
-        private void MenuItemGeneralOptions_Click(object sender, RoutedEventArgs e) {
-            Common.Instance.Package.ShowOptionPage(typeof(ExtensionGeneralOptions));
-        }
+        private void IsFollowModeEnabled_CheckedChange(object sender, RoutedEventArgs e) 
+            => FunctionFollower.IsFollowingEnabled = ((CheckBox)sender).IsChecked.Value;
 
-        private void MenuItemListingGenearationOptions_Click(object sender, RoutedEventArgs e) {
-            Common.Instance.Package.ShowOptionPage(typeof(ExtensionListingGenerationOptions));
-        }
+        private void MenuItemGeneralOptions_Click(object sender, RoutedEventArgs e) 
+            => Common.Instance.Package.ShowOptionPage(typeof(ExtensionGeneralOptions));
 
-        private void MenuItemMethodFilteringOptions_Click(object sender, RoutedEventArgs e) {
-            Common.Instance.Package.ShowOptionPage(typeof(ExtensionExcludeOptions));
-        }
+        private void MenuItemListingGenearationOptions_Click(object sender, RoutedEventArgs e) 
+            => Common.Instance.Package.ShowOptionPage(typeof(ExtensionListingGenerationOptions));
 
-        private void MenuItemDisplayOptions_Click(object sender, RoutedEventArgs e) {
-            Common.Instance.Package.ShowOptionPage(typeof(ExtensionDisplayOptions));
-        }
+        private void MenuItemMethodFilteringOptions_Click(object sender, RoutedEventArgs e) 
+            => Common.Instance.Package.ShowOptionPage(typeof(ExtensionExcludeOptions));
 
-        private void OptionsLink_MouseDown(object sender, MouseButtonEventArgs e) {
-            if (e.ChangedButton != MouseButton.Left) {
+        private void MenuItemDisplayOptions_Click(object sender, RoutedEventArgs e) 
+            => Common.Instance.Package.ShowOptionPage(typeof(ExtensionDisplayOptions));
+
+        private void OptionsLink_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton != MouseButton.Left)
                 return;
+
+            if (sender is TextBlock textBlock)
+            {
+                var contextMenu = textBlock.ContextMenu;
+                if (contextMenu == null)
+                    return;
+
+                contextMenu.PlacementTarget = textBlock;
+                contextMenu.IsOpen = true;
             }
-            var block = sender as TextBlock;
-            var contextMenu = block.ContextMenu;
-            contextMenu.PlacementTarget = block;
-            contextMenu.IsOpen = true;
+
             e.Handled = true;
         }
         #endregion UI handlers
 
         #region Helper methods
-        private Visibility ToVisibilityState(bool b) {
-            return b ? Visibility.Visible : Visibility.Hidden;
-        }
+
+        private static Visibility ToVisibilityState(bool b) 
+            => b ? Visibility.Visible : Visibility.Hidden;
+
         #endregion
     }
 }

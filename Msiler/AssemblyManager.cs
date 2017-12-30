@@ -21,8 +21,8 @@ namespace Msiler
 
     public class AssemblyManager : IVsUpdateSolutionEvents, IVsSolutionEvents
     {
-        AssemblyReader _assemblyReader;
-        DateTime _previousAssemblyWriteTime;
+        private AssemblyReader _assemblyReader;
+        private DateTime _previousAssemblyWriteTime;
 
         public AssemblyManager() {
             uint solutionUpdateCookie;

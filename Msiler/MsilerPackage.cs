@@ -30,7 +30,7 @@ namespace Msiler
         private IVsSolutionBuildManager _buildManager;
         private IVsSolution _solution;
 
-        void ShowToolWindow(object sender, EventArgs e) {
+        private void ShowToolWindow(object sender, EventArgs e) {
             var window = this.FindToolWindow(typeof(MsilerToolWindow), 0, true);
             if (window?.Frame == null) {
                 throw new NotSupportedException(Resources.CanNotCreateWindow);

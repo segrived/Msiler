@@ -15,7 +15,7 @@ namespace Msiler.UI
             view.Filter = this.FilterInstructionsList;
         }
 
-        void InstructionList_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+        private void InstructionList_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             var item = ((ListBox)sender).SelectedItem;
             if (item == null) {
                 return;
@@ -25,7 +25,7 @@ namespace Msiler.UI
             this.SelectedInstuctionInfo.Text = instructionInfo.Description;
         }
 
-        bool FilterInstructionsList(object o) {
+        private bool FilterInstructionsList(object o) {
             string methodName = o as string;
             string filterQuery = this.FilterMethodsTextBox.Text;
             return String.IsNullOrEmpty(filterQuery) 

@@ -2,13 +2,13 @@
 
 namespace Msiler.Controls
 {
-    class ListBoxScroll : ListBox
+    internal class ListBoxScroll : ListBox
     {
         public ListBoxScroll() {
             this.SelectionChanged += this.ListBoxScroll_SelectionChanged;
         }
 
-        void ListBoxScroll_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+        private void ListBoxScroll_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             this.ScrollIntoView(this.SelectedItem);
         }
     }

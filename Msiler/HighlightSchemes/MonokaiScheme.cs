@@ -1,8 +1,8 @@
 ﻿namespace Msiler.HighlightSchemes
 {
-    class MonokaiScheme : IListingHighlightingScheme
+    internal class MonokaiScheme : IListingHighlightingScheme
     {
-        internal class Scheme : IListingHighlightingSchemeDef
+        private class Scheme : IListingHighlightingSchemeDef
         {
             public string BuiltinTypeHighlight { get; } = "#AE81FF;BI";
             public string CommentHighlight { get; } = "#75715E;I";
@@ -14,9 +14,6 @@
             public string WarningHighlight { get; } = "#FD971F;B";
         }
 
-
-        public IListingHighlightingSchemeDef GetScheme() {
-            return new Scheme();
-        }
+        public IListingHighlightingSchemeDef GetScheme() => new Scheme();
     }
 }

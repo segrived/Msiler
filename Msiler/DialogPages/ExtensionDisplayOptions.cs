@@ -28,8 +28,8 @@ namespace Msiler.DialogPages
         public int TooltipTransparency { get; set; } = 0;
 
         [Category(CategoryTitle)]
-        [DisplayName("VS Color theme")]
-        [Description("Visual Studio color theme, Msiler highlighting will be adjusted based on this value")]
-        public MsilerColorTheme ColorTheme { get; set; } = MsilerColorTheme.Auto;
+        [DisplayName("Color scheme")]
+        [Description("")]
+        public MsilerColorTheme ColorScheme { get; set; } = MsilerColorTheme.Auto;
     }
 }

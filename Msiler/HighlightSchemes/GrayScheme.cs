@@ -1,8 +1,8 @@
 ﻿namespace Msiler.HighlightSchemes
 {
-    class GrayScheme : IListingHighlightingScheme
+    internal class GrayScheme : IListingHighlightingScheme
     {
-        internal class Scheme : IListingHighlightingSchemeDef
+        private class Scheme : IListingHighlightingSchemeDef
         {
             public string BuiltinTypeHighlight { get; } = "#A7A7A7;BI";
             public string CommentHighlight { get; } = "#BBBBBB;I";
@@ -14,9 +14,6 @@
             public string WarningHighlight { get; } = "#777777;B";
         }
 
-
-        public IListingHighlightingSchemeDef GetScheme() {
-            return new Scheme();
-        }
+        public IListingHighlightingSchemeDef GetScheme() => new Scheme();
     }
 }

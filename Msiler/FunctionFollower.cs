@@ -37,7 +37,7 @@ namespace Msiler
             MethodSelected?.Invoke(this, new MethodSignatureEventArgs(methodInfo));
         }
 
-        void Caret_PositionChanged(object sender, CaretPositionChangedEventArgs e) {
+        private void Caret_PositionChanged(object sender, CaretPositionChangedEventArgs e) {
             if (!IsFollowingEnabled) {
                 return;
             }

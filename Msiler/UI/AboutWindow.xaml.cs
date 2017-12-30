@@ -13,11 +13,11 @@ namespace Msiler.UI
             this.VersionTextBlock.Text = $"Version {manifest.Version}";
         }
 
-        void Ok_Click(object sender, RoutedEventArgs e) {
+        private void Ok_Click(object sender, RoutedEventArgs e) {
             this.Close();
         }
 
-        void Hyperlink_Click(object sender, RoutedEventArgs e) {
+        private void Hyperlink_Click(object sender, RoutedEventArgs e) {
             Process.Start("https://github.com/segrived/Msiler");
         }
     }

@@ -12,7 +12,7 @@ namespace Msiler.Lib
 
         public string Version { get; set; }
 
-        VsixManifest() { }
+        private VsixManifest() { }
 
         private VsixManifest(string manifestPath) {
             var doc = new XmlDocument();

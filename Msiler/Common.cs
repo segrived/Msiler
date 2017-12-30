@@ -26,6 +26,6 @@ namespace Msiler
         public ExtensionExcludeOptions ExcludeOptions { get; set; }
         #endregion
 
-        Common() { }
+        private Common() { }
     }
 }

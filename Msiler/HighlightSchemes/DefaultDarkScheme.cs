@@ -2,9 +2,7 @@
 {
     public class DefaultDarkScheme : IListingHighlightingScheme
     {
-        public IListingHighlightingSchemeDef GetScheme() => new Scheme();
-
-        internal class Scheme : IListingHighlightingSchemeDef
+        private class Scheme : IListingHighlightingSchemeDef
         {
             public string BuiltinTypeHighlight { get; } = "#969696;B";
             public string CommentHighlight { get; } = "#5D82DD;I";
@@ -15,5 +13,7 @@
             public string ErrorHighlight { get; } = "#FF6666;B";
             public string WarningHighlight { get; } = "#FFC266;B";
         }
+
+        public IListingHighlightingSchemeDef GetScheme() => new Scheme();
     }
 }
