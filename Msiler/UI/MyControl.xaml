@@ -65,7 +65,8 @@
                                      MouseHover="BytecodeListing_MouseHover"
                                      IsReadOnly="True"
                                      MouseHoverStopped="BytecodeListing_MouseHoverStopped"
-                                     PreviewMouseDoubleClick="BytecodeListing_PreviewMouseDoubleClick">
+                                     PreviewMouseDoubleClick="BytecodeListing_PreviewMouseDoubleClick"
+                                     PreviewMouseDown="BytecodeListing_OnPreviewMouseDown">
                     <ctrl:MvvmTextEditor.ContextMenu>
                         <ContextMenu>
                             <MenuItem Command="Copy" />

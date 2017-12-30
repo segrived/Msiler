@@ -7,7 +7,7 @@
         Title="About Msiler"
         WindowStartupLocation="CenterScreen"
         WindowStyle="ToolWindow"
-        Height="320"
+        Height="220"
         Width="400">
     <Window.Resources>
         <Style TargetType="TextBlock">
@@ -22,15 +22,13 @@
                         Orientation="Vertical"
                         Margin="5"
                         DockPanel.Dock="Top">
-                <Image Source="/Msiler;component/Resources/Logo.png"
-                       Stretch="None" />
-                <TextBlock FontWeight="Bold"
-                           FontSize="22"
-                           Name="VersionTextBlock" />
-                <TextBlock FontSize="14"
-                           Text="by segrived, 2015-2018" />
+
+                <TextBlock FontSize="22" Text="Msiler" />
+                <TextBlock FontSize="18" Name="VersionTextBlock" />
+                <TextBlock FontSize="14" Text="by segrived, 2015-2018" />
+
                 <TextBlock FontSize="14">
-                <Hyperlink Click="Hyperlink_Click">https://github.com/segrived/Msiler</Hyperlink>
+                    <Hyperlink Click="Hyperlink_Click">https://github.com/segrived/Msiler</Hyperlink>
                 </TextBlock>
             </StackPanel>
             <Button Click="Ok_Click"

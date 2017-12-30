@@ -277,18 +277,26 @@ namespace Msiler.UI
         private void BytecodeListing_MouseHoverStopped(object sender, MouseEventArgs e) 
             => this.toolTip.IsOpen = false;
 
+        private bool TryNavigateToOffset(string offsetText)
+        {
+            var match = OffsetRegex.Match(offsetText);
+            if (!match.Success)
+                return false;
+
+            int line = this.offsetLinesCache[match.Value];
+            int offset = this.BytecodeListing.Document.GetOffset(line, 0);
+            this.BytecodeListing.CaretOffset = offset;
+            this.BytecodeListing.ScrollToLine(line);
+            return true;
+
+        }
+
         private void BytecodeListing_PreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             string wordUnderCursor = this.GetWordUnderCursor(e.GetPosition(this.BytecodeListing));
 
-            // detect offset under cursor
-            var match = OffsetRegex.Match(wordUnderCursor);
-            if (match.Success)
+            if (this.TryNavigateToOffset(wordUnderCursor))
             {
-                int line = this.offsetLinesCache[match.Value];
-                int offset = this.BytecodeListing.Document.GetOffset(line, 0);
-                this.BytecodeListing.CaretOffset = offset;
-                this.BytecodeListing.ScrollToLine(line);
                 e.Handled = true;
                 return;
             }
@@ -339,6 +347,15 @@ namespace Msiler.UI
         #endregion
 
         #region UI handlers
+
+        private void BytecodeListing_OnPreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (!Keyboard.Modifiers.HasFlag(ModifierKeys.Control))
+                return;
+
+            if (this.TryNavigateToOffset(this.GetWordUnderCursor(e.GetPosition(this.BytecodeListing))))
+                e.Handled = true;
+        }
 
         private void MethodsList_SelectionChanged(object sender, SelectionChangedEventArgs e) 
             => this.ProcessMethod((AssemblyMethod)this.MethodsList.SelectedItem);
