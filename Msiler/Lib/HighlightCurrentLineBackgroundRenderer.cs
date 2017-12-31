@@ -9,6 +9,8 @@ namespace Msiler.Lib
 {
     public class HighlightCurrentLineBackgroundRenderer : IBackgroundRenderer
     {
+        public bool Enabled { get; set; } = true;
+
         private readonly TextEditor editor;
         private SolidColorBrush brush;
 
@@ -24,7 +26,7 @@ namespace Msiler.Lib
 
         public void Draw(TextView textView, DrawingContext drawingContext)
         {
-            if (this.editor.Document == null)
+            if (!this.Enabled || this.editor.Document == null)
                 return;
 
             textView.EnsureVisualLines();

@@ -1,6 +1,7 @@
 ﻿using Msiler.Lib;
 using System.ComponentModel;
 
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
 // ReSharper disable MemberCanBePrivate.Global
 
 namespace Msiler.DialogPages
@@ -33,5 +34,10 @@ namespace Msiler.DialogPages
         [DisplayName("Color scheme")]
         [Description("")]
         public MsilerColorSchemeCode ColorScheme { get; set; } = MsilerColorSchemeCode.Auto;
+
+        [Category(CATEGORY_TITLE)]
+        [DisplayName("Highlight active line")]
+        [Description("")]
+        public bool HighlightActiveLine { get; set; } = false;
     }
 }

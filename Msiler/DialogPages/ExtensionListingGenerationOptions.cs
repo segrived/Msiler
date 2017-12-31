@@ -1,6 +1,7 @@
 ﻿using Msiler.AssemblyParser;
 using System.ComponentModel;
 
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
 // ReSharper disable MemberCanBePrivate.Global
 
 namespace Msiler.DialogPages

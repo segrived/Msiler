@@ -27,14 +27,13 @@ namespace Msiler.UI
         private static readonly Regex OffsetRegex = new Regex(@"^(IL_[\dA-F]+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         private readonly Dictionary<string, int> offsetLinesCache;
-
         private IHighlightingDefinition currentHighlightDefinition;
-
         private readonly AssemblyManager assemblyManager;
+        private readonly ToolTip toolTip = new ToolTip();
+        private HighlightCurrentLineBackgroundRenderer activeLineRenderer;
+        private readonly TextEditorWordProcesor textWordProcessor;
 
         private AssemblyMethod currentMethod;
-
-        private readonly TextEditorWordProcesor textWordProcessor;
 
         private AssemblyMethod CurrentMethod
         {
@@ -59,9 +58,8 @@ namespace Msiler.UI
             this.assemblyManager = new AssemblyManager();
             this.textWordProcessor = new TextEditorWordProcesor(this.BytecodeListing);
 
-            var currentLineRenderer = new HighlightCurrentLineBackgroundRenderer(this.BytecodeListing);
-            this.BytecodeListing.TextArea.TextView.BackgroundRenderers.Add(currentLineRenderer);
-
+            this.activeLineRenderer = new HighlightCurrentLineBackgroundRenderer(this.BytecodeListing);
+            this.BytecodeListing.TextArea.TextView.BackgroundRenderers.Add(this.activeLineRenderer);
             this.InitConfiguration();
             this.InitEventHandlers();
         }
@@ -108,6 +106,8 @@ namespace Msiler.UI
             this.BytecodeListing.FontSize = displayOptions.FontSize;
             this.BytecodeListing.ShowLineNumbers = displayOptions.LineNumbers;
             this.BytecodeListing.SyntaxHighlighting = this.currentHighlightDefinition;
+
+            this.activeLineRenderer.Enabled = displayOptions.HighlightActiveLine;
         }
 
         private void InitEventHandlers()
@@ -224,8 +224,6 @@ namespace Msiler.UI
         }
 
         #region Instruction Hint Tooltip
-
-        private readonly ToolTip toolTip = new ToolTip();
 
         private bool TryNavigateTo()
         {
