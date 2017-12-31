@@ -1,4 +1,4 @@
-﻿using Msiler.Lib;
+﻿using Msiler.Helpers;
 
 namespace Msiler.HighlightSchemes
 {
@@ -6,7 +6,7 @@ namespace Msiler.HighlightSchemes
     {
         public IListingHighlightingSchemeDef GetScheme()
         {
-            var theme = VsThemeDetector.GetTheme();
+            var theme = VsThemeHelpers.GetTheme();
 
             if (theme == VsThemeCode.Light || theme == VsThemeCode.Blue || theme == VsThemeCode.Unknown)
                 return new DefaultLightScheme().GetScheme();

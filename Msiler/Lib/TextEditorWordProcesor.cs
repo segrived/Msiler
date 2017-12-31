@@ -77,6 +77,11 @@ namespace Msiler.Lib
         public void UpdateByPoint(Point p)
         {
             this.textPosition = p;
+            this.Invalidate();
+        }
+
+        public void Invalidate()
+        {
             this.needUpdateData = true;
         }
 

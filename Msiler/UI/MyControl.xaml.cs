@@ -26,15 +26,15 @@ namespace Msiler.UI
 
         private static readonly Regex OffsetRegex = new Regex(@"^(IL_[\dA-F]+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        private readonly Dictionary<string, int> offsetLinesCache = new Dictionary<string, int>();
+        private readonly Dictionary<string, int> offsetLinesCache;
 
         private IHighlightingDefinition currentHighlightDefinition;
 
-        private readonly AssemblyManager assemblyManager = new AssemblyManager();
+        private readonly AssemblyManager assemblyManager;
 
         private AssemblyMethod currentMethod;
 
-        private TextEditorWordProcesor textWordProcessor;
+        private readonly TextEditorWordProcesor textWordProcessor;
 
         private AssemblyMethod CurrentMethod
         {
@@ -43,6 +43,7 @@ namespace Msiler.UI
             {
                 this.currentMethod = value;
                 this.MethodsList.SelectedItem = value;
+                this.textWordProcessor?.Invalidate();
             }
         }
 
@@ -54,7 +55,12 @@ namespace Msiler.UI
         {
             this.InitializeComponent();
 
+            this.offsetLinesCache = new Dictionary<string, int>();
+            this.assemblyManager = new AssemblyManager();
             this.textWordProcessor = new TextEditorWordProcesor(this.BytecodeListing);
+
+            var currentLineRenderer = new HighlightCurrentLineBackgroundRenderer(this.BytecodeListing);
+            this.BytecodeListing.TextArea.TextView.BackgroundRenderers.Add(currentLineRenderer);
 
             this.InitConfiguration();
             this.InitEventHandlers();
@@ -226,7 +232,7 @@ namespace Msiler.UI
             if (!this.textWordProcessor.IsValidWord)
                 return false;
 
-            // try naviage to offset
+            // try navigate to offset
             var match = OffsetRegex.Match(this.textWordProcessor.Word);
             if (match.Success)
             {
