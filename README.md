@@ -9,7 +9,7 @@ CIL (MSIL) code viewer extension for Visual Studio 2017.
 
 ## Screenshot
 
-![Screenshot](https://i.imgur.com/itDM13A.gif)
+![Screenshot](https://i.imgur.com/yYOM3Eu.gif)
 
 ## Installation
 You can install extension from [Visual Studio Gallery](https://visualstudiogallery.msdn.microsoft.com/60fc53d4-e414-461b-a27c-3d5d2a53f637) or download from [releases section](https://github.com/segrived/Msiler/releases) and install manually.
