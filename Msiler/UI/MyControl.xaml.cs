@@ -234,6 +234,7 @@ namespace Msiler.UI
                 int offset = this.BytecodeListing.Document.GetOffset(line, 0);
                 this.BytecodeListing.CaretOffset = offset;
                 this.BytecodeListing.ScrollToLine(line);
+                this.BytecodeListing.Focus();
 
                 return true;
             }
