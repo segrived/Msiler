@@ -55,6 +55,11 @@ namespace Msiler.DialogPages
         [Description("NOTE: rebuilding required")]
         public bool ProcessPdbFiles { get; set; } = true;
 
+        [Category(CATEGORY_TITLE)]
+        [DisplayName("Instruction description mode")]
+        [Description("If enabled, instruction description will be included directly in listing")]
+        public DescriptionMode InstructionDescriptionMode { get; set; } = DescriptionMode.Disabled;
+
         public ListingGeneratorOptions ToListingGeneratorOptions() 
             => new ListingGeneratorOptions
         {
@@ -66,7 +71,8 @@ namespace Msiler.DialogPages
             ProcessPdbFiles = this.ProcessPdbFiles,
             SimplifyFunctionNames = this.SimplifyFunctionNames,
             UpcaseOpCodes = this.UpcaseOpCodes,
-            ReadInstructionBytes = this.ReadInstructionBytes
+            ReadInstructionBytes = this.ReadInstructionBytes,
+            DescriptionMode = this.InstructionDescriptionMode
         };
     }
 }

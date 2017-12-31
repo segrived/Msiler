@@ -32,8 +32,6 @@ namespace Msiler.AssemblyParser
             this.options = options;
         }
 
-        private string GetHeader(AssemblyMethod m) => $"Method: {m.Signature.MethodName}";
-
         private string GetOffset(Instruction i) {
             string f = this.options.DecimalOffsets ? "IL_{0:D4}" : "IL_{0:X4}";
             return String.Format(f, i.Offset);
@@ -80,7 +78,8 @@ namespace Msiler.AssemblyParser
                 result += $"| {bytesSeq}| ";
             }
             string opcodePart = this.options.AlignListing ? this.GetOpCode(i).PadRight(longestOpcode + 1) : this.GetOpCode(i);
-            return result + $"{opcodePart} {this.GetOperand(i)}";
+            var fullString = result + $"{opcodePart} {this.GetOperand(i)}";
+            return fullString.TrimEnd(' ', '\t');
         }
 
         private string ParsePdbInformation(SequencePoint sp)
@@ -159,7 +158,18 @@ namespace Msiler.AssemblyParser
                 if (this.options.ProcessPdbFiles)
                     sb.Append(this.ParsePdbInformation(instruction.SequencePoint));
 
-                sb.AppendLine(this.InstructionToString(instruction, this.longestOpCode));
+                var info = Helpers.GetInstructionInformation(instruction.OpCode.Name);
+                string descriptionComment = $"// {info.Name}: {info.Description}";
+
+                if (this.options.DescriptionMode == DescriptionMode.BeforeLine)
+                    sb.AppendLine(descriptionComment);
+
+                string instructionData = this.InstructionToString(instruction, this.longestOpCode);
+
+                if (this.options.DescriptionMode == DescriptionMode.AfterInstruction)
+                    instructionData += " " + descriptionComment;
+
+                sb.AppendLine(instructionData);
             }
 
             string resultListing = sb.ToString();

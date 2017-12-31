@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Msiler.Helpers
 {
@@ -24,16 +22,6 @@ namespace Msiler.Helpers
             {
                 return null;
             }
-        }
-
-        public static string JoinStrings(this IEnumerable<string> strColl)
-        {
-            var sb = new StringBuilder();
-
-            foreach (string s in strColl)
-                sb.AppendLine(s);
-
-            return sb.ToString();
         }
     }
 }

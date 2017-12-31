@@ -11,5 +11,13 @@
         public bool IncludeMethodName { get; set; } = false;
         public bool ProcessPdbFiles { get; set; } = false;
         public bool ReadInstructionBytes { get; set; } = false;
+        public DescriptionMode DescriptionMode { get; set; } = DescriptionMode.Disabled;
+    }
+
+    public enum DescriptionMode
+    {
+        Disabled,
+        BeforeLine,
+        AfterInstruction
     }
 }
