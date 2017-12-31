@@ -34,6 +34,8 @@ namespace Msiler.UI
 
         private AssemblyMethod currentMethod;
 
+        private TextEditorWordProcesor textWordProcessor;
+
         private AssemblyMethod CurrentMethod
         {
             get => this.currentMethod;
@@ -48,8 +50,11 @@ namespace Msiler.UI
 
         private readonly Dictionary<AssemblyMethod, string> listingCache = new Dictionary<AssemblyMethod, string>();
 
-        public MyControl() {
+        public MyControl()
+        {
             this.InitializeComponent();
+
+            this.textWordProcessor = new TextEditorWordProcesor(this.BytecodeListing);
 
             this.InitConfiguration();
             this.InitEventHandlers();
@@ -216,16 +221,74 @@ namespace Msiler.UI
 
         private readonly ToolTip toolTip = new ToolTip();
 
+        private bool TryNavigateTo()
+        {
+            if (!this.textWordProcessor.IsValidWord)
+                return false;
+
+            // try naviage to offset
+            var match = OffsetRegex.Match(this.textWordProcessor.Word);
+            if (match.Success)
+            {
+                int line = this.offsetLinesCache[match.Value];
+                int offset = this.BytecodeListing.Document.GetOffset(line, 0);
+                this.BytecodeListing.CaretOffset = offset;
+                this.BytecodeListing.ScrollToLine(line);
+
+                return true;
+            }
+
+            // try navigate to method
+            var method = this.assemblyMethods?.FirstOrDefault(m => m.Signature.MethodName == this.textWordProcessor.Word);
+            if (method == null)
+                return false;
+
+            this.CurrentMethod = method;
+            return true;
+        }
+
+        private void ShowToolTip(string content, IHighlightingDefinition highlight = null)
+        {
+            int tooltipTransp = Common.Instance.DisplayOptions.TooltipTransparency;
+
+            this.toolTip.PlacementTarget = this;
+
+            this.toolTip.Opacity = 1.0 - (tooltipTransp < 0 || tooltipTransp > 100 ? 0 : tooltipTransp) / 100.0;
+
+            var bgDColor = VSColorTheme.GetThemedColor(EnvironmentColors.ToolWindowBackgroundBrushKey);
+            var bgMColor = Color.FromRgb(bgDColor.R, bgDColor.G, bgDColor.B);
+            this.toolTip.Background = new SolidColorBrush(bgMColor);
+
+            var fgDColor = VSColorTheme.GetThemedColor(EnvironmentColors.ToolWindowTextBrushKey);
+            var fgMColor = Color.FromRgb(fgDColor.R, fgDColor.G, fgDColor.B);
+
+            this.toolTip.Content = new TextEditor
+            {
+                Text = content,
+                HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden,
+                VerticalScrollBarVisibility = ScrollBarVisibility.Hidden,
+                SyntaxHighlighting = highlight,
+                Background = Brushes.Transparent,
+                FontFamily = new FontFamily(Common.Instance.DisplayOptions.FontName),
+                FontSize = Common.Instance.DisplayOptions.FontSize,
+                Foreground = new SolidColorBrush(fgMColor)
+            };
+
+            this.toolTip.IsOpen = true;
+        }
+
+        #endregion
+
+        #region UI handlers
+
         private void BytecodeListing_MouseHover(object sender, MouseEventArgs e)
         {
-            string wordUnderCursor = this.BytecodeListing.GetWordFromPoint(e.GetPosition(this.BytecodeListing));
-
-            if (wordUnderCursor == null)
+            if (!this.textWordProcessor.IsValidWord)
                 return;
 
-            var offsetMatch = OffsetRegex.Match(wordUnderCursor);
+            var offsetMatch = OffsetRegex.Match(this.textWordProcessor.Word);
 
-            if (offsetMatch.Success)
+            if (offsetMatch.Success && !this.textWordProcessor.IsOnLineStart)
             {
                 string offsetStr = offsetMatch.Value;
                 if (!this.offsetLinesCache.ContainsKey(offsetStr))
@@ -257,7 +320,7 @@ namespace Msiler.UI
                 this.ShowToolTip(sb.ToString().TrimEnd('\r', '\n'), this.currentHighlightDefinition);
             }
 
-            var numberUnderCursor = StringHelpers.ParseNumber(wordUnderCursor);
+            var numberUnderCursor = StringHelpers.ParseNumber(this.textWordProcessor.Word);
 
             if (numberUnderCursor != null)
             {
@@ -273,7 +336,7 @@ namespace Msiler.UI
                 this.ShowToolTip(hint, this.currentHighlightDefinition);
             }
 
-            var info = AssemblyParser.Helpers.GetInstructionInformation(wordUnderCursor);
+            var info = AssemblyParser.Helpers.GetInstructionInformation(this.textWordProcessor.Word);
             if (info != null)
                 this.ShowToolTip($"{info.Name}: {info.Description}");
 
@@ -283,88 +346,32 @@ namespace Msiler.UI
         private void BytecodeListing_MouseHoverStopped(object sender, MouseEventArgs e) 
             => this.toolTip.IsOpen = false;
 
-        private bool TryNavigateToOffset(string offsetText)
+        private void BytecodeListing_OnPreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (offsetText == null)
-                return false;
+            bool isCtrlMod = Keyboard.Modifiers.HasFlag(ModifierKeys.Control);
 
-            var match = OffsetRegex.Match(offsetText);
-            if (!match.Success)
-                return false;
-
-            int line = this.offsetLinesCache[match.Value];
-            int offset = this.BytecodeListing.Document.GetOffset(line, 0);
-            this.BytecodeListing.CaretOffset = offset;
-            this.BytecodeListing.ScrollToLine(line);
-            return true;
-
+            if (e.ChangedButton == MouseButton.Middle || (e.ChangedButton == MouseButton.Left && isCtrlMod))
+            {
+                if (this.TryNavigateTo())
+                    e.Handled = true;
+            }
         }
 
         private void BytecodeListing_PreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            string wordUnderCursor = this.BytecodeListing.GetWordFromPoint(e.GetPosition(this.BytecodeListing));
-
-            if (this.TryNavigateToOffset(wordUnderCursor))
+            if (this.TryNavigateTo())
             {
                 e.Handled = true;
                 return;
             }
 
             // detect method name under cursor
-            var fMethod = this.assemblyMethods.FirstOrDefault(m => m.Signature.MethodName == wordUnderCursor);
-            if (fMethod == null)
-                return;
-
-            this.CurrentMethod = fMethod;
+            
             e.Handled = true;
         }
 
-
-        private void ShowToolTip(string content, IHighlightingDefinition highlight = null)
-        {
-            var displayOptions = Common.Instance.DisplayOptions;
-            this.toolTip.PlacementTarget = this;
-
-            int transpLevel = (displayOptions.TooltipTransparency < 0 || displayOptions.TooltipTransparency > 100)
-                ? 0
-                : displayOptions.TooltipTransparency;
-
-            this.toolTip.Opacity = 1.0 - transpLevel / 100.0;
-
-            var bgDColor = VSColorTheme.GetThemedColor(EnvironmentColors.ToolWindowBackgroundBrushKey);
-            var bgMColor = Color.FromRgb(bgDColor.R, bgDColor.G, bgDColor.B);
-            this.toolTip.Background = new SolidColorBrush(bgMColor);
-
-            var fgDColor = VSColorTheme.GetThemedColor(EnvironmentColors.ToolWindowTextBrushKey);
-            var fgMColor = Color.FromRgb(fgDColor.R, fgDColor.G, fgDColor.B);
-
-            this.toolTip.Content = new TextEditor
-            {
-                Text = content,
-                HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden,
-                VerticalScrollBarVisibility = ScrollBarVisibility.Hidden,
-                SyntaxHighlighting = highlight,
-                Background = Brushes.Transparent,
-                FontFamily = new FontFamily(displayOptions.FontName),
-                FontSize = displayOptions.FontSize,
-                Foreground = new SolidColorBrush(fgMColor)
-            };
-
-            this.toolTip.IsOpen = true;
-        }
-
-        #endregion
-
-        #region UI handlers
-
-        private void BytecodeListing_OnPreviewMouseDown(object sender, MouseButtonEventArgs e)
-        {
-            if (!Keyboard.Modifiers.HasFlag(ModifierKeys.Control))
-                return;
-
-            if (this.TryNavigateToOffset(this.BytecodeListing.GetWordFromPoint(e.GetPosition(this.BytecodeListing))))
-                e.Handled = true;
-        }
+        private void BytecodeListing_OnMouseMove(object sender, MouseEventArgs e) 
+            => this.textWordProcessor.UpdateByPoint(e.GetPosition(this.BytecodeListing));
 
         private void MethodsList_SelectionChanged(object sender, SelectionChangedEventArgs e) 
             => this.ProcessMethod((AssemblyMethod)this.MethodsList.SelectedItem);
