@@ -186,7 +186,7 @@
     <Compile Include="AssemblyManager.cs" />
     <Compile Include="Helpers\VsThemeHelpers.cs" />
     <Compile Include="Lib\HighlightCurrentLineBackgroundRenderer.cs" />
-    <Compile Include="Lib\TextEditorWordProcesor.cs" />
+    <Compile Include="Lib\TextEditorWordProcessor.cs" />
     <Compile Include="Helpers\DteHelpers.cs" />
     <Compile Include="Helpers\FontHelpers.cs" />
     <Compile Include="Helpers\StringHelpers.cs" />

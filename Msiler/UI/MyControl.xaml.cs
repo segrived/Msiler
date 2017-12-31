@@ -31,7 +31,7 @@ namespace Msiler.UI
         private readonly AssemblyManager assemblyManager;
         private readonly ToolTip toolTip = new ToolTip();
         private HighlightCurrentLineBackgroundRenderer activeLineRenderer;
-        private readonly TextEditorWordProcesor textWordProcessor;
+        private readonly TextEditorWordProcessor textWordProcessor;
 
         private AssemblyMethod currentMethod;
 
@@ -56,7 +56,7 @@ namespace Msiler.UI
 
             this.offsetLinesCache = new Dictionary<string, int>();
             this.assemblyManager = new AssemblyManager();
-            this.textWordProcessor = new TextEditorWordProcesor(this.BytecodeListing);
+            this.textWordProcessor = new TextEditorWordProcessor(this.BytecodeListing);
 
             this.activeLineRenderer = new HighlightCurrentLineBackgroundRenderer(this.BytecodeListing);
             this.BytecodeListing.TextArea.TextView.BackgroundRenderers.Add(this.activeLineRenderer);

@@ -5,7 +5,7 @@ using TextEditor = ICSharpCode.AvalonEdit.TextEditor;
 
 namespace Msiler.Lib
 {
-    public class TextEditorWordProcesor
+    public class TextEditorWordProcessor
     {
         private readonly TextEditor editor;
         private Point textPosition;
@@ -69,7 +69,7 @@ namespace Msiler.Lib
 
         public bool IsOnLineStart => this.StartOffset == this.Line.Offset;
 
-        public TextEditorWordProcesor(TextEditor editor)
+        public TextEditorWordProcessor(TextEditor editor)
         {
             this.editor = editor;
         }
