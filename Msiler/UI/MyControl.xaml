@@ -17,12 +17,11 @@
     </UserControl.Resources>
 
     <Grid>
-        <Grid Name="WelcomeUserControl"
-              Visibility="Visible">
+        <Grid Name="WelcomeUserControl" Visibility="Visible">
             <uc:WelcomeUserControl />
         </Grid>
-        <Grid Name="MainView"
-              Visibility="Hidden">
+        
+        <Grid Name="MainView" Visibility="Hidden">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="100" />

@@ -384,15 +384,6 @@ namespace Msiler.UI
         private void FilterMethodsTextBox_TextChanged(object sender, TextChangedEventArgs e) 
             => CollectionViewSource.GetDefaultView(this.MethodsList.ItemsSource).Refresh();
 
-        private void HyperlinkOptions_Click(object sender, RoutedEventArgs e) 
-            => Common.Instance.Package.ShowOptionPage(typeof(ExtensionGeneralOptions));
-
-        private void HyperlinkGithub_Click(object sender, RoutedEventArgs e) 
-            => Process.Start(Common.RepoUrl);
-
-        private void HyperlinkAbout_Click(object sender, RoutedEventArgs e) 
-            => new AboutWindow().ShowDialog();
-
         private void IsFollowModeEnabled_CheckedChange(object sender, RoutedEventArgs e) 
             => FunctionFollower.IsFollowingEnabled = ((CheckBox)sender).IsChecked.Value;
 

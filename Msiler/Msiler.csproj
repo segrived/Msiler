@@ -198,9 +198,6 @@
     <Compile Include="HighlightSchemes\IListingHighlightingSchemeDef.cs" />
     <Compile Include="HighlightSchemes\MonokaiScheme.cs" />
     <Compile Include="TextViewCreationListener.cs" />
-    <Compile Include="UI\AboutWindow.xaml.cs">
-      <DependentUpon>AboutWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Lib\MsilerColorScheme.cs" />
     <Compile Include="Common.cs" />
     <Compile Include="Converters\IsGreaterThenConverter.cs" />
@@ -258,10 +255,6 @@
     <None Include="Resources\Images.png" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="UI\AboutWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="UI\ILHelpWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

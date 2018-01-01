@@ -1,5 +1,6 @@
 ﻿using Msiler.AssemblyParser;
 using System.ComponentModel;
+using Microsoft.Internal.VisualStudio.PlatformUI;
 
 // ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
 // ReSharper disable MemberCanBePrivate.Global
