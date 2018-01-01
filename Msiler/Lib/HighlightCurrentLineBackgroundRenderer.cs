@@ -34,12 +34,12 @@ namespace Msiler.Lib
 
             foreach (var rect in BackgroundGeometryBuilder.GetRectsForSegment(textView, currentLine))
             {
-                double width = textView.ActualWidth - 32;
+                double width = textView.ActualWidth;
 
                 if (width < 0)
                     return;
 
-                var drawRect = new Rect(rect.Location, new Size(textView.ActualWidth - 32, rect.Height));
+                var drawRect = new Rect(rect.Location, new Size(width, rect.Height));
                 drawingContext.DrawRectangle(this.brush, null, drawRect);
             }
         }
