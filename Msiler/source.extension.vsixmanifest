@@ -3,7 +3,7 @@
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011"
                  xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="677e8a98-2b8c-4726-ac96-e1192eb42876" Version="2.2" Language="en-US" Publisher="segrived" />
+        <Identity Id="677e8a98-2b8c-4726-ac96-e1192eb42876" Version="2.2.1" Language="en-US" Publisher="segrived" />
         <DisplayName>Msiler 2017</DisplayName>
         <Description xml:space="preserve">CIL (MSIL) Code Viewer Extension for Visual Studio 2017</Description>
         <MoreInfo>https://github.com/segrived/Msiler</MoreInfo>
