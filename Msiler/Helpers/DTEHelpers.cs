@@ -78,12 +78,15 @@ namespace Msiler.Helpers
         }
 
 
-        private static string GetPropertyValueFrom(string projectFile, string propertyName, string configurationName)
+        private static string GetPropertyValueFrom(string projectFile, string propertyName, string solutionDir, string configurationName)
         {
             using (var projectCollection = new ProjectCollection())
             {
                 var p = new Project(projectFile, null, null,  projectCollection, ProjectLoadSettings.Default);
+
                 p.SetProperty("Configuration", configurationName);
+                p.SetProperty("SolutionDir", solutionDir);
+                p.SetGlobalProperty("SolutionDir", solutionDir);
                 p.ReevaluateIfNecessary();
                 return p.Properties.Where(x => x.Name == propertyName).Select(x => x.EvaluatedValue).SingleOrDefault();
             }
@@ -97,17 +100,20 @@ namespace Msiler.Helpers
             if (!(sb.StartupProjects is Array projects))
                 return null;
 
-            //
+            if (dte.Solution?.FullName == null)
+                return null;
 
             var activeProjectPath = projects.GetValue(0);
-
             var activeProject = GetProjects(dte).FirstOrDefault(proj => proj.UniqueName == (string)activeProjectPath);
 
             if (!(activeProject is EnvDTE.Project project))
                 return null; 
 
             var activeConf = project.ConfigurationManager.ActiveConfiguration;
-            return GetPropertyValueFrom(project.FileName, "TargetPath", activeConf.ConfigurationName);
+            var solutionDir = Path.GetDirectoryName(dte.Solution.FullName) + Path.DirectorySeparatorChar;
+            var outputFileName = new DirectoryInfo(GetPropertyValueFrom(project.FileName, "TargetPath", solutionDir, activeConf.ConfigurationName));
+            // normalize output path
+            return outputFileName.FullName;
         }
 
         public static AssemblyMethodSignature GetSignature(VirtualPoint point, FileCodeModel2 fcm) {
