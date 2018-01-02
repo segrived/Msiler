@@ -40,6 +40,44 @@ namespace Msiler.Helpers
             }
         }
 
+        public static List<EnvDTE.Project> GetProjects(DTE2 dte)
+        {
+            var projects = dte.Solution.Projects;
+            var list = new List<EnvDTE.Project>();
+            var item = projects.GetEnumerator();
+
+            while (item.MoveNext())
+            {
+                if (!(item.Current is EnvDTE.Project project))
+                    continue;
+
+                if (project.Kind == ProjectKinds.vsProjectKindSolutionFolder)
+                    list.AddRange(GetSolutionFolderProjects(project));
+                else
+                    list.Add(project);
+            }
+
+            return list;
+        }
+        private static IEnumerable<EnvDTE.Project> GetSolutionFolderProjects(EnvDTE.Project solutionFolder)
+        {
+            var list = new List<EnvDTE.Project>();
+            for (var i = 1; i <= solutionFolder.ProjectItems.Count; i++)
+            {
+                var subProject = solutionFolder.ProjectItems.Item(i).SubProject;
+                if (subProject == null)
+                    continue;
+ 
+                if (subProject.Kind == ProjectKinds.vsProjectKindSolutionFolder)
+                    list.AddRange(GetSolutionFolderProjects(subProject));
+                else
+                    list.Add(subProject);
+            }
+ 
+            return list;
+        }
+
+
         private static string GetPropertyValueFrom(string projectFile, string propertyName, string configurationName)
         {
             using (var projectCollection = new ProjectCollection())
@@ -58,9 +96,18 @@ namespace Msiler.Helpers
 
             if (!(sb.StartupProjects is Array projects))
                 return null;
-            var activeProject = dte.Solution.Item(projects.GetValue(0));
-            var activeConf = activeProject.ConfigurationManager.ActiveConfiguration;
-            return GetPropertyValueFrom(activeProject.FileName, "TargetPath", activeConf.ConfigurationName);
+
+            //
+
+            var activeProjectPath = projects.GetValue(0);
+
+            var activeProject = GetProjects(dte).FirstOrDefault(proj => proj.UniqueName == (string)activeProjectPath);
+
+            if (!(activeProject is EnvDTE.Project project))
+                return null; 
+
+            var activeConf = project.ConfigurationManager.ActiveConfiguration;
+            return GetPropertyValueFrom(project.FileName, "TargetPath", activeConf.ConfigurationName);
         }
 
         public static AssemblyMethodSignature GetSignature(VirtualPoint point, FileCodeModel2 fcm) {
